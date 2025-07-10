@@ -10,11 +10,7 @@ import {
 
 const { width, height } = Dimensions.get('window');
 
-interface SplashScreenProps {
-  onFinish: () => void;
-}
-
-const SplashScreen = ({ onFinish }: SplashScreenProps) => {
+const SplashScreen = () => {
   const fadeAnim = new Animated.Value(0);
   const scaleAnim = new Animated.Value(0.8);
   const slideAnim = new Animated.Value(50);
@@ -40,12 +36,12 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
     ]).start();
 
     // Auto navigate after 3 seconds
-    const timer = setTimeout(() => {
-      onFinish();
-    }, 3000);
+    // const timer = setTimeout(() => {
+    //   onFinish();
+    // }, 3000);
 
-    return () => clearTimeout(timer);
-  }, [fadeAnim, scaleAnim, slideAnim, onFinish]);
+    // return () => clearTimeout(timer);
+  }, [fadeAnim, scaleAnim, slideAnim]);
 
   return (
     <View style={styles.container}>
@@ -82,11 +78,7 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
         <Text style={styles.tagline}>Easy way to donate</Text>
 
         {/* Loading indicator */}
-        <View style={styles.loadingContainer}>
-          {/* <View style={styles.loadingDot} />
-          <View style={styles.loadingDot} />
-          <View style={styles.loadingDot} /> */}
-        </View>
+        <View style={styles.loadingContainer}></View>
       </Animated.View>
     </View>
   );
