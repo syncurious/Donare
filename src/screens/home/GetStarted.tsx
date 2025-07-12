@@ -8,14 +8,14 @@ import Divider from '../../components/base/Divider';
 import logoPng from '../../assets/images/logoWihtoutText.png';
 import getStartedIllustrationPng from '../../assets/images/get_started_illustration.png';
 import theme from '../../config/theme';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const GetStarted = ({
-  onGetStarted,
-  onSignIn,
-}: {
-  onGetStarted?: () => void;
-  onSignIn?: () => void;
-}) => {
+const GetStarted = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const handleToNavigate = (route: string) => {
+    navigation.navigate(route);
+  };
   return (
     <Container
       contentContainerStyle={[{ flex: 1 }, styles.root]}
@@ -53,27 +53,27 @@ const GetStarted = ({
         <Button
           variant="contained"
           color="primary"
-          size="small"
+          size="medium"
           style={[
             { backgroundColor: theme.colors.primary[500] },
             styles.button,
           ]}
-          onPress={onGetStarted}
+          onPress={() => handleToNavigate('SignIn')}
         >
           Get Started
         </Button>
         <Button
           variant="contained"
           color="primary"
-          size="small"
+          size="medium"
+          onPress={() => handleToNavigate('SignIn')}
           textStyle={{
             color: theme.colors.secondary[600],
           }}
           style={[
-            { backgroundColor: theme.colors.secondary[200]},
+            { backgroundColor: theme.colors.secondary[200] },
             styles.button,
           ]}
-          onPress={onSignIn}
         >
           Sign In
         </Button>
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
   root: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    // borderWidth:1
   },
   logoContainer: {
     flexDirection: 'row',
@@ -117,7 +116,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   button: {
-    flex: 1,
     borderRadius: 15,
   },
 });
