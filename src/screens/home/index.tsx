@@ -5,11 +5,7 @@ import BaseComponentsExample from "../../components/base/Example";
 
 const HomeScreen = () => {
     return (
-        // <SplashScreen onFinish={() => {
-        //     console.log("SplashScreen finished");
-        // }} />
-        <BaseComponentsExample />
-            // <ThemeExample />
+        <SplashScreen />
         // <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor : "#1E3A8A" }}>
         //     <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>Home Screen</Text>
         // </View>
