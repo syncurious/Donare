@@ -3,7 +3,7 @@ import AuthNavigation from './AuthNavigation';
 import UserNavigation from './UserNavigation';
 
 const MainNavigation = () => {
-  const isAuth = true;
+  const isAuth = false;
   return (
     <NavigationContainer>
       {isAuth ? <UserNavigation /> : <AuthNavigation />}
