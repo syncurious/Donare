@@ -6,7 +6,8 @@ const MainNavigation = () => {
   const isAuth = false;
   return (
     <NavigationContainer>
-      {isAuth ? <UserNavigation /> : <AuthNavigation />}
+      <UserNavigation />
+       {/* <AuthNavigation /> */}
     </NavigationContainer>
   );
 };
