@@ -1,6 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../../../screens/home/Home';
 import Header from '../../../../components/base/Header';
+import BottomNavBar from '../../../../components/base/BottomNavBar';
+
+// Placeholder screens for other tabs
+const Placeholder = ({ label }: { label: string }) => (
+  <Header titleAlign="left" title={label} />
+);
 
 const Tab = createBottomTabNavigator();
 const BottomNavigation = () => {
@@ -8,17 +14,21 @@ const BottomNavigation = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
-        header(props) {
-          return <Header titleAlign='left' />;
-        },
         animation: 'shift',
-
       }}
+      tabBar={props => <BottomNavBar {...props} />}
     >
       <Tab.Screen name="Home" component={Home} />
-      {/* <Tab.Screen name="Messages" component={HomeScreen} />
-      <Tab.Screen name="Notification" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={HomeScreen} /> */}
+      <Tab.Screen name="Donate" children={() => <Placeholder label="Donate" />} />
+      <Tab.Screen name="Volunteer" children={() => <Placeholder label="Volunteer" />} />
+      <Tab.Screen
+        name="Qibla"
+        children={() => <Placeholder label="Qibla" />}
+      />
+      <Tab.Screen
+        name="Profile"
+        children={() => <Placeholder label="Profile" />}
+      />
     </Tab.Navigator>
   );
 };
