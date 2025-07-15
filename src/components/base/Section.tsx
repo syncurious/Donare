@@ -6,7 +6,7 @@ import Text from './Text';
 interface SectionProps {
   title: string;
   description?: string;
-  children: React.ReactNode[];
+  children: React.ReactNode[] | React.ReactNode;
   autoCarousel?: boolean;
   style?: any;
 }
