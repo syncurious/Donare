@@ -11,8 +11,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 // Placeholder PNGs (replace with actual PNGs as needed)
 import logoPng from '../../assets/images/logoWihtoutText.png';
-import facebookPng from '../../assets/images/facebookIcon.png';
-import googlePng from '../../assets/images/googleIcon.png';
+import facebookPng from '../../assets/icons/facebookIcon.png';
+import googlePng from '../../assets/icons/googleIcon.png';
 
 const Login = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

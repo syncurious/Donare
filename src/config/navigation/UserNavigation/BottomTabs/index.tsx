@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../../../screens/home/Home';
+import { Donate } from '../../../../screens/home';
 import Header from '../../../../components/base/Header';
 import BottomNavBar from '../../../../components/base/BottomNavBar';
 
@@ -19,7 +20,7 @@ const BottomNavigation = () => {
       tabBar={props => <BottomNavBar {...props} />}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Donate" children={() => <Placeholder label="Donate" />} />
+      <Tab.Screen name="Donate" component={Donate} />
       <Tab.Screen name="Volunteer" children={() => <Placeholder label="Volunteer" />} />
       <Tab.Screen
         name="Qibla"

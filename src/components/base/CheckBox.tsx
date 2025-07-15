@@ -4,8 +4,8 @@ import Text from './Text';
 import theme from '../../config/theme';
 
 // Placeholder PNGs for checked/unchecked icons (replace with your own)
-import checkedPng from '../../assets/images/checkbox_checked.png';
-import uncheckedPng from '../../assets/images/checkbox_unchecked.png';
+import checkedPng from '../../assets/icons/checkbox_checked.png';
+import uncheckedPng from '../../assets/icons/checkbox_unchecked.png';
 
 interface CheckBoxProps {
   checked: boolean;

@@ -3,6 +3,13 @@ import SplashScreen from "../SplashScreen";
 import ThemeExample from "../../components/ThemeExample";
 import BaseComponentsExample from "../../components/base/Example";
 import GetStarted from "./GetStarted";
+import Donate from "./Donate";
+
+export { default as HomeScreen } from "./Home";
+export { default as GetStarted } from "./GetStarted";
+export { default as Login } from "./Login";
+export { default as SignUp } from "./SignUp";
+export { Donate };
 
 const HomeScreen = () => {
     return (
