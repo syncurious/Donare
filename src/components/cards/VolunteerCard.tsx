@@ -24,15 +24,10 @@ interface VolunteerCardProps {
   onButtonPress: () => void;
 }
 
-const VolunteerCard: React.FC<VolunteerCardProps> = ({
-  image,
-  title,
-  description,
-  benefits,
-  buttonText,
-  sectionTitle,
-  onButtonPress,
-}) => {
+// Rename VolunteerCard to BenefitsCard
+interface BenefitsCardProps extends VolunteerCardProps {}
+
+const BenefitsCard: React.FC<BenefitsCardProps> = props => {
   return (
     <Container
       variant="card"
@@ -41,39 +36,48 @@ const VolunteerCard: React.FC<VolunteerCardProps> = ({
       contentContainerStyle={styles.listContent}
       style={styles.card}
     >
-      {image && (
+      {props.image && (
         <Image
-          source={{ uri: image }}
+          source={{ uri: props.image }}
           style={styles.image}
           resizeMode="cover"
         />
       )}
-      <View style={{ padding: 12, gap: 4 }}>
-        <Heading level={2} style={styles.title}>
-          {title}
-        </Heading>
-        <Paragraph style={styles.description}>{description}</Paragraph>
-        <Section title={sectionTitle}>
-          {benefits.map((benefit, idx) => (
-            <View key={idx} style={styles.benefitRow}>
-              {benefit.icon && (
-                <View style={styles.benefitIconWrapper}>
-                  <Image source={benefit.icon} style={styles.benefitIcon} />
+      <View
+        style={{
+          padding: 12,
+          gap: 4,
+          justifyContent: 'space-between',
+          flex: 1,
+        }}
+      >
+        <View style={{ gap: 4 }}>
+          <Heading level={2} style={styles.title}>
+            {props.title}
+          </Heading>
+          <Paragraph style={styles.description}>{props.description}</Paragraph>
+          <Section title={props.sectionTitle}>
+            {props.benefits.map((benefit, idx) => (
+              <View key={idx} style={styles.benefitRow}>
+                {benefit.icon && (
+                  <View style={styles.benefitIconWrapper}>
+                    <Image source={benefit.icon} style={styles.benefitIcon} />
+                  </View>
+                )}
+                <View style={styles.benefitTextContainer}>
+                  <Text variant="subtitle1" style={styles.benefitTitle}>
+                    {benefit.title}
+                  </Text>
+                  <Text variant="body2" color="muted">
+                    {benefit.description}
+                  </Text>
                 </View>
-              )}
-              <View style={styles.benefitTextContainer}>
-                <Text variant="subtitle1" style={styles.benefitTitle}>
-                  {benefit.title}
-                </Text>
-                <Text variant="body2" color="muted">
-                  {benefit.description}
-                </Text>
               </View>
-            </View>
-          ))}
-        </Section>
-        <Button onPress={onButtonPress} style={styles.button}>
-          {buttonText}
+            ))}
+          </Section>
+        </View>
+        <Button onPress={props.onButtonPress} style={styles.button}>
+          {props.buttonText}
         </Button>
       </View>
     </Container>
@@ -132,4 +136,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VolunteerCard;
+export { BenefitsCard };
+export default BenefitsCard;
