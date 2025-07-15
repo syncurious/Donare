@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../../../../screens/home/Home';
-import { Donate } from '../../../../screens/home';
+import { Donate, Volunteer } from '../../../../screens/home';
 import Header from '../../../../components/base/Header';
 import BottomNavBar from '../../../../components/base/BottomNavBar';
 import Profile from '../../../../screens/profile';

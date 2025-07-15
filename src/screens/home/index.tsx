@@ -9,6 +9,7 @@ export { default as HomeScreen } from "./Home";
 export { default as GetStarted } from "./GetStarted";
 export { default as Login } from "./Login";
 export { default as SignUp } from "./SignUp";
+export { default as Volunteer } from "./Volunteer";
 export { Donate };
 
 const HomeScreen = () => {
