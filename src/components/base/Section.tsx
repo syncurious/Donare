@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   carousel: {
     paddingVertical: 8,
     paddingRight: 12,
+    paddingLeft: 12, // <-- Add this line
   },
   children: {
     gap: 12,

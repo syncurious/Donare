@@ -140,8 +140,7 @@ const Home: React.FC = () => {
       </View>
       <Container scrollable style={styles.container}>
         {/* Quick Cards Section */}
-
-        <View>
+        <View style={styles.containerPadding}>
           <Heading level={1}>Assalamu Alaikum, Osama</Heading>
         </View>
         <Section title="" autoCarousel>
@@ -149,11 +148,9 @@ const Home: React.FC = () => {
             <CampaignCard key={idx} {...item} />
           ))}
         </Section>
+
         {/* Quick Navigation Section */}
-          <QuickNavigation />
-        {/* <Section title="">
-        
-      </Section> */}
+        <QuickNavigation />
         {/* Updates Section */}
         <Section title="Updates" autoCarousel>
           {updates.map((item, idx) => (
@@ -164,23 +161,7 @@ const Home: React.FC = () => {
         <Section title="Daily Verse">
           <VerseCard {...dailyVerse} />
         </Section>
-
-        {/* Existing sections (optional, can be moved below or above as needed) */}
-        <Section title="Featured Campaigns" autoCarousel>
-          {campaigns.map((item, idx) => (
-            <CampaignCard key={idx} {...item} />
-          ))}
-        </Section>
-        <Section title="Reminders">
-          {reminders.map((item, idx) => (
-            <ReminderCard key={idx} {...item} />
-          ))}
-        </Section>
-        <Section title="Latest News" autoCarousel>
-          {news.map((item, idx) => (
-            <NewsCard key={idx} {...item} />
-          ))}
-        </Section>
+        <View style={{ height: 50 }} />
       </Container>
     </View>
   );
@@ -191,6 +172,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 0,
     backgroundColor: '#fff',
+    paddingBottom: 100,
+  },
+  containerPadding: {
+    paddingHorizontal: 12,
   },
   dateSection: {
     display: 'flex',
