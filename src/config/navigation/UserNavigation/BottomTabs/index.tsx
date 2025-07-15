@@ -3,6 +3,7 @@ import Home from '../../../../screens/home/Home';
 import { Donate } from '../../../../screens/home';
 import Header from '../../../../components/base/Header';
 import BottomNavBar from '../../../../components/base/BottomNavBar';
+import Profile from '../../../../screens/profile';
 
 // Placeholder screens for other tabs
 const Placeholder = ({ label }: { label: string }) => (
@@ -21,15 +22,12 @@ const BottomNavigation = () => {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Donate" component={Donate} />
-      <Tab.Screen name="Volunteer" children={() => <Placeholder label="Volunteer" />} />
       <Tab.Screen
-        name="Qibla"
-        children={() => <Placeholder label="Qibla" />}
+        name="Volunteer"
+        children={() => <Placeholder label="Volunteer" />}
       />
-      <Tab.Screen
-        name="Profile"
-        children={() => <Placeholder label="Profile" />}
-      />
+      <Tab.Screen name="Qibla" children={() => <Placeholder label="Qibla" />} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };
