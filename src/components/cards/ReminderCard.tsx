@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   buttonText: {
-    color: theme.colors.neutral[400],
+    color: theme.colors.neutral[500],
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'left',

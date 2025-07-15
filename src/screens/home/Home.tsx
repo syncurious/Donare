@@ -17,6 +17,10 @@ import QuickCard from '../../components/cards/QuickCard';
 import Heading from '../../components/base/Heading';
 import theme from '../../config/theme';
 import VerseCard from '../../components/cards/verseCard';
+import NamazIcon from '../../assets/icons/NamazIcon.png';
+import QiblaIcon from '../../assets/icons/QiblaIcon.png';
+import CalendarIcon from '../../assets/icons/calendarIcon.png';
+import QuickNavigation from '../../components/cards/quickNavigation';
 
 const campaigns = [
   {
@@ -146,6 +150,7 @@ const Home: React.FC = () => {
           ))}
         </Section>
         {/* Quick Navigation Section */}
+          <QuickNavigation />
         {/* <Section title="">
         
       </Section> */}
@@ -184,7 +189,7 @@ const Home: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 8,
+    paddingHorizontal: 0,
     backgroundColor: '#fff',
   },
   dateSection: {

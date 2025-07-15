@@ -83,8 +83,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   verse: {
-    fontWeight: 'bold',
+    fontWeight: '500',
     fontSize: 16,
+    color: theme.colors.neutral[600],
     marginBottom: 4,
     textAlign: 'left',
   },
