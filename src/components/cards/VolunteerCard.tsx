@@ -42,9 +42,13 @@ const VolunteerCard: React.FC<VolunteerCardProps> = ({
       style={styles.card}
     >
       {image && (
-        <Image source={image} style={styles.image} resizeMode="contain" />
+        <Image
+          source={{ uri: image }}
+          style={styles.image}
+          resizeMode="cover"
+        />
       )}
-      <View>
+      <View style={{ padding: 12, gap: 4 }}>
         <Heading level={2} style={styles.title}>
           {title}
         </Heading>
@@ -79,13 +83,11 @@ const VolunteerCard: React.FC<VolunteerCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    // padding: 0,
+    padding: 0,
   },
   image: {
     width: '100%',
     height: 180,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
     marginBottom: 12,
   },
   title: {
@@ -112,10 +114,6 @@ const styles = StyleSheet.create({
   benefitIcon: {
     width: 25,
     height: 25,
-    // backgroundColor :theme.colors.primary[100],
-    // borderRadius: 10,
-    // padding: 10,
-    // marginRight: 12,
   },
   benefitTextContainer: {
     flex: 1,
@@ -125,7 +123,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   listContent: {
-    paddingBottom: 30,
+    paddingBottom: 10,
   },
   button: {
     marginTop: 16,

@@ -1,7 +1,9 @@
 import React from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import VolunteerCard from '../../components/cards/VolunteerCard';
+import VolunteerForm from '../../components/cards/VolunteerForm';
 import { ImageSourcePropType } from 'react-native';
+import { useState } from 'react';
 
 // Import icons from assets
 import SocialIcon from '../../assets/icons/duoIcon.png';
@@ -35,18 +37,15 @@ const Volunteer: React.FC = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   return (
-      <VolunteerCard
-        sectionTitle="Benefits of Volunteering"
-        image={VolunteerImage as ImageSourcePropType}
-        title="Make a difference"
-        description="Join our volunteer program and help us make a positive impact in the community. Your time and skills can help us reach more people in need."
-        benefits={benefits}
-        buttonText="Apply to Volunteer"
-        onButtonPress={() => {
-          // Example: navigate to an application form or show a message
-          navigation.navigate('Home');
-        }}
-      />
+    <VolunteerCard
+      sectionTitle="Benefits of Volunteering"
+      image={"https://images.unsplash.com/photo-1506744038136-46273834b3fb" as ImageSourcePropType}
+      title="Make a difference"
+      description="Join our volunteer program and help us make a positive impact in the community. Your time and skills can help us reach more people in need."
+      benefits={benefits}
+      buttonText="Apply to Volunteer"
+      onButtonPress={() => navigation.navigate('VolunteerForm')}
+    />
   );
 };
 
