@@ -1,6 +1,6 @@
 import React from 'react';
 import BenefitsCard from '../../components/cards/VolunteerCard';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import heartIcon from '../../assets/icons/heartIcon.png';
 import duoIcon from '../../assets/icons/duoIcon.png';
 import compassIcon from '../../assets/icons/compassIcon.png';
@@ -24,7 +24,7 @@ const zakatBenefits = [
 ];
 
 const BenefitsZakat = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   return (
     <BenefitsCard
       image={"https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
@@ -33,7 +33,7 @@ const BenefitsZakat = () => {
       benefits={zakatBenefits}
       buttonText="Donate Zakat"
       sectionTitle="Why Give Zakat?"
-      onButtonPress={() => navigation.goBack()}
+      onButtonPress={() => navigation.navigate("ZakatHomeAssets")}
     />
   );
 };
