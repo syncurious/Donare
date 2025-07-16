@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text as RNText, StyleSheet, PermissionsAndroid, Platform, Alert, Animated, Image } from 'react-native';
 import Text from '../../components/base/Text';
-import Geolocation from '@react-native-community/geolocation';
+// import Geolocation from '@react-native-community/geolocation';
 import { magnetometer, SensorData } from 'react-native-sensors';
 import { useFocusEffect } from '@react-navigation/native';
 import Section from '../../components/base/Section';
@@ -45,24 +45,24 @@ function useQibla() {
     setLoading(true);
     setError(null);
     setLastError(null);
-    Geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setLocation({ lat: latitude, lng: longitude });
-        setQiblaBearing(calculateQiblaBearing(latitude, longitude));
-        setLoading(false);
-      },
-      (err) => {
-        setLastError(err);
-        setError(
-          err && err.message
-            ? `Failed to get location: ${err.message}`
-            : 'Failed to get location. Please check your GPS settings.'
-        );
-        setLoading(false);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
+    // Geolocation.getCurrentPosition(
+    //   (pos) => {
+    //     const { latitude, longitude } = pos.coords;
+    //     setLocation({ lat: latitude, lng: longitude });
+    //     setQiblaBearing(calculateQiblaBearing(latitude, longitude));
+    //     setLoading(false);
+    //   },
+    //   (err) => {
+    //     setLastError(err);
+    //     setError(
+    //       err && err.message
+    //         ? `Failed to get location: ${err.message}`
+    //         : 'Failed to get location. Please check your GPS settings.'
+    //     );
+    //     setLoading(false);
+    //   },
+    //   { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    // );
   }, []);
 
   // Request location and calculate Qibla bearing
@@ -83,26 +83,27 @@ function useQibla() {
     };
 
     setLoading(true);
-    requestLocationPermission().then((granted) => {
-      if (granted) {
-        requestLocation();
+    // requestLocationPermission().then((granted) => {
+    //   if (granted) {
+    //     requestLocation();
         // Optionally, watch position for live updates
-        geoWatchId = Geolocation.watchPosition(
-          (pos) => {
-            const { latitude, longitude } = pos.coords;
-            setLocation({ lat: latitude, lng: longitude });
-            setQiblaBearing(calculateQiblaBearing(latitude, longitude));
-          },
-          (err) => {},
-          { enableHighAccuracy: true, distanceFilter: 10 }
-        );
-      } else {
-        setLoading(false);
-      }
-    });
-    return () => {
-      if (geoWatchId !== null) Geolocation.clearWatch(geoWatchId);
-    };
+    //     geoWatchId = Geolocation.watchPosition(
+    //       (pos) => {
+    //         const { latitude, longitude } = pos.coords;
+    //         setLocation({ lat: latitude, lng: longitude });
+    //         setQiblaBearing(calculateQiblaBearing(latitude, longitude));
+    //       },
+    //       (err) => {},
+    //       { enableHighAccuracy: true, distanceFilter: 10 }
+    //     );
+    //   } else {
+    //     setLoading(false);
+    //   }
+    // });
+    // return () => {
+    //   if (geoWatchId !== null) Geolocation.clearWatch(geoWatchId);
+    // };
+    
   }, [requestLocation]);
 
   // Subscribe to magnetometer
