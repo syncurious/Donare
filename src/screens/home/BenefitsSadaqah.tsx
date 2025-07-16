@@ -1,6 +1,6 @@
 import React from 'react';
 import BenefitsCard from '../../components/cards/VolunteerCard';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import heartIconFilled from '../../assets/icons/heartIconFilled.png';
 import duoIconFilled from '../../assets/icons/duoIconFilled.png';
 import compassIconFilled from '../../assets/icons/compassIconFilled.png';
@@ -24,7 +24,7 @@ const sadaqahBenefits = [
 ];
 
 const BenefitsSadaqah = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   return (
     <BenefitsCard
       image={"https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
@@ -33,7 +33,7 @@ const BenefitsSadaqah = () => {
       benefits={sadaqahBenefits}
       buttonText="Give Sadaqah"
       sectionTitle="Why Give Sadaqah?"
-      onButtonPress={() => navigation.goBack()}
+      onButtonPress={() => navigation.navigate('ManualAmountEntry', { donationType: 'Sadaqah' })}
     />
   );
 };

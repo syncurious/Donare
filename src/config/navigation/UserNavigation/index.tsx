@@ -12,6 +12,7 @@ import ZakatDirectEntry from '../../../screens/home/ZakatDirectEntry';
 import NewPaymentMethod from '../../../screens/home/NewPaymentMethod';
 import PaymentConfirmation from '../../../screens/home/PaymentConfirmation';
 import ThankYou from '../../../screens/home/ThankYou';
+import ManualAmountEntry from '../../../screens/home/ManualAmountEntry';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -27,6 +28,7 @@ type UserStackParamList = {
   NewPaymentMethod: undefined;
   PaymentConfirmation: { donationType: string; amount: number | string; paymentMethod: string };
   ThankYou: { donationType: string; amount: number | string };
+  ManualAmountEntry: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -146,6 +148,15 @@ const UserNavigation = () => {
           title: 'Thank You',
         }}
         component={ThankYou}
+      />
+      <Stack.Screen
+        name="ManualAmountEntry"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Enter Amount',
+        }}
+        component={ManualAmountEntry}
       />
     </Stack.Navigator>
   );
