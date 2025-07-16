@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { RouteProp, useRoute, useNavigation, NavigationProp } from '@react-navigation/native';
 import type { UserStackParamList } from '../../config/navigation/UserNavigation';
 import BenefitsCard from '../../components/cards/VolunteerCard';
 
@@ -12,7 +12,7 @@ type ThankYouRouteParams = {
 };
 
 const ThankYou = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute<RouteProp<UserStackParamList, 'ThankYou'>>();
   const { donationType, amount } = route.params || {};
 
@@ -26,7 +26,7 @@ const ThankYou = () => {
         sectionTitle=""
         buttonText="Back To Home"
         benefits={[]}
-        onButtonPress={() => navigation.navigate('BottomTabs')}
+        onButtonPress={() => navigation.navigateDeprecated('BottomTabs')}
       />
   );
 };

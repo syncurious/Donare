@@ -11,6 +11,7 @@ export { default as Login } from "./Login";
 export { default as SignUp } from "./SignUp";
 export { default as Volunteer } from "./Volunteer";
 export { default as NewPaymentMethod } from "./NewPaymentMethod";
+export { default as FidyahCalculator } from "./FidyahCalculator";
 export { Donate };
 
 const HomeScreen = () => {

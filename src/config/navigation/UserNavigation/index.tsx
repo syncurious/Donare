@@ -13,6 +13,7 @@ import NewPaymentMethod from '../../../screens/home/NewPaymentMethod';
 import PaymentConfirmation from '../../../screens/home/PaymentConfirmation';
 import ThankYou from '../../../screens/home/ThankYou';
 import ManualAmountEntry from '../../../screens/home/ManualAmountEntry';
+import FidyahCalculator from '../../../screens/home/FidyahCalculator';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -29,6 +30,7 @@ type UserStackParamList = {
   PaymentConfirmation: { donationType: string; amount: number | string; paymentMethod: string };
   ThankYou: { donationType: string; amount: number | string };
   ManualAmountEntry: undefined;
+  FidyahCalculator: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -157,6 +159,15 @@ const UserNavigation = () => {
           title: 'Enter Amount',
         }}
         component={ManualAmountEntry}
+      />
+      <Stack.Screen
+        name="FidyahCalculator"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Calculate Fidyah',
+        }}
+        component={FidyahCalculator}
       />
     </Stack.Navigator>
   );

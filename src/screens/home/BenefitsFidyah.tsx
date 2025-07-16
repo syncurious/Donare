@@ -1,6 +1,6 @@
 import React from 'react';
 import BenefitsCard from '../../components/cards/VolunteerCard';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import NamazIcon from '../../assets/icons/NamazIcon.png';
 import heartIcon from '../../assets/icons/heartIcon.png';
 import duoIcon from '../../assets/icons/duoIcon.png';
@@ -24,7 +24,7 @@ const fidyahBenefits = [
 ];
 
 const BenefitsFidyah = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   return (
     <BenefitsCard
       image={"https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
@@ -33,7 +33,7 @@ const BenefitsFidyah = () => {
       benefits={fidyahBenefits}
       buttonText="Give Fidyah"
       sectionTitle="Why Give Fidyah?"
-      onButtonPress={() => navigation.goBack()}
+      onButtonPress={() => navigation.navigate('FidyahCalculator')}
     />
   );
 };
