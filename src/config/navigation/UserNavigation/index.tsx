@@ -9,6 +9,7 @@ import ZakatHomeAssets from '../../../screens/home/ZakatHomeAssets';
 import ZakatBusinessAssets from '../../../screens/home/ZakatBusinessAssets';
 import ZakatSummary from '../../../screens/home/ZakatSummary';
 import ZakatDirectEntry from '../../../screens/home/ZakatDirectEntry';
+import NewPaymentMethod from '../../../screens/home/NewPaymentMethod';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -21,6 +22,7 @@ type UserStackParamList = {
   ZakatBusinessAssets: { homeAssets: string };
   ZakatSummary: { homeAssets: string; businessAssets: string };
   ZakatDirectEntry: undefined;
+  NewPaymentMethod: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -113,6 +115,15 @@ const UserNavigation = () => {
           title: 'Direct Zakat Entry',
         }}
         component={ZakatDirectEntry}
+      />
+      <Stack.Screen
+        name="NewPaymentMethod"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Add Payment Method',
+        }}
+        component={NewPaymentMethod}
       />
     </Stack.Navigator>
   );

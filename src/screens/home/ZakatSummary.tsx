@@ -47,7 +47,8 @@ const ZakatSummary = () => {
           <Paragraph variant="body2" style={styles.bold}>PKR {zakat.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Paragraph>
         </View>
       </View>
-      <Button style={styles.button} onPress={() => {/* TODO: Go to next step or donation */}}>
+      <Button style={styles.button} onPress={() => {
+        navigation.navigate('NewPaymentMethod' as never)}}>
         Proceed to Donate
       </Button>
     </ScrollView>

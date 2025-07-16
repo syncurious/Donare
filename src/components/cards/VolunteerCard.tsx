@@ -7,6 +7,7 @@ import Button from '../base/Button';
 import Section from '../base/Section';
 import Text from '../base/Text';
 import theme from '../../config/theme';
+import BefitsListCard from './befitsListCard';
 
 interface Benefit {
   icon?: any; // require or import for local icon
@@ -58,21 +59,7 @@ const BenefitsCard: React.FC<BenefitsCardProps> = props => {
           <Paragraph style={styles.description}>{props.description}</Paragraph>
           <Section title={props.sectionTitle}>
             {props.benefits.map((benefit, idx) => (
-              <View key={idx} style={styles.benefitRow}>
-                {benefit.icon && (
-                  <View style={styles.benefitIconWrapper}>
-                    <Image source={benefit.icon} style={styles.benefitIcon} />
-                  </View>
-                )}
-                <View style={styles.benefitTextContainer}>
-                  <Text variant="subtitle1" style={styles.benefitTitle}>
-                    {benefit.title}
-                  </Text>
-                  <Text variant="body2" color="muted">
-                    {benefit.description}
-                  </Text>
-                </View>
-              </View>
+              <BefitsListCard {...benefit} key={idx} />
             ))}
           </Section>
         </View>
