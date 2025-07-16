@@ -25,9 +25,9 @@ const BottomNavigation = () => {
       <Tab.Screen name="Donate" component={Donate} />
       <Tab.Screen
         name="Volunteer"
-        children={() => <Placeholder label="Volunteer" />}
+        component={Volunteer}
       />
-      <Tab.Screen name="Qibla" component={Qibla} />
+      <Tab.Screen name="Qibla" component={() => <Placeholder label="Qibla" />} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

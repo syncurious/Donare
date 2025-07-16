@@ -1,16 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Container from '../../components/base/Container';
 import Section from '../../components/base/Section';
 import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
+import Button from '../../components/base/Button';
 import Feather from 'react-native-vector-icons/Feather';
+import { useTheme } from '../../config/theme';
 
 const getInitials = (name: string): string => {
   return name
@@ -20,42 +17,76 @@ const getInitials = (name: string): string => {
     .toUpperCase();
 };
 
-const ICON_COLOR = '#6a85f1';
-const CHEVRON_COLOR = '#b0b3c6';
-const CARD_BG = 'rgba(255,255,255,0.85)';
-const TOP_BG = '#b8c6ff';
-const BOTTOM_BG = '#f7f8fa';
-
 const Profile = () => {
+  const navigation = useNavigation();
+  const { theme } = useTheme();
   const user = {
     name: 'Omar Hassan',
     memberSince: '2022',
     email: 'omar.hassan@gmail.com',
     phone: '+1(555)123-4567',
     profileImage: 'https://avatar.iran.liara.run/public/boy',
-    // profileCompletion: 0.8, // Remove profile completion
   };
 
   return (
-    <Container scrollable padding="none" style={styles.containerBg}>
-      <View style={styles.topBg}>
-        <View style={styles.profileCard}>
+    <Container
+      scrollable
+      padding="none"
+      style={{ backgroundColor: theme.colors.background.primary }}
+    >
+      {/* Top Section with Avatar and Edit */}
+      <View
+        style={[
+          styles.topBg,
+          {
+            backgroundColor: theme.colors.primary[50],
+            borderBottomLeftRadius: theme.borderRadius['2xl'],
+            borderBottomRightRadius: theme.borderRadius['2xl'],
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.profileCard,
+            {
+              backgroundColor: theme.colors.background.secondary,
+              borderRadius: theme.borderRadius.xl,
+            },
+          ]}
+        >
           <View style={styles.avatarWrapper}>
-            {/* Remove avatar border */}
             {user.profileImage ? (
               <Image
-                source={{ uri: 'https://avatar.iran.liara.run/public/boy' }}
-                style={styles.avatar}
+                source={{ uri: user.profileImage }}
+                style={[
+                  styles.avatar,
+                  { borderColor: theme.colors.primary[500] },
+                ]}
               />
             ) : (
-              <View style={styles.avatarFallback}>
+              <View
+                style={[
+                  styles.avatarFallback,
+                  { backgroundColor: theme.colors.primary[500] },
+                ]}
+              >
                 <Text style={styles.avatarInitials}>
                   {getInitials(user.name)}
                 </Text>
               </View>
             )}
-            <TouchableOpacity style={styles.editIconBtn} activeOpacity={0.7}>
-              <Feather name="edit-2" size={16} color="#fff" />
+            <TouchableOpacity
+              style={[
+                styles.editIconBtn,
+                { backgroundColor: theme.colors.primary[500] },
+              ]}
+              activeOpacity={0.7}
+            >
+              <Feather
+                name="edit-2"
+                size={16}
+                color={theme.colors.text.inverse}
+              />
             </TouchableOpacity>
           </View>
           <Heading level={2} style={styles.name}>
@@ -64,17 +95,17 @@ const Profile = () => {
           <Text variant="caption" color="secondary" style={styles.memberSince}>
             Member since {user.memberSince}
           </Text>
-          {/* Remove profile completion text */}
         </View>
       </View>
 
-      <View style={styles.sectionCard}>
+      {/* Personal Info Section */}
+      <Container variant="card" style={styles.sectionCard}>
         <Section title="Personal Info">
           <View style={styles.infoRow}>
             <Feather
               name="mail"
               size={16}
-              color={ICON_COLOR}
+              color={theme.colors.primary[500]}
               style={styles.infoIcon}
             />
             <Text variant="body2" color="secondary" style={styles.infoLabel}>
@@ -88,7 +119,7 @@ const Profile = () => {
             <Feather
               name="phone"
               size={16}
-              color={ICON_COLOR}
+              color={theme.colors.primary[500]}
               style={styles.infoIcon}
             />
             <Text variant="body2" color="secondary" style={styles.infoLabel}>
@@ -99,73 +130,74 @@ const Profile = () => {
             </Text>
           </View>
         </Section>
-      </View>
+      </Container>
 
-      <View style={styles.sectionCard}>
-        <Section title="Donation History">
-          <TouchableOpacity style={styles.linkRow} activeOpacity={0.7}>
-            <View style={styles.linkRowLeft}>
-              <Feather
-                name="clock"
-                size={16}
-                color={ICON_COLOR}
-                style={styles.linkIcon}
-              />
-              <Text variant="body2">View Donation History</Text>
-            </View>
+      {/* Saved Causes Section */}
+      <Container variant="card" style={styles.sectionCard}>
+        <Section title="History">
+          <TouchableOpacity
+            style={styles.listRow}
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('DonationHistory' as never)}
+          >
+            <Text variant="body2" style={styles.listRowText}>
+              View Donation History
+            </Text>
             <Feather
               name="chevron-right"
-              size={18}
-              color={CHEVRON_COLOR}
-              style={styles.chevron}
+              size={20}
+              color={theme.colors.primary[500]}
             />
           </TouchableOpacity>
-        </Section>
-      </View>
-      <View style={styles.sectionCard}>
-        <Section title="Saved Causes">
-          <TouchableOpacity style={styles.linkRow} activeOpacity={0.7}>
-            <View style={styles.linkRowLeft}>
-              <Feather
-                name="bookmark"
-                size={16}
-                color={ICON_COLOR}
-                style={styles.linkIcon}
-              />
-              <Text variant="body2">View Saved Causes</Text>
-            </View>
+          <TouchableOpacity
+            style={styles.listRow}
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('SavedCauses' as never)}
+          >
+            <Text variant="body2" style={styles.listRowText}>
+              View Saved Causes
+            </Text>
             <Feather
               name="chevron-right"
-              size={18}
-              color={CHEVRON_COLOR}
-              style={styles.chevron}
+              size={20}
+              color={theme.colors.primary[500]}
             />
           </TouchableOpacity>
-        </Section>
-      </View>
-      <View style={styles.sectionCard}>
-        <Section title="Volunteer Record">
-          <TouchableOpacity style={styles.linkRow} activeOpacity={0.7}>
-            <View style={styles.linkRowLeft}>
-              <Feather
-                name="award"
-                size={16}
-                color={ICON_COLOR}
-                style={styles.linkIcon}
-              />
-              <Text variant="body2">View Volunteer Record</Text>
-            </View>
+          <TouchableOpacity
+            style={styles.listRow}
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('VolunteerRecord' as never)}
+          >
+            <Text variant="body2" style={styles.listRowText}>
+              View Volunteer Record
+            </Text>
             <Feather
               name="chevron-right"
-              size={18}
-              color={CHEVRON_COLOR}
-              style={styles.chevron}
+              size={20}
+              color={theme.colors.primary[500]}
             />
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.listRow,
+              { backgroundColor: theme.colors.error[50] },
+            ]}
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('VolunteerRecord' as never)}
+          >
+            <Text
+              variant="h6"
+              style={[styles.listRowText, { color: theme.colors.error[500] }]}
+            >
+              Logout
+            </Text>
+            <Feather name="log-out" size={20} color={theme.colors.error[500]} />
+          </TouchableOpacity>
         </Section>
-      </View>
+      </Container>
 
-      <View style={styles.sectionCard}>
+      {/* Settings Section */}
+      {/* <Container variant="card" style={styles.sectionCard}>
         <Section title="Settings">
           <View style={styles.infoRow}>
             <Text variant="body2" color="secondary" style={styles.infoLabel}>
@@ -184,87 +216,63 @@ const Profile = () => {
             </Text>
           </View>
         </Section>
-      </View>
+      </Container> */}
 
-      <TouchableOpacity style={styles.logoutButton} activeOpacity={0.8}>
-        <Feather name="log-out" size={18} color="#fff" style={styles.logoutIcon} />
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </TouchableOpacity>
+      {/* Logout Button */}
+      <View style={{ flex: 1 }}></View>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  containerBg: {
-    backgroundColor: BOTTOM_BG,
-  },
   topBg: {
     width: '100%',
-    paddingTop: Platform.OS === 'ios' ? 32 : 16,
-    paddingBottom: 24, // reduced
+    paddingTop: 32,
+    paddingBottom: 24,
     alignItems: 'center',
-    backgroundColor: TOP_BG,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
-    marginBottom: 4, // reduced
+    marginBottom: 4,
   },
   profileCard: {
-    backgroundColor: CARD_BG,
-    borderRadius: 14, // reduced
     alignItems: 'center',
-    padding: 12, // reduced
+    padding: 16,
     width: '90%',
-    // Remove shadow and border
-    shadowColor: undefined,
-    shadowOffset: undefined,
-    shadowOpacity: undefined,
-    shadowRadius: undefined,
-    elevation: 0,
     marginTop: 0,
     marginBottom: 0,
-    borderWidth: 0,
-    borderColor: undefined,
   },
   avatarWrapper: {
-    width: 80, // reduced
-    height: 80, // reduced
+    width: 88,
+    height: 88,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4, // reduced
+    marginBottom: 8,
   },
-  // Remove avatarBorder style
   avatar: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    borderWidth: 1,
-    borderColor: ICON_COLOR,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
     zIndex: 2,
   },
   avatarFallback: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    backgroundColor: ICON_COLOR,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 2,
   },
   avatarInitials: {
-    fontSize: 28, // reduced
+    fontSize: 28,
     color: '#fff',
-    fontWeight: '600', // lighter
+    fontWeight: '600',
   },
   editIconBtn: {
     position: 'absolute',
     bottom: 4,
     right: 4,
-    backgroundColor: ICON_COLOR,
     borderRadius: 12,
-    padding: 2,
+    padding: 4,
     zIndex: 3,
-    borderWidth: 0,
-    borderColor: undefined,
   },
   name: {
     marginBottom: 0,
@@ -276,95 +284,78 @@ const styles = StyleSheet.create({
   memberSince: {
     marginBottom: 0,
     fontSize: 12,
-    color: '#888',
-  },
-  sectionTitle: {
-    fontWeight: '500',
-    fontSize: 14,
-    color: '#222',
-    marginBottom: 2,
   },
   sectionCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
     marginHorizontal: 0,
-    marginVertical: 4,
-    padding: 10,
+    marginVertical: 8,
   },
   infoRow: {
+    marginTop: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
   },
   infoIcon: {
-    marginRight: 6,
+    marginRight: 12,
   },
   infoLabel: {
     minWidth: 60,
-    marginRight: 4,
-    color: '#aaa',
+    marginRight: 0,
     fontSize: 13,
   },
   infoValue: {
     flex: 1,
     textAlign: 'left',
-    color: '#222',
     fontSize: 13,
   },
-  linkRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    backgroundColor: '#f2f4fa',
+  actionButton: {
+    marginTop: 8,
+    alignSelf: 'flex-start',
     borderRadius: 8,
-    marginBottom: 2,
-    marginTop: 2,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
   },
-  linkRowLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  linkIcon: {
-    marginRight: 6,
-  },
-  chevron: {
-    marginLeft: 6,
-  },
-  // Remove old logoutBtn and logoutText
-  logoutLink: {
-    // old style, now replaced
-  },
-  logoutLinkText: {
-    // old style, now replaced
+  actionButtonText: {
+    fontWeight: '600',
+    fontSize: 15,
   },
   logoutButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#ff4d4f',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 24,
-    marginTop: 32,
-    marginBottom: 32,
-    elevation: 2,
-    shadowColor: '#ff4d4f',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    flex: 1,
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // alignSelf: 'center',
+    // paddingVertical: 12,
+    // paddingHorizontal: 32,
+    // borderRadius: 24,
+    marginVertical: 32,
+    marginHorizontal: 50,
+    // elevation: 2,
   },
   logoutButtonText: {
     color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
+    // fontWeight: '600',
+    // fontSize: 16,
     textAlign: 'center',
-    marginLeft: 8,
-    letterSpacing: 0.2,
+    // marginLeft: 8,
+    // letterSpacing: 0.2,
   },
   logoutIcon: {
     marginRight: 0,
+  },
+  listRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+    marginTop: 2,
+    marginBottom: 2,
+  },
+  listRowText: {
+    fontWeight: '500',
+    fontSize: 15,
+    color: '#222',
   },
 });
 

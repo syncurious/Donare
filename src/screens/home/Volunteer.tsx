@@ -9,8 +9,6 @@ import { useState } from 'react';
 import SocialIcon from '../../assets/icons/duoIcon.png';
 import SkillIcon from '../../assets/icons/compassIcon.png';
 import GrowthIcon from '../../assets/icons/heartIcon.png';
-import VolunteerImage from '../../assets/images/get_started_illustration.png';
-import { Container } from '../../components/base';
 
 const benefits = [
   {
