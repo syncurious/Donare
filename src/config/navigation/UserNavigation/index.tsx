@@ -10,6 +10,8 @@ import ZakatBusinessAssets from '../../../screens/home/ZakatBusinessAssets';
 import ZakatSummary from '../../../screens/home/ZakatSummary';
 import ZakatDirectEntry from '../../../screens/home/ZakatDirectEntry';
 import NewPaymentMethod from '../../../screens/home/NewPaymentMethod';
+import PaymentConfirmation from '../../../screens/home/PaymentConfirmation';
+import ThankYou from '../../../screens/home/ThankYou';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -23,6 +25,8 @@ type UserStackParamList = {
   ZakatSummary: { homeAssets: string; businessAssets: string };
   ZakatDirectEntry: undefined;
   NewPaymentMethod: undefined;
+  PaymentConfirmation: { donationType: string; amount: number | string; paymentMethod: string };
+  ThankYou: { donationType: string; amount: number | string };
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -124,6 +128,24 @@ const UserNavigation = () => {
           title: 'Add Payment Method',
         }}
         component={NewPaymentMethod}
+      />
+      <Stack.Screen
+        name="PaymentConfirmation"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Confirm Payment',
+        }}
+        component={PaymentConfirmation}
+      />
+      <Stack.Screen
+        name="ThankYou"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Thank You',
+        }}
+        component={ThankYou}
       />
     </Stack.Navigator>
   );

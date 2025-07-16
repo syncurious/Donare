@@ -30,13 +30,16 @@ const PAYMENT_OPTIONS = [
 ];
 
 const SelectPaymentMethod = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { theme } = useTheme();
   const [selected, setSelected] = useState('card');
 
   const handleContinue = () => {
-    // Proceed with selected payment method
-    // navigation.navigate('NextScreen', { method: selected });
+    navigation.navigate('PaymentConfirmation', {
+      donationType: 'One-Time Donation',
+      amount: 100,
+      paymentMethod: selected,
+    });
   };
 
   return (
