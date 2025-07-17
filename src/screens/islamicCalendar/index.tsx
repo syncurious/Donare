@@ -1,36 +1,37 @@
 import React, { useState } from 'react';
 import moment from 'moment-hijri';
 import { Moment } from 'moment';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Heading, Paragraph } from '../../components/base';
 
 const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 const IslamicCalendar = () => {
-  const [currentHijriMonth, setCurrentHijriMonth] = useState<Moment>(moment());
+  const [baseHijriMonth, setBaseHijriMonth] = useState<Moment>(moment());
 
   // Get today's Hijri date for highlighting
   const todayHijri = moment();
-  const isToday = (day: number) => {
+  const isToday = (date: Moment) => {
     // @ts-ignore: moment-hijri extends Moment with iYear, iMonth, iDate
     return (
-      (todayHijri as any).iYear() === (currentHijriMonth as any).iYear() &&
-      (todayHijri as any).iMonth() === (currentHijriMonth as any).iMonth() &&
-      (todayHijri as any).iDate() === day
+      (todayHijri as any).iYear() === (date as any).iYear() &&
+      (todayHijri as any).iMonth() === (date as any).iMonth() &&
+      (todayHijri as any).iDate() === (date as any).iDate()
     );
   };
 
   const goToNextMonth = () => {
-    setCurrentHijriMonth((prev: Moment) => moment(prev).add(1, 'iMonth'));
+    setBaseHijriMonth(prev => moment(prev).add(1, 'iMonth'));
   };
 
   const goToPrevMonth = () => {
-    setCurrentHijriMonth((prev: Moment) => moment(prev).subtract(1, 'iMonth'));
+    setBaseHijriMonth(prev => moment(prev).subtract(1, 'iMonth'));
   };
 
-  const renderWeeks = () => {
-    const startOfMonth = moment(currentHijriMonth).startOf('iMonth');
-    const endOfMonth = moment(currentHijriMonth).endOf('iMonth');
+  // Helper to render a single month's calendar
+  const renderMonth = (monthMoment: Moment) => {
+    const startOfMonth = moment(monthMoment).startOf('iMonth');
+    const endOfMonth = moment(monthMoment).endOf('iMonth');
     const daysInMonth = endOfMonth.iDate();
     const startDay = startOfMonth.day();
 
@@ -52,63 +53,86 @@ const IslamicCalendar = () => {
     for (let i = 0; i < daysArray.length; i += 7) {
       weeks.push(daysArray.slice(i, i + 7));
     }
-    return weeks;
+
+    return (
+      <View style={styles.monthContainer}>
+        <Heading level={2} style={styles.monthTitle}>
+          {monthMoment.format('iMMMM iYYYY')}
+        </Heading>
+        {/* Weekday Header */}
+        <View style={styles.weekRow}>
+          {weekDays.map((d, idx) => (
+            <Paragraph key={idx} style={styles.dayHeader}>
+              {d}
+            </Paragraph>
+          ))}
+        </View>
+        {/* Calendar Grid */}
+        <View style={styles.gridContainer}>
+          {weeks.map((week, wIdx) => (
+            <View key={wIdx} style={styles.gridRow}>
+              {week.map((item, idx) => {
+                const cellDate = !item.empty
+                  ? moment(monthMoment).startOf('iMonth').add(Number(item.label) - 1, 'days')
+                  : null;
+                return (
+                  <View
+                    key={item.key}
+                    style={[
+                      styles.dayCell,
+                      item.empty && styles.emptyCell,
+                      !item.empty && cellDate && isToday(cellDate) && styles.todayCell,
+                    ]}
+                  >
+                    <Paragraph
+                      style={[
+                        item.empty ? styles.emptyDay : styles.dayText,
+                        !item.empty && cellDate && isToday(cellDate) && styles.todayText,
+                      ]}
+                    >
+                      {item.label}
+                    </Paragraph>
+                  </View>
+                );
+              })}
+            </View>
+          ))}
+        </View>
+      </View>
+    );
   };
+
+  // Calculate the two months to display
+  const firstMonth = moment(baseHijriMonth);
+  const secondMonth = moment(baseHijriMonth).add(1, 'iMonth');
 
   return (
     <View style={styles.container}>
+      {/* Top Navigation */}
       <View style={styles.headerRow}>
         <Button onPress={goToPrevMonth} style={styles.navBtn}>
           <Paragraph>{'◀'}</Paragraph>
         </Button>
         <View style={styles.monthTitleWrapper}>
-          <Heading level={2} style={styles.monthTitle}>
-            {currentHijriMonth.format('iMMMM iYYYY')}
-          </Heading>
+          <Heading level={3} style={styles.calTitle}>Islamic Calendar</Heading>
         </View>
         <Button onPress={goToNextMonth} style={styles.navBtn}>
           <Paragraph>{'▶'}</Paragraph>
         </Button>
       </View>
-
-      {/* Weekday Header */}
-      <View style={styles.weekRow}>
-        {weekDays.map((d, idx) => (
-          <Paragraph key={idx} style={styles.dayHeader}>
-            {d}
-          </Paragraph>
-        ))}
-      </View>
-
-      {/* Calendar Grid */}
-      <View style={styles.gridContainer}>
-        {renderWeeks().map((week, wIdx) => (
-          <View key={wIdx} style={styles.gridRow}>
-            {week.map(item => (
-              <View
-                key={item.key}
-                style={[
-                  styles.dayCell,
-                  item.empty && styles.emptyCell,
-                  !item.empty &&
-                    isToday(Number(item.label)) &&
-                    styles.todayCell,
-                ]}
-              >
-                <Paragraph
-                  style={[
-                    item.empty ? styles.emptyDay : styles.dayText,
-                    !item.empty &&
-                      isToday(Number(item.label)) &&
-                      styles.todayText,
-                  ]}
-                >
-                  {item.label}
-                </Paragraph>
-              </View>
-            ))}
-          </View>
-        ))}
+      {/* First Month */}
+      {renderMonth(firstMonth)}
+      {/* Second Month */}
+      {renderMonth(secondMonth)}
+      {/* Bottom Navigation */}
+      <View style={styles.headerRow}>
+        <Button onPress={goToPrevMonth} style={styles.navBtn}>
+          <Paragraph>{'◀'}</Paragraph>
+        </Button>
+        <View style={styles.monthTitleWrapper} />
+        <Button onPress={goToNextMonth} style={styles.navBtn}>
+          <Paragraph>{'▶'}</Paragraph>
+        </Button>
       </View>
     </View>
   );
@@ -124,8 +148,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 8,
     marginTop: 8,
+  },
+  calTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#222',
   },
   monthTitleWrapper: {
     flex: 1,
@@ -139,11 +169,15 @@ const styles = StyleSheet.create({
     width: 50,
     backgroundColor: 'transparent',
   },
+  monthContainer: {
+    marginBottom: 16,
+  },
   monthTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#222',
+    marginBottom: 4,
   },
   weekRow: {
     flexDirection: 'row',
