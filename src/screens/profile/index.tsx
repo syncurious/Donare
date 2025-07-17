@@ -134,14 +134,14 @@ const Profile = () => {
 
       {/* Saved Causes Section */}
       <Container variant="card" style={styles.sectionCard}>
-        <Section title="History">
+        <Section style={{ marginVertical: 0 }} title="History">
           <TouchableOpacity
             style={styles.listRow}
             activeOpacity={0.7}
             onPress={() => navigation.navigate('DonationHistory' as never)}
           >
             <Text variant="body2" style={styles.listRowText}>
-              View Donation History
+              Donation History
             </Text>
             <Feather
               name="chevron-right"
@@ -152,10 +152,10 @@ const Profile = () => {
           <TouchableOpacity
             style={styles.listRow}
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('SavedCauses' as never)}
+            onPress={() => navigation.navigate('RequestHelp' as never)}
           >
             <Text variant="body2" style={styles.listRowText}>
-              View Saved Causes
+              View Your Help Requests
             </Text>
             <Feather
               name="chevron-right"
@@ -169,7 +169,7 @@ const Profile = () => {
             onPress={() => navigation.navigate('VolunteerRecord' as never)}
           >
             <Text variant="body2" style={styles.listRowText}>
-              View Volunteer Record
+              View Your Volunteer Form
             </Text>
             <Feather
               name="chevron-right"
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 12,
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
     borderRadius: 8,
     backgroundColor: 'transparent',
     marginTop: 2,

@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, ViewStyle } from 'react-native';
 import Heading from './Heading';
 import Text from './Text';
 
@@ -8,7 +8,7 @@ interface SectionProps {
   description?: string;
   children: React.ReactNode[] | React.ReactNode;
   autoCarousel?: boolean;
-  style?: any;
+  style?: ViewStyle;
 }
 
 const Section: React.FC<SectionProps> = ({
