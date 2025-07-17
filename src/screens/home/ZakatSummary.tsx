@@ -1,14 +1,29 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Touchable,
+  TouchableOpacity,
+} from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { UserStackParamList } from '../../config/navigation/UserNavigation';
 import Heading from '../../components/base/Heading';
 import Paragraph from '../../components/base/Paragraph';
 import Button from '../../components/base/Button';
+import Container from '../../components/base/Container';
+import Section from '../../components/base/Section';
+import { screenDimensions, theme } from '../../config/theme';
+import Feather from 'react-native-vector-icons/Feather';
+
+const rightArrow = require('../../assets/icons/NamazIcon.png');
 
 const ZakatSummary = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<UserStackParamList, 'ZakatSummary'>>();
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<UserStackParamList, 'ZakatSummary'>
+    >();
   const route = useRoute<RouteProp<UserStackParamList, 'ZakatSummary'>>();
   const { homeAssets, businessAssets } = route.params;
 
@@ -31,88 +46,299 @@ const ZakatSummary = () => {
   const zakat = totalAssets * 0.025;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Heading level={2} style={styles.heading}>Zakat Calculator</Heading>
-      <View style={styles.zakatCard}>
-        <Paragraph variant="body2" color="secondary" style={styles.zakatLabel}>Your Zakat Amount</Paragraph>
-        <Heading level={2} style={styles.zakatAmount}>PKR {zakat.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Heading>
+    <View style={styles.root}>
+      <Container scrollable padding="small" style={styles.container}>
+        {/* <Heading level={2} style={styles.heading}>Zakat Calculator</Heading> */}
+        {/* <View style={styles.summaryCard}>
+          <Paragraph variant="body2" color="secondary" style={styles.summaryLabel}>Your Zakat Amount</Paragraph>
+          <Heading level={1} style={styles.summaryAmount}>PKR {zakat.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Heading>
+        </View> */}
+        <Section title="Home Assets" style={styles.section}>
+          {/* <Paragraph variant="body2" color="secondary" style={styles.sectionHeader}>Home Assets</Paragraph> */}
+          <View style={styles.assetRow}>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Cash at Home/Bank:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Cash at Home/Bank
+              </Paragraph>
+            </View>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(home.cash)
+                ? parseFloat(home.cash).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <Paragraph variant="body2" color="secondary">
+              Gold Value:
+            </Paragraph>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(home.gold)
+                ? parseFloat(home.gold).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <Paragraph variant="body2" color="secondary">
+              Silver Value:
+            </Paragraph>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(home.silver)
+                ? parseFloat(home.silver).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <Paragraph variant="body2" color="secondary">
+              Other Assets:
+            </Paragraph>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(home.otherAssets)
+                ? parseFloat(home.otherAssets).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <Paragraph
+              variant="body2"
+              color="secondary"
+              style={{ fontWeight: 'bold' }}
+            >
+              Total Home Assets:
+            </Paragraph>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR {homeTotal.toLocaleString()}
+            </Paragraph>
+          </View>
+        </Section>
+        <Section title="Business Assets" style={styles.section}>
+          <View style={styles.assetRow}>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Inventory:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Inventory
+              </Paragraph>
+            </View>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(business.inventory)
+                ? parseFloat(business.inventory).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Receivables:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Receivables
+              </Paragraph>
+            </View>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(business.receivables)
+                ? parseFloat(business.receivables).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Investments:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Investments
+              </Paragraph>
+            </View>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(business.investments)
+                ? parseFloat(business.investments).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Other Business Assets:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Other Business Assets
+              </Paragraph>
+            </View>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR{' '}
+              {parseFloat(business.otherBusinessAssets)
+                ? parseFloat(business.otherBusinessAssets).toLocaleString()
+                : '0'}
+            </Paragraph>
+          </View>
+          <View style={styles.assetRow}>
+            <Paragraph variant="body2" color="secondary">
+              Total Business Assets:
+            </Paragraph>
+            <Paragraph variant="body2" style={styles.bold}>
+              PKR {businessTotal.toLocaleString()}
+            </Paragraph>
+          </View>
+        </Section>
+      </Container>
+      <View style={styles.stickyFooter}>
+        <Section title="Total Zakat Due" style={styles.section}>
+          <TouchableOpacity activeOpacity={0.7} style={styles.assetRow}>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="h4" style={{}}>
+                PKR{' '}
+                {zakat.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Is Your Zakat Which is 2.5% of your total assets
+              </Paragraph>
+            </View>
+            <Feather
+              name="chevron-right"
+              size={30}
+              color={theme.colors.text.primary}
+            />
+          </TouchableOpacity>
+        </Section>
       </View>
-      <View style={styles.breakdownCard}>
-        <View style={styles.row}>
-          <Paragraph variant="body2" color="secondary">Total Assets</Paragraph>
-          <Paragraph variant="body2" style={styles.bold}>PKR {totalAssets.toLocaleString()}</Paragraph>
-        </View>
-        <View style={styles.row}>
-          <Paragraph variant="body2" color="secondary">Zakat (2.5%)</Paragraph>
-          <Paragraph variant="body2" style={styles.bold}>PKR {zakat.toLocaleString(undefined, { maximumFractionDigits: 2 })}</Paragraph>
-        </View>
-      </View>
-      <Button style={styles.button} onPress={() => {
-        navigation.navigate('NewPaymentMethod' as never)}}>
-        Proceed to Donate
-      </Button>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 24,
+  root: {
+    flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  },
+  container: {
+    backgroundColor: '#fff',
+    flexGrow: 1,
+    marginBottom: screenDimensions.height * 0.20,
+    paddingBottom: 120, // for sticky footer space
   },
   heading: {
     marginBottom: 24,
     textAlign: 'center',
+    fontWeight: '700',
+    fontSize: 18,
   },
-  zakatCard: {
+  summaryCard: {
     width: '100%',
-    backgroundColor: '#F3F7F9',
-    borderRadius: 16,
-    paddingVertical: 32,
-    paddingHorizontal: 16,
+    backgroundColor: '#E8F5E9',
+    borderRadius: 20,
+    paddingVertical: 36,
+    paddingHorizontal: 20,
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 28,
     shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   },
-  zakatLabel: {
-    marginBottom: 8,
+  summaryLabel: {
+    marginBottom: 10,
     fontWeight: '500',
+    fontSize: 16,
   },
-  zakatAmount: {
-    fontSize: 36,
+  summaryAmount: {
+    fontSize: 40,
     fontWeight: 'bold',
     color: '#2e7d32',
   },
-  breakdownCard: {
+  section: {
     width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    // backgroundColor: '#fff',
+    gap: 12,
+    borderRadius: 16,
     padding: 20,
-    marginBottom: 32,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    marginBottom: 20,
+  },
+  sectionHeader: {
+    fontWeight: '700',
+    fontSize: 16,
+    marginBottom: 12,
+    color: '#222',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 14,
   },
   bold: {
     fontWeight: 'bold',
     color: '#222',
+    backgroundColor: '#F9FAFB',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
   },
-  button: {
+  stickyFooter: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: screenDimensions.height * 0.20,
+    backgroundColor: theme.colors.primary[100],
+    paddingHorizontal: 16,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: -2 },
+    elevation: 8,
+  },
+  nextButton: {
     width: '100%',
-    marginTop: 16,
+    backgroundColor: '#2e7d32',
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+  },
+  nextButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  nextButtonText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginRight: 12,
+  },
+  nextButtonAmount: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginLeft: 'auto',
+  },
+  assetRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  assetRowLabel: {
+    gap: 4,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
 });
 
-export default ZakatSummary; 
+export default ZakatSummary;

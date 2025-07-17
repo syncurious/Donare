@@ -9,10 +9,10 @@ import { useTheme } from '../../config/theme';
 import { useNavigation, useRoute, RouteProp, NavigationProp } from '@react-navigation/native';
 
 interface ManualAmountEntryProps {
-  donationType?: 'Sadaqah' | 'Kaffarah';
+  donationType?: 'Sadaqah' | 'Kaffarah' | 'Zakat' | 'Fidyah';
 }
 
-type RouteParams = { donationType?: 'Sadaqah' | 'Kaffarah' };
+type RouteParams = { donationType?: 'Sadaqah' | 'Kaffarah' | 'Zakat' | 'Fidyah' };
 
 const ManualAmountEntry: React.FC<ManualAmountEntryProps> = (props) => {
   const { theme } = useTheme();

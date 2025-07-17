@@ -13,8 +13,9 @@ import Input from '../../components/base/Input';
 import Button from '../../components/base/Button';
 import { Modal } from '../../components/base';
 import { FoodCard } from '../../components/cards';
-import { useTheme } from '../../config/theme';
+import theme, { useTheme } from '../../config/theme';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import SkipButton from '../../components/sections/SkipButto';
 
 const foodOptions = [
   {
@@ -48,7 +49,7 @@ const FidyahCalculator: React.FC = () => {
     (typeof foodOptions)[0] | null
   >(null);
   const [customRate, setCustomRate] = useState('');
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleSkip = () => {
@@ -143,13 +144,7 @@ const FidyahCalculator: React.FC = () => {
         </View>
       </Modal>
       {/* Skip Row */}
-      <View style={styles.skipRow}>
-        <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
-          <Paragraph variant="body1" color="primary" style={styles.skipText}>
-            Skip
-          </Paragraph>
-        </TouchableOpacity>
-      </View>
+      <SkipButton onPress={handleSkip}/>
       {/* Title & Description */}
       <View style={styles.headerSection}>
         <Heading level={2} style={styles.heading}>
@@ -239,18 +234,6 @@ const FidyahCalculator: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  skipRow: {
-    alignItems: 'flex-end',
-    padding: 16,
-  },
-  skipButton: {
-    padding: 4,
-  },
-  skipText: {
-    fontWeight: '700',
-    fontSize: 14,
-    opacity: 0.7,
-  },
   headerSection: {
     alignItems: 'center',
     marginBottom: 16,
