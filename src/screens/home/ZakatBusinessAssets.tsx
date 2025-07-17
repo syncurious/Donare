@@ -7,7 +7,7 @@ import Heading from '../../components/base/Heading';
 import Paragraph from '../../components/base/Paragraph';
 import Input from '../../components/base/Input';
 import Button from '../../components/base/Button';
-import SkipButton from '../../components/sections/SkipButto';
+import SkipButton from '../../components/sections/SkipButton';
 
 const ZakatBusinessAssets = () => {
   const navigation =

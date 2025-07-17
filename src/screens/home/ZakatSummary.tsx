@@ -22,7 +22,7 @@ const rightArrow = require('../../assets/icons/NamazIcon.png');
 const ZakatSummary = () => {
   const navigation =
     useNavigation<
-      NativeStackNavigationProp<UserStackParamList, 'ZakatSummary'>
+      NativeStackNavigationProp<any, 'ZakatSummary'>
     >();
   const route = useRoute<RouteProp<UserStackParamList, 'ZakatSummary'>>();
   const { homeAssets, businessAssets } = route.params;
@@ -61,7 +61,7 @@ const ZakatSummary = () => {
                 Cash at Home/Bank:
               </Paragraph>
               <Paragraph variant="caption" color="secondary">
-                Cash at Home/Bank
+                Liquid cash available in hand or in bank accounts
               </Paragraph>
             </View>
             <Paragraph variant="body2" style={styles.bold}>
@@ -72,9 +72,14 @@ const ZakatSummary = () => {
             </Paragraph>
           </View>
           <View style={styles.assetRow}>
-            <Paragraph variant="body2" color="secondary">
-              Gold Value:
-            </Paragraph>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Gold Value:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Total value of gold you own
+              </Paragraph>
+            </View>
             <Paragraph variant="body2" style={styles.bold}>
               PKR{' '}
               {parseFloat(home.gold)
@@ -83,9 +88,14 @@ const ZakatSummary = () => {
             </Paragraph>
           </View>
           <View style={styles.assetRow}>
-            <Paragraph variant="body2" color="secondary">
-              Silver Value:
-            </Paragraph>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Silver Value:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Total value of silver you own
+              </Paragraph>
+            </View>
             <Paragraph variant="body2" style={styles.bold}>
               PKR{' '}
               {parseFloat(home.silver)
@@ -94,9 +104,14 @@ const ZakatSummary = () => {
             </Paragraph>
           </View>
           <View style={styles.assetRow}>
-            <Paragraph variant="body2" color="secondary">
-              Other Assets:
-            </Paragraph>
+            <View style={styles.assetRowLabel}>
+              <Paragraph variant="body1" color="primary">
+                Other Assets:
+              </Paragraph>
+              <Paragraph variant="caption" color="secondary">
+                Any other valuable assets at home (e.g., property, bonds)
+              </Paragraph>
+            </View>
             <Paragraph variant="body2" style={styles.bold}>
               PKR{' '}
               {parseFloat(home.otherAssets)
@@ -124,7 +139,7 @@ const ZakatSummary = () => {
                 Inventory:
               </Paragraph>
               <Paragraph variant="caption" color="secondary">
-                Inventory
+                Value of goods or products held for sale
               </Paragraph>
             </View>
             <Paragraph variant="body2" style={styles.bold}>
@@ -140,7 +155,7 @@ const ZakatSummary = () => {
                 Receivables:
               </Paragraph>
               <Paragraph variant="caption" color="secondary">
-                Receivables
+                Money owed to you by others (e.g., customers)
               </Paragraph>
             </View>
             <Paragraph variant="body2" style={styles.bold}>
@@ -156,7 +171,7 @@ const ZakatSummary = () => {
                 Investments:
               </Paragraph>
               <Paragraph variant="caption" color="secondary">
-                Investments
+                Value of stocks, bonds, or other investments
               </Paragraph>
             </View>
             <Paragraph variant="body2" style={styles.bold}>
@@ -172,7 +187,7 @@ const ZakatSummary = () => {
                 Other Business Assets:
               </Paragraph>
               <Paragraph variant="caption" color="secondary">
-                Other Business Assets
+                Any other business-related assets of value
               </Paragraph>
             </View>
             <Paragraph variant="body2" style={styles.bold}>
@@ -183,7 +198,11 @@ const ZakatSummary = () => {
             </Paragraph>
           </View>
           <View style={styles.assetRow}>
-            <Paragraph variant="body2" color="secondary">
+            <Paragraph
+              variant="body2"
+              color="secondary"
+              style={{ fontWeight: 'bold' }}
+            >
               Total Business Assets:
             </Paragraph>
             <Paragraph variant="body2" style={styles.bold}>
@@ -194,7 +213,16 @@ const ZakatSummary = () => {
       </Container>
       <View style={styles.stickyFooter}>
         <Section title="Total Zakat Due" style={styles.section}>
-          <TouchableOpacity activeOpacity={0.7} style={styles.assetRow}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.assetRow}
+            onPress={() =>
+              navigation.navigate('NewPaymentMethod', {
+                amount: zakat.toString(),
+                donationType: 'Zakat',
+              })
+            }
+          >
             <View style={styles.assetRowLabel}>
               <Paragraph variant="h4" style={{}}>
                 PKR{' '}
@@ -224,7 +252,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flexGrow: 1,
-    marginBottom: screenDimensions.height * 0.20,
+    marginBottom: screenDimensions.height * 0.2,
     paddingBottom: 120, // for sticky footer space
   },
   heading: {
@@ -290,7 +318,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: screenDimensions.height * 0.20,
+    height: screenDimensions.height * 0.2,
     backgroundColor: theme.colors.primary[100],
     paddingHorizontal: 16,
     borderTopLeftRadius: 20,
@@ -335,6 +363,7 @@ const styles = StyleSheet.create({
   },
   assetRowLabel: {
     gap: 4,
+    maxWidth: '80%',
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',

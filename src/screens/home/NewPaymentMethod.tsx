@@ -4,9 +4,10 @@ import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Button from '../../components/base/Button';
 import CheckBox from '../../components/base/CheckBox';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '../../config/theme';
 import BefitsListCard from '../../components/cards/befitsListCard';
+import { UserStackParamList } from '../../config/navigation/UserNavigation';
 
 const PAYMENT_OPTIONS = [
   {
@@ -33,11 +34,12 @@ const SelectPaymentMethod = () => {
   const navigation = useNavigation<any>();
   const { theme } = useTheme();
   const [selected, setSelected] = useState('card');
+  const { amount, donationType  } = useRoute<RouteProp<UserStackParamList, 'NewPaymentMethod'>>().params;
 
   const handleContinue = () => {
     navigation.navigate('PaymentConfirmation', {
-      donationType: 'One-Time Donation',
-      amount: 100,
+      donationType: donationType,
+      amount: amount,
       paymentMethod: selected,
     });
   };

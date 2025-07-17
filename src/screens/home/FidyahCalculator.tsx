@@ -15,7 +15,7 @@ import { Modal } from '../../components/base';
 import { FoodCard } from '../../components/cards';
 import theme, { useTheme } from '../../config/theme';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import SkipButton from '../../components/sections/SkipButto';
+import SkipButton from '../../components/sections/SkipButton';
 
 const foodOptions = [
   {

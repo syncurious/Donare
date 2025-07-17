@@ -8,7 +8,6 @@ import BenefitsKaffarah from '../../../screens/home/BenefitsKaffarah';
 import ZakatHomeAssets from '../../../screens/home/ZakatHomeAssets';
 import ZakatBusinessAssets from '../../../screens/home/ZakatBusinessAssets';
 import ZakatSummary from '../../../screens/home/ZakatSummary';
-import ZakatDirectEntry from '../../../screens/home/ZakatDirectEntry';
 import NewPaymentMethod from '../../../screens/home/NewPaymentMethod';
 import PaymentConfirmation from '../../../screens/home/PaymentConfirmation';
 import ThankYou from '../../../screens/home/ThankYou';
@@ -25,8 +24,7 @@ type UserStackParamList = {
   ZakatHomeAssets: undefined;
   ZakatBusinessAssets: { homeAssets: string };
   ZakatSummary: { homeAssets: string; businessAssets: string };
-  ZakatDirectEntry: undefined;
-  NewPaymentMethod: undefined;
+  NewPaymentMethod: { amount: string; donationType: string };
   PaymentConfirmation: { donationType: string; amount: number | string; paymentMethod: string };
   ThankYou: { donationType: string; amount: number | string };
   ManualAmountEntry: undefined;
@@ -114,15 +112,6 @@ const UserNavigation = () => {
           title: 'Zakat Summary',
         }}
         component={ZakatSummary}
-      />
-      <Stack.Screen
-        name="ZakatDirectEntry"
-        options={{
-          animation: 'slide_from_right',
-          headerShown: true,
-          title: 'Direct Zakat Entry',
-        }}
-        component={ZakatDirectEntry}
       />
       <Stack.Screen
         name="NewPaymentMethod"
