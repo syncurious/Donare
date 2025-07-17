@@ -50,6 +50,7 @@ const QuickNavigation = () => {
             justifyContent: 'center',
             gap: 12,
           }}
+          onPress={() => handleNavigate('IslamicCalendar')}
         >
           <View style={styles.quickNavigationItemIcon}>
             <Image

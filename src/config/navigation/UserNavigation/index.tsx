@@ -15,6 +15,7 @@ import ManualAmountEntry from '../../../screens/home/ManualAmountEntry';
 import FidyahCalculator from '../../../screens/home/FidyahCalculator';
 import DonationHistory from '../../../screens/profile/DonationHistory';
 import PrayerTimes from '../../../screens/prayerTime';
+import IslamicCalendar from '../../../screens/islamicCalendar';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -37,6 +38,7 @@ type UserStackParamList = {
   FidyahCalculator: undefined;
   DonationHistory: undefined;
   PrayerTimes: undefined;
+  IslamicCalendar: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -183,6 +185,15 @@ const UserNavigation = () => {
           title: 'Prayes Time',
         }}
         component={PrayerTimes}
+      />
+      <Stack.Screen
+        name="IslamicCalendar"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Islamic Calendar',
+        }}
+        component={IslamicCalendar}
       />
     </Stack.Navigator>
   );
