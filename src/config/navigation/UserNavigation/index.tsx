@@ -15,6 +15,7 @@ import ManualAmountEntry from '../../../screens/home/ManualAmountEntry';
 import FidyahCalculator from '../../../screens/home/FidyahCalculator';
 import DonationHistory from '../../../screens/profile/DonationHistory';
 import RequestHelp from '../../../screens/home/RequestHelp';
+import Impact from '../../../screens/home/Impact';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -37,6 +38,7 @@ type UserStackParamList = {
   FidyahCalculator: undefined;
   DonationHistory: undefined;
   RequestHelp: undefined;
+  Impact: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -183,6 +185,15 @@ const UserNavigation = () => {
           title: 'Donation History',
         }}
         component={DonationHistory}
+      />
+      <Stack.Screen
+        name="Impact"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Impact',
+        }}
+        component={Impact}
       />
     </Stack.Navigator>
   );

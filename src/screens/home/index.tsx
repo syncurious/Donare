@@ -13,6 +13,7 @@ export { default as Volunteer } from "./Volunteer";
 export { default as NewPaymentMethod } from "./NewPaymentMethod";
 export { default as FidyahCalculator } from "./FidyahCalculator";
 export { default as RequestHelp } from "./RequestHelp";
+export { default as Impact } from "./Impact";
 export { Donate };
 
 const HomeScreen = () => {

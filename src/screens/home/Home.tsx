@@ -146,7 +146,7 @@ const Home: React.FC = () => {
         </View>
         <Section title="" autoCarousel>
           {quickCards.map((item, idx) => (
-            <CampaignCard key={idx} {...item} />
+            <CampaignCard style={{ width: 300 }} key={idx} {...item} />
           ))}
         </Section>
 

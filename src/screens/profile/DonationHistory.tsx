@@ -8,6 +8,7 @@ import Chip from '../../components/base/Chip';
 import { useTheme } from '../../config/theme';
 import BefitsListCard from '../../components/cards/befitsListCard';
 import HeartIcon from '../../assets/icons/heartIcon.png';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const DONATION_TYPES = ['All', 'Zakat', 'Sadaqah', 'Fidyah'];
 
@@ -21,6 +22,7 @@ const SAMPLE_DONATIONS = [
 const DonationHistory = () => {
   const { theme } = useTheme();
   const [selectedType, setSelectedType] = useState('All');
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const filteredDonations =
     selectedType === 'All'
@@ -70,7 +72,7 @@ const DonationHistory = () => {
               <TouchableOpacity
                 activeOpacity={0.7}
                 key={donation.id}
-                onPress={() => {}}
+                onPress={() => {navigation.navigate('Impact')}}
                 style={{
                   borderWidth: 1,
                   borderColor: theme.colors.neutral[200],

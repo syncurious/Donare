@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ViewStyle, StyleProp } from 'react-native';
 import theme, { borderRadius } from '../../config/theme';
 
 interface CampaignCardProps {
@@ -8,6 +8,7 @@ interface CampaignCardProps {
   image?: string;
   buttonText?: string;
   buttonAction?: () => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = ({
@@ -16,9 +17,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   image,
   buttonText,
   buttonAction,
+  style,
 }) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       {image ? (
         <Image
           source={{ uri: image }}
@@ -55,8 +57,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-    minWidth: 280,
-    maxWidth: 300,
+    // minWidth: 280,
+    // maxWidth: 300,
     alignItems: 'flex-start',
   },
   image: {
@@ -69,13 +71,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 4,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   description: {
     color: '#666',
     fontSize: 13,
     marginBottom: 4,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   progressBarContainer: {
     width: '100%',
