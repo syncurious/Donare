@@ -10,10 +10,12 @@ function BefitsListCard({
   icon,
   title,
   description,
+  RightComponent,
 }: {
   icon?: any,
   title?: string;
   description?: string;
+  RightComponent?: React.ReactNode;
 }) {
   return (
     <View style={styles.benefitRow}>
@@ -30,6 +32,7 @@ function BefitsListCard({
           {description}
         </Text>
       </View>
+      {RightComponent && RightComponent}
     </View>
   );
 }

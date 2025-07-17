@@ -13,6 +13,7 @@ import PaymentConfirmation from '../../../screens/home/PaymentConfirmation';
 import ThankYou from '../../../screens/home/ThankYou';
 import ManualAmountEntry from '../../../screens/home/ManualAmountEntry';
 import FidyahCalculator from '../../../screens/home/FidyahCalculator';
+import DonationHistory from '../../../screens/profile/DonationHistory';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -25,10 +26,15 @@ type UserStackParamList = {
   ZakatBusinessAssets: { homeAssets: string };
   ZakatSummary: { homeAssets: string; businessAssets: string };
   NewPaymentMethod: { amount: string; donationType: string };
-  PaymentConfirmation: { donationType: string; amount: number | string; paymentMethod: string };
+  PaymentConfirmation: {
+    donationType: string;
+    amount: number | string;
+    paymentMethod: string;
+  };
   ThankYou: { donationType: string; amount: number | string };
   ManualAmountEntry: undefined;
   FidyahCalculator: undefined;
+  DonationHistory: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -157,6 +163,15 @@ const UserNavigation = () => {
           title: 'Calculate Fidyah',
         }}
         component={FidyahCalculator}
+      />
+      <Stack.Screen
+        name="DonationHistory"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Donation History',
+        }}
+        component={DonationHistory}
       />
     </Stack.Navigator>
   );
