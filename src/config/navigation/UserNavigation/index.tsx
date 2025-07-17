@@ -14,6 +14,7 @@ import ThankYou from '../../../screens/home/ThankYou';
 import ManualAmountEntry from '../../../screens/home/ManualAmountEntry';
 import FidyahCalculator from '../../../screens/home/FidyahCalculator';
 import DonationHistory from '../../../screens/profile/DonationHistory';
+import RequestHelp from '../../../screens/home/RequestHelp';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -35,6 +36,7 @@ type UserStackParamList = {
   ManualAmountEntry: undefined;
   FidyahCalculator: undefined;
   DonationHistory: undefined;
+  RequestHelp: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -55,6 +57,15 @@ const UserNavigation = () => {
           title: 'Volunteer Form',
         }}
         component={VolunteerFrom}
+      />
+      <Stack.Screen
+        name="RequestHelp"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Request Help',
+        }}
+        component={RequestHelp}
       />
       <Stack.Screen
         name="BenefitsZakat"
