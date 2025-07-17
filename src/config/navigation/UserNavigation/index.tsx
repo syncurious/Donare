@@ -14,6 +14,8 @@ import ThankYou from '../../../screens/home/ThankYou';
 import ManualAmountEntry from '../../../screens/home/ManualAmountEntry';
 import FidyahCalculator from '../../../screens/home/FidyahCalculator';
 import DonationHistory from '../../../screens/profile/DonationHistory';
+import PrayerTimes from '../../../screens/prayerTime';
+import IslamicCalendar from '../../../screens/islamicCalendar';
 import RequestHelp from '../../../screens/home/RequestHelp';
 import Impact from '../../../screens/home/Impact';
 
@@ -37,6 +39,8 @@ type UserStackParamList = {
   ManualAmountEntry: undefined;
   FidyahCalculator: undefined;
   DonationHistory: undefined;
+  PrayerTimes: undefined;
+  IslamicCalendar: undefined;
   RequestHelp: undefined;
   Impact: undefined;
 };
@@ -194,6 +198,24 @@ const UserNavigation = () => {
           title: 'Impact',
         }}
         component={Impact}
+      />
+      <Stack.Screen
+        name="PrayerTimes"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Prayes Time',
+        }}
+        component={PrayerTimes}
+      />
+      <Stack.Screen
+        name="IslamicCalendar"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Islamic Calendar',
+        }}
+        component={IslamicCalendar}
       />
     </Stack.Navigator>
   );

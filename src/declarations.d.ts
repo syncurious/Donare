@@ -5,3 +5,4 @@ declare module '*.png' {
   }
 
 declare module 'react-native-vector-icons/Feather';
+declare module 'moment-hijri';
