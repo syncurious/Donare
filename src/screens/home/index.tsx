@@ -12,6 +12,7 @@ export { default as SignUp } from "./SignUp";
 export { default as Volunteer } from "./Volunteer";
 export { default as NewPaymentMethod } from "./NewPaymentMethod";
 export { default as FidyahCalculator } from "./FidyahCalculator";
+export { default as RequestHelp } from "./RequestHelp";
 export { Donate };
 
 const HomeScreen = () => {

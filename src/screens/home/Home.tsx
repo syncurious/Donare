@@ -21,6 +21,7 @@ import NamazIcon from '../../assets/icons/NamazIcon.png';
 import QiblaIcon from '../../assets/icons/QiblaIcon.png';
 import CalendarIcon from '../../assets/icons/calendarIcon.png';
 import QuickNavigation from '../../components/cards/quickNavigation';
+import Headline from '../../components/sections/Headline';
 
 const campaigns = [
   {
@@ -130,14 +131,14 @@ const dailyVerse = {
 const Home: React.FC = () => {
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.dateSection}>
+      <Headline>
         <Heading level={6} color="inverse">
           1445 AH, 1st Muharram
         </Heading>
         <Heading level={6} color="inverse">
           July 7, 2024
         </Heading>
-      </View>
+      </Headline>
       <Container scrollable style={styles.container}>
         {/* Quick Cards Section */}
         <View style={styles.containerPadding}>
@@ -177,13 +178,7 @@ const styles = StyleSheet.create({
   containerPadding: {
     paddingHorizontal: 12,
   },
-  dateSection: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    backgroundColor: theme.colors.primary[500],
-    padding: 8,
-  },
+
   quickNavRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',

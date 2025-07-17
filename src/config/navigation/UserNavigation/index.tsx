@@ -16,6 +16,7 @@ import FidyahCalculator from '../../../screens/home/FidyahCalculator';
 import DonationHistory from '../../../screens/profile/DonationHistory';
 import PrayerTimes from '../../../screens/prayerTime';
 import IslamicCalendar from '../../../screens/islamicCalendar';
+import RequestHelp from '../../../screens/home/RequestHelp';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -39,6 +40,7 @@ type UserStackParamList = {
   DonationHistory: undefined;
   PrayerTimes: undefined;
   IslamicCalendar: undefined;
+  RequestHelp: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -59,6 +61,15 @@ const UserNavigation = () => {
           title: 'Volunteer Form',
         }}
         component={VolunteerFrom}
+      />
+      <Stack.Screen
+        name="RequestHelp"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Request Help',
+        }}
+        component={RequestHelp}
       />
       <Stack.Screen
         name="BenefitsZakat"
