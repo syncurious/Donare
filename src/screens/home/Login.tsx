@@ -8,6 +8,7 @@ import Button from '../../components/base/Button';
 import theme from '../../config/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAuthStore, UserRole } from '../../store/auth';
 
 // Placeholder PNGs (replace with actual PNGs as needed)
 import logoPng from '../../assets/images/logoWihtoutText.png';
@@ -16,12 +17,26 @@ import googlePng from '../../assets/icons/googleIcon.png';
 
 const Login = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({ email: '', password: '' });
+  const login = useAuthStore(state => state.login);
+
+  const handleInputChange = (key: 'email' | 'password', value: string) => {
+    setForm(prev => ({ ...prev, [key]: value }));
+  };
 
   const handleLogin = () => {
-    navigation.navigate('Home');
-    // TODO: Implement login logic
+    let userPayload = {
+      id: '1',
+      name: 'John Doe',
+      email: form.email,
+      role: 'user' as UserRole,
+    }; // Dummy login: set a fake user
+    if (form.email == 'admin@gmail.com' && form.password == '123456') {
+      userPayload.role = 'admin' as UserRole;
+    }
+    login(userPayload);
+    // Navigate to user home or dashboard as needed
+    // navigation.navigate('Home');
   };
 
   return (
@@ -41,8 +56,8 @@ const Login = () => {
         <Input
           label="Email"
           placeholder="Enter your email"
-          value={email}
-          onChangeText={setEmail}
+          value={form.email}
+          onChangeText={text => handleInputChange('email', text)}
           variant="outlined"
           style={styles.input}
           inputStyle={{ fontSize: 16 }}
@@ -53,8 +68,8 @@ const Login = () => {
         <Input
           label="Password"
           placeholder="Enter your password"
-          value={password}
-          onChangeText={setPassword}
+          value={form.password}
+          onChangeText={text => handleInputChange('password', text)}
           variant="outlined"
           style={styles.input}
           inputStyle={{ fontSize: 16 }}

@@ -1,13 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { useAuthStore } from '../../store/auth';
 import AuthNavigation from './AuthNavigation';
 import UserNavigation from './UserNavigation';
 
 const MainNavigation = () => {
-  const isAuth = false;
+  const isAuth = useAuthStore((state) => state.isLoggedIn);
   return (
     <NavigationContainer>
-      <UserNavigation />
-       {/* <AuthNavigation /> */}
+      {isAuth ? <UserNavigation /> : <AuthNavigation />}
     </NavigationContainer>
   );
 };

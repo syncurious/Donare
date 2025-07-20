@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Container from '../../components/base/Container';
 import Section from '../../components/base/Section';
 import Heading from '../../components/base/Heading';
@@ -8,6 +8,7 @@ import Text from '../../components/base/Text';
 import Button from '../../components/base/Button';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../config/theme';
+import { useAuthStore } from '../../store/auth';
 
 const getInitials = (name: string): string => {
   return name
@@ -18,8 +19,9 @@ const getInitials = (name: string): string => {
 };
 
 const Profile = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   const { theme } = useTheme();
+  const logout = useAuthStore(state => state.logout);
   const user = {
     name: 'Omar Hassan',
     memberSince: '2022',
@@ -183,7 +185,10 @@ const Profile = () => {
               { backgroundColor: theme.colors.error[50] },
             ]}
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('VolunteerRecord' as never)}
+            onPress={() => {
+              logout();
+              // navigation.navigate('Login');
+            }}
           >
             <Text
               variant="h6"
