@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AdminBottomNavigation from './BottomTabs';
 import VolunteerDetailsScreen from '../../../screens/admin/volunteers/VolunteerDetailsScreen';
+import RequestDetails from '../../../screens/admin/RequestDetails';
 
 // Add VolunteerDetails type for navigation param
 interface VolunteerDetails {
@@ -15,6 +16,7 @@ interface VolunteerDetails {
 type AdminStackParamList = {
   AdminBottomTabs: undefined;
   VolunteerDetails: { volunteer: VolunteerDetails };
+  RequestDetails: { requestId: string };
 };
 
 const Stack = createNativeStackNavigator<AdminStackParamList>();
@@ -33,6 +35,14 @@ const AdminNavigation = () => {
         options={{
           headerShown: true,
           title: 'Volunteer Details',
+        }}
+      />
+      <Stack.Screen
+        name="RequestDetails"
+        component={RequestDetails}
+        options={{
+          headerShown: true,
+          title: 'Help Request Details',
         }}
       />
     </Stack.Navigator>

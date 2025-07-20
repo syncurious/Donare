@@ -6,6 +6,7 @@ import BottomNavBar from '../../../../components/base/BottomNavBar';
 import Profile from '../../../../screens/profile';
 import Qibla from '../../../../screens/qibla';
 import AdminDashboard from '../../../../screens/admin/dashboard';
+import HelpRequest from '../../../../screens/home/HelpRequest';
 
 // Placeholder screens for other tabs
 const Placeholder = ({ label }: { label: string }) => (
@@ -24,6 +25,7 @@ const AdminBottomNavigation = () => {
     >
       <Tab.Screen name="Dashboard" component={AdminDashboard} />
       <Tab.Screen name="ManageUsers" component={() => <Placeholder label="Manage Users" />} />
+      <Tab.Screen name="HelpRequest" component={HelpRequest} />
       <Tab.Screen name="Settings" component={() => <Placeholder label="Settings" />} />
       <Tab.Screen name="Reports" component={() => <Placeholder label="Reports" />} />
     </Tab.Navigator>

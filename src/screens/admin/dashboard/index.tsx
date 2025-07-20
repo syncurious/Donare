@@ -2,7 +2,10 @@ import Container from '../../../components/base/Container';
 import Heading from '../../../components/base/Heading';
 import Text from '../../../components/base/Text';
 import Card from '../../../components/base/Card';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { AdminStackParamList } from '../../../config/navigation/UserNavigation copy';
 
 const dashboardData = {
   stats: [
@@ -21,6 +24,7 @@ const dashboardData = {
 };
 
 const AdminDashboard = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<AdminStackParamList>>();
   return (
     <Container scrollable padding="large">
       <Heading level={2} style={{ marginBottom: 16 }}>
@@ -41,12 +45,28 @@ const AdminDashboard = () => {
         Recent Activities
       </Heading>
       <View>
-        {dashboardData.recentActivities.map((activity, idx) => (
-          <Card key={idx} style={styles.activityCard}>
-            <Text variant="h6">{activity.name}</Text>
-            <Text variant="body2" color="secondary">{activity.action}</Text>
-          </Card>
-        ))}
+        {dashboardData.recentActivities.map((activity, idx) => {
+          if (activity.action === 'Help Request') {
+            return (
+              <TouchableOpacity
+                key={idx}
+                onPress={() => navigation.navigate('RequestDetails', { requestId: '12345' })}
+                activeOpacity={0.8}
+              >
+                <Card style={styles.activityCard}>
+                  <Text variant="h6">{activity.name}</Text>
+                  <Text variant="body2" color="secondary">{activity.action}</Text>
+                </Card>
+              </TouchableOpacity>
+            );
+          }
+          return (
+            <Card key={idx} style={styles.activityCard}>
+              <Text variant="h6">{activity.name}</Text>
+              <Text variant="body2" color="secondary">{activity.action}</Text>
+            </Card>
+          );
+        })}
       </View>
     </Container>
   );
