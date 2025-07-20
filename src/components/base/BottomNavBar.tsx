@@ -12,8 +12,9 @@ import HeartIconFilled from '../../assets/icons/heartIconFilled.png';
 import ProfileIcon from '../../assets/icons/profileIcon.png';
 import ProfileIconFilled from '../../assets/icons/profileIconFilled.png';
 import theme from '../../config/theme';
+import { useAuthStore } from '../../store/auth';
 
-const TABS = [
+const UserTabs = [
   {
     name: 'Home',
     label: 'Home',
@@ -46,11 +47,23 @@ const TABS = [
   },
 ];
 
+const AdminTabs = [
+
+  {
+    name: 'Dashboard',
+    label: 'Dashboard',
+    icon: HomeIcon,
+    iconActive: HomeIconFilled,
+  },
+];
+
 const BottomNavBar: React.FC<BottomTabBarProps> = ({
   state,
   descriptors,
   navigation,
 }) => {
+  const isAdmin = useAuthStore(state => state.user?.role === 'admin');
+  const TABS = isAdmin ? AdminTabs : UserTabs;
   return (
     <View style={styles.container}>
       {TABS.map((tab, idx) => {
