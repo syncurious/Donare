@@ -9,6 +9,7 @@ import Button from '../../components/base/Button';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../config/theme';
 import { useAuthStore } from '../../store/auth';
+import ProfileCard from '../../components/cards/ProfileCard';
 
 const getInitials = (name: string): string => {
   return name
@@ -27,7 +28,7 @@ const Profile = () => {
     memberSince: '2022',
     email: 'omar.hassan@gmail.com',
     phone: '+1(555)123-4567',
-    profileImage: 'https://avatar.iran.liara.run/public/boy',
+    image: 'https://avatar.iran.liara.run/public/boy',
   };
 
   return (
@@ -37,68 +38,7 @@ const Profile = () => {
       style={{ backgroundColor: theme.colors.background.primary }}
     >
       {/* Top Section with Avatar and Edit */}
-      <View
-        style={[
-          styles.topBg,
-          {
-            backgroundColor: theme.colors.primary[50],
-            borderBottomLeftRadius: theme.borderRadius['2xl'],
-            borderBottomRightRadius: theme.borderRadius['2xl'],
-          },
-        ]}
-      >
-        <View
-          style={[
-            styles.profileCard,
-            {
-              backgroundColor: theme.colors.background.secondary,
-              borderRadius: theme.borderRadius.xl,
-            },
-          ]}
-        >
-          <View style={styles.avatarWrapper}>
-            {user.profileImage ? (
-              <Image
-                source={{ uri: user.profileImage }}
-                style={[
-                  styles.avatar,
-                  { borderColor: theme.colors.primary[500] },
-                ]}
-              />
-            ) : (
-              <View
-                style={[
-                  styles.avatarFallback,
-                  { backgroundColor: theme.colors.primary[500] },
-                ]}
-              >
-                <Text style={styles.avatarInitials}>
-                  {getInitials(user.name)}
-                </Text>
-              </View>
-            )}
-            <TouchableOpacity
-              style={[
-                styles.editIconBtn,
-                { backgroundColor: theme.colors.primary[500] },
-              ]}
-              activeOpacity={0.7}
-            >
-              <Feather
-                name="edit-2"
-                size={16}
-                color={theme.colors.text.inverse}
-              />
-            </TouchableOpacity>
-          </View>
-          <Heading level={2} style={styles.name}>
-            {user.name}
-          </Heading>
-          <Text variant="caption" color="secondary" style={styles.memberSince}>
-            Member since {user.memberSince}
-          </Text>
-        </View>
-      </View>
+      <ProfileCard user={user} theme={theme} />
 
       {/* Personal Info Section */}
       <Container variant="card" style={styles.sectionCard}>

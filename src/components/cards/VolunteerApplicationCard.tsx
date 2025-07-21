@@ -70,10 +70,14 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 12,
-    padding: 16,
-    borderRadius: 16,
+    marginBottom: 0,
+    padding: 12,
+    paddingHorizontal : 0,
+    borderRadius: 0,
+    elevation: 0,
     backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E020',
   },
   row: {
     flexDirection: 'row',

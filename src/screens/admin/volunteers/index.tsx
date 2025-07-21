@@ -5,7 +5,7 @@ import VolunteerApplicationCard from '../../../components/cards/VolunteerApplica
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { AdminStackParamList } from '../../../config/navigation/AdminNavigation'
+import type { AdminStackParamList } from '../../../config/navigation/AdminNavigation';
 
 interface VolunteerDetails {
   name: string;
@@ -74,7 +74,8 @@ const volunteerApplications: VolunteerDetails[] = [
 ];
 
 const AdminVolunteerApplications = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<AdminStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AdminStackParamList>>();
 
   const handleView = (email: string) => {
     const volunteer = volunteerApplications.find(v => v.email === email);
@@ -84,10 +85,14 @@ const AdminVolunteerApplications = () => {
   };
 
   return (
-    <Container scrollable padding="small">
-      <Heading level={2} style={{ marginBottom: 16 }}>
+    <Container
+      scrollable
+      padding="small"
+      style={{ flex: 1, backgroundColor: '#fff' }}
+    >
+      {/* <Heading level={2} style={{ marginBottom: 16 }}>
         Volunteer Applications
-      </Heading>
+      </Heading> */}
       <View>
         {volunteerApplications.map((app, idx) => (
           <VolunteerApplicationCard
@@ -104,4 +109,4 @@ const AdminVolunteerApplications = () => {
   );
 };
 
-export default AdminVolunteerApplications; 
+export default AdminVolunteerApplications;

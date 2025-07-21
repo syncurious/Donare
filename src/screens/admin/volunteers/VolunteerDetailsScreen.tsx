@@ -5,6 +5,9 @@ import Heading from '../../../components/base/Heading';
 import Text from '../../../components/base/Text';
 import Button from '../../../components/base/Button';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import theme from '../../../config/theme';
+import Section from '../../../components/base/Section';
+import ProfileCard from '../../../components/cards/ProfileCard';
 
 interface VolunteerDetails {
   name: string;
@@ -13,6 +16,7 @@ interface VolunteerDetails {
   joined: string;
   skills: string[];
   availability: { label: string; value: string }[];
+  message: string;
 }
 
 type VolunteerDetailsScreenRouteProp = RouteProp<
@@ -38,52 +42,99 @@ const VolunteerDetailsScreen: React.FC = () => {
   };
 
   return (
-    <Container scrollable padding="large">
-      <Heading level={3} style={styles.title}>Volunteer Details</Heading>
-      <Text variant="h5" style={styles.name}>{volunteer.name}</Text>
-      <Text variant="body2" color="secondary" style={styles.joined}>{volunteer.joined}</Text>
-
-      <Heading level={5} style={styles.sectionTitle}>Skills</Heading>
-      <View style={styles.skillsRow}>
-        {volunteer.skills.map(skill => (
-          <View key={skill} style={styles.skillBadge}>
-            <Text variant="body2">{skill}</Text>
+    <Container
+      padding="small"
+      style={styles.container}
+      scrollable={true}
+      contentContainerStyle={styles.containerContent}
+    >
+      <View style={styles.profileCard}>
+        <ProfileCard user={{
+          name: volunteer.name,
+          email: volunteer.email,
+          phone: volunteer.phone, 
+          image: "https://avatar.iran.liara.run/public/boy",
+          memberSince: "2022",
+        }} theme={theme} />
+      </View>
+      <View style={{ width : "100%"}}>
+        <Section title="Skills">
+          <View style={styles.skillsRow}>
+            {volunteer.skills.map(skill => (
+              <View key={skill} style={styles.skillBadge}>
+                <Text variant="body2">{skill}</Text>
+              </View>
+            ))}
           </View>
-        ))}
-      </View>
+        </Section>
 
-      <Heading level={5} style={styles.sectionTitle}>Availability</Heading>
-      <View style={styles.availabilityRow}>
-        {volunteer.availability.map(avail => (
-          <View key={avail.label} style={styles.availCol}>
-            <Text variant="body2" color="secondary">{avail.label}</Text>
-            <Text variant="body2">{avail.value}</Text>
+        <Section title="Availability">
+          <View style={styles.availabilityRow}>
+            {volunteer.availability.map(avail => (
+              <View key={avail.label} style={styles.availCol}>
+                <Text variant="body2" color="secondary">
+                  {avail.label}
+                </Text>
+                <Text variant="body2">{avail.value}</Text>
+              </View>
+            ))}
           </View>
-        ))}
-      </View>
+        </Section>
 
-      <Heading level={5} style={styles.sectionTitle}>Contact Information</Heading>
-      <View style={styles.contactRow}>
-        <View style={styles.contactCol}>
-          <Text variant="body2" color="secondary">Phone</Text>
-          <Text variant="body2">{volunteer.phone}</Text>
-        </View>
-        <View style={styles.contactCol}>
-          <Text variant="body2" color="secondary">Email</Text>
-          <Text variant="body2">{volunteer.email}</Text>
-        </View>
+        <Section title="Contact Information">
+          <View style={styles.contactRow}>
+            <View style={styles.contactCol}>
+              <Text variant="body2" color="secondary">
+                Phone
+              </Text>
+              <Text variant="body2">{volunteer.phone}</Text>
+            </View>
+            <View style={styles.contactCol}>
+              <Text variant="body2" color="secondary">
+                Email
+              </Text>
+              <Text variant="body2">{volunteer.email}</Text>
+            </View>
+          </View>
+        </Section>
+        <Section title="Message">
+          <Text variant="body2">
+            {volunteer.message}
+          </Text>
+        </Section>
       </View>
-
       <View style={styles.actionsRow}>
-        <Button style={styles.approveBtn} onPress={handleApprove}>Approve</Button>
-        <Button variant="outlined" style={styles.rejectBtn} onPress={handleReject}>Reject</Button>
+        <Button
+          variant="outlined"
+          style={styles.rejectBtn}
+          onPress={handleReject}
+        >
+          Reject
+        </Button>
+        <Button style={styles.approveBtn} onPress={handleApprove}>
+          Approve
+        </Button>
       </View>
-      <Button variant="text" onPress={() => navigation.goBack()} style={styles.closeBtn}>Back</Button>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: theme.colors.background.primary,
+  },
+  containerContent: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 32,
+  },
+  profileCard: {
+    width: '100%',
+    marginBottom: 16,
+  },
   title: {
     marginBottom: 8,
     textAlign: 'center',
@@ -146,7 +197,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
     borderRadius: 20,
-    backgroundColor: '#B2CCE5',
   },
   rejectBtn: {
     flex: 1,
@@ -160,4 +210,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VolunteerDetailsScreen; 
+export default VolunteerDetailsScreen;
