@@ -27,7 +27,7 @@ const BottomNavigation = () => {
         name="Volunteer"
         component={Volunteer}
       />
-      <Tab.Screen name="Qibla" component={() => <Placeholder label="Qibla" />} />
+      <Tab.Screen name="Qibla" component={Qibla} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
