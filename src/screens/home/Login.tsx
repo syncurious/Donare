@@ -31,9 +31,10 @@ const Login = () => {
       email: form.email,
       role: 'user' as UserRole,
     }; // Dummy login: set a fake user
-    if (form.email == 'admin@gmail.com' && form.password == '123456') {
+    if (form.email == 'admin@gmail.com') {
       userPayload.role = 'admin' as UserRole;
     }
+    console.log(userPayload)
     login(userPayload);
     // Navigate to user home or dashboard as needed
     // navigation.navigate('Home');

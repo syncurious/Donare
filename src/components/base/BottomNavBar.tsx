@@ -54,7 +54,6 @@ const UserTabs = [
 ];
 
 const AdminTabs = [
-
   {
     name: 'Dashboard',
     label: 'Dashboard',
@@ -72,29 +71,30 @@ const BottomNavBar: React.FC<BottomTabBarProps> = ({
   const TABS = isAdmin ? AdminTabs : UserTabs;
   return (
     <View style={styles.container}>
-      {TABS.map((tab, idx) => {
+      {state.routes.map((route, idx) => {
+        const tab = TABS.find(t => t.name === route.name);
+        if (!tab) return null;
         const isFocused = state.index === idx;
         const onPress = () => {
           const event = navigation.emit({
             type: 'tabPress',
-            target: state.routes[idx].key,
+            target: route.key,
             canPreventDefault: true,
           });
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(tab.name);
+            navigation.navigate(route.name);
           }
         };
         return (
           <TouchableOpacity
-            key={tab.name}
+            key={route.key}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={
-              descriptors[state.routes[idx].key]?.options
-                .tabBarAccessibilityLabel
+              descriptors[route.key]?.options.tabBarAccessibilityLabel
             }
             testID={
-              descriptors[state.routes[idx].key]?.options.tabBarButtonTestID
+              descriptors[route.key]?.options.tabBarButtonTestID
             }
             onPress={onPress}
             style={styles.tab}
