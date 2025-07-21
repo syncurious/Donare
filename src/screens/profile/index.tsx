@@ -23,6 +23,7 @@ const Profile = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const { theme } = useTheme();
   const logout = useAuthStore(state => state.logout);
+  const isAdmin = useAuthStore(state => state.user?.role == 'admin');
   const user = {
     name: 'Omar Hassan',
     memberSince: '2022',
@@ -75,50 +76,86 @@ const Profile = () => {
       </Container>
 
       {/* Saved Causes Section */}
-      <Container variant="card" style={styles.sectionCard}>
-        <Section style={{ marginVertical: 0 }} title="History">
-          <TouchableOpacity
-            style={styles.listRow}
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('DonationHistory' as never)}
-          >
-            <Text variant="body2" style={styles.listRowText}>
-              Donation History
-            </Text>
-            <Feather
-              name="chevron-right"
-              size={20}
-              color={theme.colors.primary[500]}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.listRow}
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('RequestHelp' as never)}
-          >
-            <Text variant="body2" style={styles.listRowText}>
-              View Your Help Requests
-            </Text>
-            <Feather
-              name="chevron-right"
-              size={20}
-              color={theme.colors.primary[500]}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.listRow}
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('VolunteerRecord' as never)}
-          >
-            <Text variant="body2" style={styles.listRowText}>
-              View Your Volunteer Form
-            </Text>
-            <Feather
-              name="chevron-right"
-              size={20}
-              color={theme.colors.primary[500]}
-            />
-          </TouchableOpacity>
+      {!isAdmin ? (
+        <Container variant="card" style={styles.sectionCard}>
+          <Section style={{ marginVertical: 0 }} title="History">
+            <TouchableOpacity
+              style={styles.listRow}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('DonationHistory' as never)}
+            >
+              <Text variant="body2" style={styles.listRowText}>
+                Donation History
+              </Text>
+              <Feather
+                name="chevron-right"
+                size={20}
+                color={theme.colors.primary[500]}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.listRow}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('RequestHelp' as never)}
+            >
+              <Text variant="body2" style={styles.listRowText}>
+                View Your Help Requests
+              </Text>
+              <Feather
+                name="chevron-right"
+                size={20}
+                color={theme.colors.primary[500]}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.listRow}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('VolunteerRecord' as never)}
+            >
+              <Text variant="body2" style={styles.listRowText}>
+                View Your Volunteer Form
+              </Text>
+              <Feather
+                name="chevron-right"
+                size={20}
+                color={theme.colors.primary[500]}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.listRow,
+                { backgroundColor: theme.colors.error[50] },
+              ]}
+              activeOpacity={0.7}
+              onPress={() => {
+                logout();
+                // navigation.navigate('Login');
+              }}
+            >
+              <Text
+                variant="h6"
+                style={[styles.listRowText, { color: theme.colors.error[500] }]}
+              >
+                Logout
+              </Text>
+              <Feather
+                name="log-out"
+                size={20}
+                color={theme.colors.error[500]}
+              />
+            </TouchableOpacity>
+          </Section>
+        </Container>
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Text>No History for Admin</Text>
+        </View>
+      )}
+
+      {isAdmin ? (
+        <View style={{ flex: 1, width: '100%', padding: 16 }}>
           <TouchableOpacity
             style={[
               styles.listRow,
@@ -138,31 +175,8 @@ const Profile = () => {
             </Text>
             <Feather name="log-out" size={20} color={theme.colors.error[500]} />
           </TouchableOpacity>
-        </Section>
-      </Container>
-
-      {/* Settings Section */}
-      {/* <Container variant="card" style={styles.sectionCard}>
-        <Section title="Settings">
-          <View style={styles.infoRow}>
-            <Text variant="body2" color="secondary" style={styles.infoLabel}>
-              Language
-            </Text>
-            <Text variant="body2" style={styles.infoValue}>
-              English
-            </Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text variant="body2" color="secondary" style={styles.infoLabel}>
-              Zakat Reset Date
-            </Text>
-            <Text variant="body2" style={styles.infoValue}>
-              1445 AH
-            </Text>
-          </View>
-        </Section>
-      </Container> */}
-
+        </View>
+      ) : null}
       {/* Logout Button */}
       <View style={{ flex: 1 }}></View>
     </Container>
