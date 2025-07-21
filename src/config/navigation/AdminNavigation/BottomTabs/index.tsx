@@ -6,12 +6,9 @@ import BottomNavBar from '../../../../components/base/BottomNavBar';
 import Profile from '../../../../screens/profile';
 import Qibla from '../../../../screens/qibla';
 import AdminDashboard from '../../../../screens/admin/dashboard';
+import AdminVolunteerApplications from '../../../../screens/admin/volunteers';
 import HelpRequest from '../../../../screens/home/HelpRequest';
-
-// Placeholder screens for other tabs
-const Placeholder = ({ label }: { label: string }) => (
-  <Header titleAlign="left" title={label} />
-);
+import DonationHistory from '../../../../screens/profile/DonationHistory';
 
 const Tab = createBottomTabNavigator();
 const AdminBottomNavigation = () => {
@@ -24,10 +21,10 @@ const AdminBottomNavigation = () => {
       tabBar={props => <BottomNavBar {...props} />}
     >
       <Tab.Screen name="Dashboard" component={AdminDashboard} />
-      <Tab.Screen name="ManageUsers" component={() => <Placeholder label="Manage Users" />} />
+      <Tab.Screen name="VolunteersList" component={AdminVolunteerApplications} />
       <Tab.Screen name="HelpRequest" component={HelpRequest} />
-      <Tab.Screen name="Settings" component={() => <Placeholder label="Settings" />} />
-      <Tab.Screen name="Reports" component={() => <Placeholder label="Reports" />} />
+      <Tab.Screen name="DonationList" component={DonationHistory} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };

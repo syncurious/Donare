@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator<AdminStackParamList>();
 const AdminNavigation = () => {
   return (
     <Stack.Navigator
-      // initialRouteName="BottomTabs"
+      initialRouteName="AdminBottomTabs"
       screenOptions={{
         headerShown: false,
       }}

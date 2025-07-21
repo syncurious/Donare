@@ -7,7 +7,6 @@ import AdminNavigation from './AdminNavigation';
 const MainNavigation = () => {
   const isAuth = useAuthStore(state => state.isLoggedIn);
   const isAdmin = useAuthStore(state => state.user?.role === 'admin');
-  console.log('-------------------------> isAdmin' ,isAdmin)
   return (
     <NavigationContainer>
       {isAuth ? (

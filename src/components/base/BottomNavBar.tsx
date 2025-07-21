@@ -60,6 +60,30 @@ const AdminTabs = [
     icon: HomeIcon,
     iconActive: HomeIconFilled,
   },
+  {
+    name: 'VolunteersList',
+    label: 'Volunteers',
+    icon: DuoIcon,
+    iconActive: DuoIconFilled,
+    },
+    {
+      name: 'HelpRequest',
+      label: 'Requests',
+      icon: HeartIcon,
+      iconActive: HeartIconFilled,
+    },
+    {
+      name: 'DonationList',
+      label: 'Donations',
+      icon: HeartIcon,
+      iconActive: HeartIconFilled,
+    },
+    {
+      name: 'Profile',
+      label: 'Profile',
+      icon: ProfileIcon,
+      iconActive: ProfileIconFilled,
+    },
 ];
 
 const BottomNavBar: React.FC<BottomTabBarProps> = ({
