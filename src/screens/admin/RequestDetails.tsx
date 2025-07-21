@@ -68,7 +68,7 @@ const RequestDetails = () => {
           </Paragraph>
         </Section>
       </View>
-      <Button style={styles.button} onPress={() => {}}>
+      <Button style={styles.button} onPress={() => {navigation.goBack()}}>
         Mark as Resolved
       </Button>
     </Container>
