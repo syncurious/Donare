@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import Card from '../base/Card';
 import Text from '../base/Text';
 import Button from '../base/Button';
+import theme from '../../config/theme';
 
 interface VolunteerApplicationCardProps {
   name: string;
   email: string;
+  image: string;
   status: 'Pending' | 'Approved';
   onView: () => void;
 }
@@ -14,21 +16,50 @@ interface VolunteerApplicationCardProps {
 const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
   name,
   email,
+  image,
   status,
   onView,
 }) => {
   return (
     <Card style={styles.card}>
       <View style={styles.row}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.image} />
+        </View>
         <View style={styles.infoContainer}>
-          <Text variant="h6" style={styles.name}>{name}</Text>
-          <Text variant="body2" color="secondary" style={styles.email}>{email}</Text>
+          <Text variant="h6" style={styles.name}>
+            {name}
+          </Text>
+          <Text variant="body2" color="secondary" style={styles.email}>
+            {email}
+          </Text>
+          <Text
+            style={styles.statusBadge}
+            color={
+              status === 'Approved'
+                ? 'success'
+                : status == 'Pending'
+                ? 'warning'
+                : 'error'
+            }
+          >
+            {status}
+          </Text>
         </View>
         <View style={styles.actionsContainer}>
-          <View style={[styles.statusBadge, status === 'Approved' ? styles.approved : styles.pending]}>
-            <Text variant="body2" style={styles.statusText}>{status}</Text>
-          </View>
-          <Button size="small" style={styles.viewButton} onPress={onView}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            textStyle={{
+              color: theme.colors.secondary[600],
+            }}
+            style={[
+              { backgroundColor: theme.colors.secondary[200] },
+              styles.viewButton,
+            ]}
+            onPress={onView}
+          >
             View
           </Button>
         </View>
@@ -53,6 +84,18 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 16,
   },
+  imageContainer: {
+    width: 50,
+    marginRight: 16,
+    height: 50,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 20,
+  },
   name: {
     fontWeight: '500',
     fontSize: 16,
@@ -66,13 +109,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: 8,
   },
-  statusBadge: {
-    borderRadius: 16,
-    paddingVertical: 4,
-    paddingHorizontal: 16,
-    marginBottom: 8,
-    alignSelf: 'flex-end',
-  },
+
   approved: {
     backgroundColor: '#F2F2F5',
   },
@@ -86,10 +123,17 @@ const styles = StyleSheet.create({
   },
   viewButton: {
     borderRadius: 16,
+    fontSize: 12,
     paddingHorizontal: 16,
     paddingVertical: 4,
     minWidth: 84,
   },
+  statusBadge: {
+    borderRadius: 16,
+    fontSize: 12,
+    paddingVertical: 4,
+    marginBottom: 8,
+  },
 });
 
-export default VolunteerApplicationCard; 
+export default VolunteerApplicationCard;

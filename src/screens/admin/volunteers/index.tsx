@@ -5,7 +5,7 @@ import VolunteerApplicationCard from '../../../components/cards/VolunteerApplica
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { AdminStackParamList } from '../../../config/navigation/UserNavigation copy';
+import type { AdminStackParamList } from '../../../config/navigation/AdminNavigation'
 
 interface VolunteerDetails {
   name: string;
@@ -15,12 +15,14 @@ interface VolunteerDetails {
   joined: string;
   skills: string[];
   availability: { label: string; value: string }[];
+  image: string;
 }
 
 const volunteerApplications: VolunteerDetails[] = [
   {
     name: 'Ahmed Ali',
     email: 'ahmed.ali@email.com',
+    image: 'https://avatar.iran.liara.run/public/boy',
     status: 'Pending',
     phone: '+1 (555) 111-2222',
     joined: 'Joined 1 month ago',
@@ -33,6 +35,7 @@ const volunteerApplications: VolunteerDetails[] = [
   {
     name: 'Fatima Khan',
     email: 'fatima.khan@email.com',
+    image: 'https://avatar.iran.liara.run/public/boy',
     status: 'Approved',
     phone: '+1 (555) 333-4444',
     joined: 'Joined 2 months ago',
@@ -45,6 +48,7 @@ const volunteerApplications: VolunteerDetails[] = [
   {
     name: 'Omar Hassan',
     email: 'omar.hassan@email.com',
+    image: 'https://avatar.iran.liara.run/public/boy',
     status: 'Pending',
     phone: '+1 (555) 123-4567',
     joined: 'Joined 2 months ago',
@@ -57,6 +61,7 @@ const volunteerApplications: VolunteerDetails[] = [
   {
     name: 'Layla Ibrahim',
     email: 'layla.ibrahim@email.com',
+    image: 'https://avatar.iran.liara.run/public/boy',
     status: 'Approved',
     phone: '+1 (555) 555-6666',
     joined: 'Joined 3 weeks ago',
@@ -79,7 +84,7 @@ const AdminVolunteerApplications = () => {
   };
 
   return (
-    <Container scrollable padding="large">
+    <Container scrollable padding="small">
       <Heading level={2} style={{ marginBottom: 16 }}>
         Volunteer Applications
       </Heading>
@@ -89,6 +94,7 @@ const AdminVolunteerApplications = () => {
             key={app.email}
             name={app.name}
             email={app.email}
+            image={app.image}
             status={app.status as 'Pending' | 'Approved'}
             onView={() => handleView(app.email)}
           />
