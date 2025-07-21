@@ -11,22 +11,28 @@ import { UserStackParamList } from '../../config/navigation/UserNavigation';
 
 const PAYMENT_OPTIONS = [
   {
-    icon: require('../../assets/icons/compassIcon.png'),
+    icon: require('../../assets/icons/DebitCardIcon.png'),
     key: 'card',
     label: 'Credit/Debit Card',
     description: 'Add your credit/debit card to donate easily and securely.',
   },
   {
-    icon: require('../../assets/icons/duoIcon.png'),
+    icon: require('../../assets/icons/bankPayIcon.png'),
     key: 'bank',
     label: 'Bank Transfer',
     description: 'Transfer funds directly from your bank account.',
   },
   {
-    icon: require('../../assets/icons/homeIcon.png'),
+    icon: require('../../assets/icons/Paypalcon.png'),
     key: 'wallet',
     label: 'Wallet',
     description: 'Donate from your digital wallet.',
+  },
+  {
+    icon: require('../../assets/icons/AppleIcon.png'),
+    key: 'ApplePay',
+    label: 'Apple Pay',
+    description: 'Donate from your Apple Pay account.',
   },
 ];
 
@@ -34,7 +40,8 @@ const SelectPaymentMethod = () => {
   const navigation = useNavigation<any>();
   const { theme } = useTheme();
   const [selected, setSelected] = useState('card');
-  const { amount, donationType  } = useRoute<RouteProp<UserStackParamList, 'NewPaymentMethod'>>().params;
+  const { amount, donationType } =
+    useRoute<RouteProp<UserStackParamList, 'NewPaymentMethod'>>().params;
 
   const handleContinue = () => {
     navigation.navigate('PaymentConfirmation', {

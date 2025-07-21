@@ -7,6 +7,7 @@ import Section from '../../components/base/Section';
 import CampaignCard from '../../components/cards/CampaignCard';
 import Divider from '../../components/base/Divider';
 import Text from '../../components/base/Text';
+import ImpactMetricCard from '../../components/base/ImpactMetricCard';
 
 // --- Static Data ---
 const impactPrograms = [
@@ -57,22 +58,6 @@ const beneficiaryStories = [
 ];
 
 // --- Card Components ---
-const ImpactMetricCard = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) => (
-  <View style={styles.metricCard}>
-    <Text variant="subtitle1" style={styles.metricLabel}>
-      {label}
-    </Text>
-    <Text variant="h3" style={styles.metricValue}>
-      {value}
-    </Text>
-  </View>
-);
 
 // --- Main Screen ---
 const Impact = () => {

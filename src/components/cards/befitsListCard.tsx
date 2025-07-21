@@ -8,22 +8,26 @@ import { ImageSourcePropType } from 'react-native';
 
 function BefitsListCard({
   icon,
+  profileImage,
   title,
   description,
   RightComponent,
 }: {
   icon?: any,
+  profileImage?: ImageSourcePropType,
   title?: string;
   description?: string;
   RightComponent?: React.ReactNode;
 }) {
   return (
     <View style={styles.benefitRow}>
-      {icon && (
+      {profileImage ? (
+        <Image source={profileImage} style={styles.profileImage} />
+      ) : icon ? (
         <View style={styles.benefitIconWrapper}>
           <Image source={icon} style={styles.benefitIcon} />
         </View>
-      )}
+      ) : null}
       <View style={styles.benefitTextContainer}>
         <Text variant="subtitle1" style={styles.benefitTitle}>
           {title}
@@ -56,6 +60,13 @@ const styles = StyleSheet.create({
   benefitIcon: {
     width: 25,
     height: 25,
+  },
+  profileImage: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    marginRight: 12,
+    backgroundColor: theme.colors.secondary[100],
   },
   benefitTextContainer: {
     flex: 1,

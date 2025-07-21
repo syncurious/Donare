@@ -7,8 +7,8 @@ import Text from '../../components/base/Text';
 import Chip from '../../components/base/Chip';
 import { useTheme } from '../../config/theme';
 import BefitsListCard from '../../components/cards/befitsListCard';
-import HeartIcon from '../../assets/icons/heartIcon.png';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { donationCoinIcon } from '../../assets/icons';
 
 const DONATION_TYPES = ['All', 'Zakat', 'Sadaqah', 'Fidyah'];
 
@@ -81,7 +81,7 @@ const DonationHistory = () => {
                 }}
               >
                 <BefitsListCard
-                  icon={HeartIcon}
+                  icon={donationCoinIcon}
                   RightComponent={
                     <Text
                       variant="h6"
