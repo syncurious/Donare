@@ -18,6 +18,7 @@ import PrayerTimes from '../../../screens/prayerTime';
 import IslamicCalendar from '../../../screens/islamicCalendar';
 import RequestHelp from '../../../screens/home/RequestHelp';
 import Impact from '../../../screens/home/Impact';
+import AddCause from '../../../screens/home/AddCause';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -43,6 +44,7 @@ type UserStackParamList = {
   IslamicCalendar: undefined;
   RequestHelp: undefined;
   Impact: undefined;
+  AddCause: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -216,6 +218,15 @@ const UserNavigation = () => {
           title: 'Islamic Calendar',
         }}
         component={IslamicCalendar}
+      />
+      <Stack.Screen
+        name="AddCause"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Add Cause',
+        }}
+        component={AddCause}
       />
     </Stack.Navigator>
   );

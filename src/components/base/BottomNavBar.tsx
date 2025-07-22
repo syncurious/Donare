@@ -13,6 +13,7 @@ import ProfileIcon from '../../assets/icons/profileIcon.png';
 import ProfileIconFilled from '../../assets/icons/profileIconFilled.png';
 import theme from '../../config/theme';
 import { useAuthStore } from '../../store/auth';
+import { helpIcon } from '../../assets/icons';
 
 const UserTabs = [
   {
@@ -34,10 +35,10 @@ const UserTabs = [
     iconActive: DuoIconFilled,
   },
   {
-    name: 'Qibla',
-    label: 'Qibla',
-    icon: CompassIcon,
-    iconActive: CompassIconFilled,
+    name: 'Causes',
+    label: 'Causes',
+    icon: helpIcon,
+    iconActive: helpIcon,
   },
   {
     name: 'HelpRequest',

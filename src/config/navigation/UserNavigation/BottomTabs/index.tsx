@@ -5,6 +5,7 @@ import Header from '../../../../components/base/Header';
 import BottomNavBar from '../../../../components/base/BottomNavBar';
 import Profile from '../../../../screens/profile';
 import Qibla from '../../../../screens/qibla';
+import Causes from '../../../../screens/home/Causes';
 
 // Placeholder screens for other tabs
 const Placeholder = ({ label }: { label: string }) => (
@@ -27,7 +28,8 @@ const BottomNavigation = () => {
         name="Volunteer"
         component={Volunteer}
       />
-      <Tab.Screen name="Qibla" component={Qibla} />
+      <Tab.Screen name="Causes" component={Causes} />
+      {/* <Tab.Screen name="Qibla" component={Qibla} /> */}
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
