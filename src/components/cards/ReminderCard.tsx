@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import theme, { borderRadius } from '../../config/theme';
 
 interface ReaminderCardProps {
@@ -8,6 +8,7 @@ interface ReaminderCardProps {
   image?: string;
   buttonText?: string;
   buttonAction?: () => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 const ReaminderCard: React.FC<ReaminderCardProps> = ({
@@ -15,10 +16,11 @@ const ReaminderCard: React.FC<ReaminderCardProps> = ({
   description,
   image,
   buttonText,
+  style,
   buttonAction,
 }) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card , style]}>
       <View
         style={{
           width: '60%',

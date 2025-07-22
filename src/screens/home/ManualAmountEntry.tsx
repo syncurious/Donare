@@ -1,31 +1,46 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Paragraph from '../../components/base/Paragraph';
 import Input from '../../components/base/Input';
 import Button from '../../components/base/Button';
 import { useTheme } from '../../config/theme';
-import { useNavigation, useRoute, RouteProp, NavigationProp } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  RouteProp,
+  NavigationProp,
+} from '@react-navigation/native';
+import { helpIcon } from '../../assets/icons';
+import ReaminderCard from '../../components/cards/ReminderCard';
+import ReminderCard from '../../components/cards/ReminderCard';
 
 interface ManualAmountEntryProps {
   donationType?: 'Sadaqah' | 'Kaffarah' | 'Zakat' | 'Fidyah';
 }
 
-type RouteParams = { donationType?: 'Sadaqah' | 'Kaffarah' | 'Zakat' | 'Fidyah' };
+type RouteParams = {
+  donationType?: 'Sadaqah' | 'Kaffarah' | 'Zakat' | 'Fidyah';
+};
 
-const ManualAmountEntry: React.FC<ManualAmountEntryProps> = (props) => {
+const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute<RouteProp<Record<string, RouteParams>, string>>();
   const [amount, setAmount] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
+  const [isKindSelected, setIsKindSelected] = useState(false);
 
   // Prefer prop, then route param, then default
-  const donationType = props.donationType || route.params?.donationType || 'Sadaqah';
+  const donationType =
+    props.donationType || route.params?.donationType || 'Sadaqah';
 
   const handleDonate = () => {
-    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
+    if (
+      (!amount || isNaN(Number(amount)) || Number(amount) <= 0) &&
+      !isKindSelected
+    ) {
       setError('Please enter a valid amount');
       return;
     }
@@ -41,28 +56,85 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = (props) => {
     navigation.goBack();
   };
 
+  const handleKindSelect = () => {
+    setIsKindSelected(true);
+    setAmount('');
+  };
+  const handleAmountChange = (val: string) => {
+    setAmount(val);
+    if (isKindSelected) setIsKindSelected(false);
+  };
+
   return (
-    <Container style={{ flex: 1, backgroundColor: theme.colors.background.primary, paddingHorizontal: 0 }}>
+    <Container
+      scrollable
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background.primary,
+        paddingHorizontal: 0,
+      }}
+    >
       <View style={styles.headerSection}>
-        <Heading level={2} style={styles.heading}>Donation Amount</Heading>
+        <Heading level={2} style={styles.heading}>
+          Donation Amount
+        </Heading>
         <Paragraph variant="h5" color="primary" style={styles.subheading}>
           How much would you like to donate?
         </Paragraph>
       </View>
-      <View style={styles.inputSection}>
-        <Input
-          label={undefined}
-          placeholder="PKR 0.00"
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType="numeric"
-          variant="outlined"
-          size="large"
-          prefixIcon={undefined}
-          style={styles.input}
-          inputStyle={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.text.primary }}
-          error={error}
-        />
+      <View style={{ flex: 1 }}>
+        <View style={styles.inputSection}>
+          <Input
+            label={undefined}
+            placeholder="PKR 0.00"
+            value={amount}
+            onChangeText={handleAmountChange}
+            keyboardType="numeric"
+            variant="outlined"
+            size="large"
+            prefixIcon={undefined}
+            style={styles.input}
+            editable={!isKindSelected}
+            inputStyle={styles.inputText}
+            onFocus={() => setIsKindSelected(false)}
+            error={error}
+          />
+        </View>
+        <View style={[styles.inputSection, styles.gap16]}>
+          <Paragraph variant="h2" color="primary">
+            Or
+          </Paragraph>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={handleKindSelect}
+          >
+            <ReminderCard
+              style={{
+                borderColor: isKindSelected
+                  ? typeof theme.colors.primary === 'string'
+                    ? theme.colors.primary
+                    : theme.colors.primary[500] || '#007bff'
+                  : '#E0E0E0',
+                borderWidth: isKindSelected ? 2 : 1,
+              }}
+              buttonAction={() => {}}
+              buttonText="Upload Image"
+              title="Donate in Kind"
+              description="Share an image of the goods you wish to donate"
+              image={
+                'https://images.unsplash.com/photo-1506744038136-46273834b3fb'
+              }
+            />
+          </TouchableOpacity>
+
+          {isKindSelected && (
+            <View style={styles.kindAddressRow}>
+              <View style={{ flex: 1 }}>
+                <Input label="Take From Address" placeholder="Enter Address" />
+              </View>
+            </View>
+          )}
+        </View>
       </View>
       <View style={styles.buttonSection}>
         <Button
@@ -111,26 +183,64 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: 12,
     backgroundColor: '#F2F2F5',
-    // paddingHorizontal: 0,
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  inputText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#222', // fallback, will be overridden by theme
+  },
+  gap16: {
+    gap: 16,
+  },
+  kindCard: {
+    borderColor: '#E0E0E0',
+    padding: 0,
+    borderWidth: 1,
+    borderRadius: 12,
+    margin: 0,
+  },
+  kindCardLeft: {
+    width: '60%',
+  },
+  kindTitle: {
+    fontWeight: 'bold',
+  },
+  kindSubtitle: {
+    fontSize: 12,
+  },
+  kindHelpIconRow: {
+    flexDirection: 'row',
+    gap: 8,
+    alignSelf: 'center',
+    marginTop: 8,
+  },
+  kindHelpIcon: {
+    width: 25,
+    height: 25,
+  },
+  kindImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+  },
+  kindAddressRow: {
+    flexDirection: 'row',
+    gap: 16,
   },
   buttonSection: {
     marginTop: 'auto',
     marginBottom: 16,
     marginHorizontal: 16,
-    // gap: 12,
-    // gap: 16,
   },
   donateButton: {
     borderRadius: 24,
-    // minHeight: 56,
     marginBottom: 12,
   },
   cancelButton: {
     borderRadius: 24,
-    // minHeight: 56,
   },
 });
 
-export default ManualAmountEntry; 
+export default ManualAmountEntry;
