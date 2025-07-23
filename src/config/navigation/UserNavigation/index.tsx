@@ -19,6 +19,7 @@ import IslamicCalendar from '../../../screens/islamicCalendar';
 import RequestHelp from '../../../screens/home/RequestHelp';
 import Impact from '../../../screens/home/Impact';
 import AddCause from '../../../screens/home/AddCause';
+import QuickDonate from '../../../screens/home/QuickDonate';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -45,6 +46,7 @@ type UserStackParamList = {
   RequestHelp: undefined;
   Impact: undefined;
   AddCause: undefined;
+  QuickDonate: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -227,6 +229,15 @@ const UserNavigation = () => {
           title: 'Add Cause',
         }}
         component={AddCause}
+      />
+      <Stack.Screen
+        name="QuickDonate"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Quick Donate',
+        }}
+        component={QuickDonate}
       />
     </Stack.Navigator>
   );

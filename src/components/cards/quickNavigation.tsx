@@ -18,7 +18,7 @@ const QuickNavigation = () => {
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.quickNavigationItem}
-          onPress={() => handleNavigate('Donate')}
+          onPress={() => handleNavigate('QuickDonate')}
         >
           <View style={styles.quickNavigationItemIcon}>
             {/* Replace with your Donate icon if available */}
