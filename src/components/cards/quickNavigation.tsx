@@ -5,6 +5,7 @@ import Heading from '../base/Heading';
 import QiblaIcon from '../../assets/icons/QiblaIcon.png';
 import IslamicCalenderIcon from '../../assets/icons/IslamicCalender.png';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
+import DonateCoinIcon from '../../assets/icons/donationCoinIcon.png';
 
 const QuickNavigation = () => {
   const navigation = useNavigation<any>();
@@ -21,7 +22,7 @@ const QuickNavigation = () => {
         >
           <View style={styles.quickNavigationItemIcon}>
             {/* Replace with your Donate icon if available */}
-            <Image source={require('../../assets/icons/donationCoinIcon.png')} style={{ width: 40, height: 40 }} />
+            <Image source={DonateCoinIcon} style={{ width: 30, height: 30 }} />
           </View>
           <Heading level={6} style={[styles.quickNavigationItemText]}>
             Donate

@@ -15,6 +15,7 @@ import {
 import { helpIcon } from '../../assets/icons';
 import ReaminderCard from '../../components/cards/ReminderCard';
 import ReminderCard from '../../components/cards/ReminderCard';
+import Text from '../../components/base/Text';
 
 interface ManualAmountEntryProps {
   donationType?: 'Sadaqah' | 'Kaffarah' | 'Zakat' | 'Fidyah';
@@ -31,6 +32,12 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
   const [amount, setAmount] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
   const [isKindSelected, setIsKindSelected] = useState(false);
+  const [kindFields, setKindFields] = useState({
+    name: '',
+    phone: '',
+    address: '',
+    description: '',
+  });
 
   // Prefer prop, then route param, then default
   const donationType =
@@ -44,11 +51,19 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
       setError('Please enter a valid amount');
       return;
     }
+    if (isKindSelected) {
+      if (!kindFields.name || !kindFields.phone || !kindFields.address) {
+        setError('Please fill all required fields for Donate in Kind');
+        return;
+      }
+    }
     setError(undefined);
     navigation.navigate('PaymentConfirmation', {
       donationType,
-      amount,
+      amount: isKindSelected ? undefined : amount,
       paymentMethod: '', // To be selected in next step
+      kindFields: isKindSelected ? kindFields : undefined,
+      isKindSelected,
     });
   };
 
@@ -73,6 +88,9 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
         backgroundColor: theme.colors.background.primary,
         paddingHorizontal: 0,
       }}
+      contentContainerStyle={{
+        paddingBottom: 40,
+      }}
     >
       <View style={styles.headerSection}>
         <Heading level={2} style={styles.heading}>
@@ -94,10 +112,8 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
             size="large"
             prefixIcon={undefined}
             style={styles.input}
-            editable={!isKindSelected}
             inputStyle={styles.inputText}
-            onFocus={() => setIsKindSelected(false)}
-            error={error}
+            error={error && !isKindSelected ? error : undefined}
           />
         </View>
         <View style={[styles.inputSection, styles.gap16]}>
@@ -126,12 +142,15 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
               }
             />
           </TouchableOpacity>
-
           {isKindSelected && (
-            <View style={styles.kindAddressRow}>
-              <View style={{ flex: 1 }}>
-                <Input label="Take From Address" placeholder="Enter Address" />
-              </View>
+            <View style={{ gap: 12 }}>
+              <Input label="Name" placeholder="Enter Name" value={kindFields.name} onChangeText={val => setKindFields(f => ({ ...f, name: val }))} style={{ marginTop: 8 }} />
+              <Input label="Phone No" placeholder="Enter Phone Number" value={kindFields.phone} onChangeText={val => setKindFields(f => ({ ...f, phone: val }))} keyboardType="phone-pad" style={{ marginTop: 8 }} />
+              <Input label="Take From Address" placeholder="Enter Address" value={kindFields.address} onChangeText={val => setKindFields(f => ({ ...f, address: val }))} />
+              <Input label="Description (optional)" placeholder="Enter Description" value={kindFields.description} onChangeText={val => setKindFields(f => ({ ...f, description: val }))} style={{ marginTop: 8 }} />
+              {error && (
+                <Text style={{ color: 'red', marginTop: 4 }}>{error}</Text>
+              )}
             </View>
           )}
         </View>
