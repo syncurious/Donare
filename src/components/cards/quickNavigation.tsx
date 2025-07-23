@@ -17,10 +17,23 @@ const QuickNavigation = () => {
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.quickNavigationItem}
+          onPress={() => handleNavigate('Donate')}
+        >
+          <View style={styles.quickNavigationItemIcon}>
+            {/* Replace with your Donate icon if available */}
+            <Image source={require('../../assets/icons/donationCoinIcon.png')} style={{ width: 40, height: 40 }} />
+          </View>
+          <Heading level={6} style={[styles.quickNavigationItemText]}>
+            Donate
+          </Heading>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.quickNavigationItem}
           onPress={() => handleNavigate('PrayerTimes')}
         >
           <View style={styles.quickNavigationItemIcon}>
-            <Image source={NamazIcon} style={{ width: 40, height: 40 }} />
+            <Image source={require('../../assets/icons/NamazIcon.png')} style={{ width: 40, height: 40 }} />
           </View>
           <Heading level={6} style={[styles.quickNavigationItemText]}>
             Namaz Time
@@ -28,35 +41,11 @@ const QuickNavigation = () => {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={{
-            width: 70,
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 12,
-          }}
-        >
-          <View style={styles.quickNavigationItemIcon}>
-            <Image source={QiblaIcon} style={{ width: 40, height: 40 }} />
-          </View>
-          <Heading level={6} style={[styles.quickNavigationItemText]}>
-            Qibla Direction
-          </Heading>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={{
-            width: 70,
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 12,
-          }}
+          style={styles.quickNavigationItem}
           onPress={() => handleNavigate('IslamicCalendar')}
         >
           <View style={styles.quickNavigationItemIcon}>
-            <Image
-              source={IslamicCalenderIcon}
-              style={{ width: 30, height: 30 }}
-            />
+            <Image source={require('../../assets/icons/IslamicCalender.png')} style={{ width: 30, height: 30 }} />
           </View>
           <Heading level={6} style={[styles.quickNavigationItemText]}>
             Calendar

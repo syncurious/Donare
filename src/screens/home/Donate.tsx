@@ -1,84 +1,37 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import ReminderCard from '../../components/cards/ReminderCard';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Headline from '../../components/sections/Headline';
-import Feather from 'react-native-vector-icons/Feather';
+import { DonateOptionCard } from '../../components/cards';
 import theme from '../../config/theme';
 
 const Donate: React.FC = () => {
-  const navigation = useNavigation<NavigationProp<any>>();
-  const donateReminders = [
-    {
-      title: 'Give your Zakat',
-      description:
-        'Zakat is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
-      buttonText: 'Donate Now',
-      buttonAction: () => navigation.navigate('BenefitsZakat'),
-    },
-    {
-      title: 'Give your Sadaqah',
-      description:
-        'Sadaqah is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
-      buttonText: 'Donate Now',
-      buttonAction: () => navigation.navigate('BenefitsSadaqah'),
-    },
-    {
-      title: 'Give your Fidyah',
-      description:
-        'Fidyah is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2',
-      buttonText: 'Donate Now',
-      buttonAction: () => navigation.navigate('BenefitsFidyah'),
-    },
-    {
-      title: 'Give your Kaffarah',
-      description:
-        'Kaffarah is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2',
-      buttonText: 'Donate Now',
-      buttonAction: () => navigation.navigate('BenefitsKaffarah'),
-    },
-  ];
+  const navigation = useNavigation<any>();
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#F7FAFC' }}>
       <Headline>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('RequestHelp' as never)}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          <Heading level={6} color="inverse">
-            Need Help? Get Support with Donare
-          </Heading>
-          <Feather
-            name="chevron-right"
-            size={20}
-            color={theme.colors.text.inverse}
-          />
-        </TouchableOpacity>
+        <Heading level={6} color="inverse">
+          What would you like to do today?
+        </Heading>
       </Headline>
       <Container scrollable style={styles.container}>
-        <Heading level={1} style={styles.heading}>
-          Donate
-        </Heading>
-        <FlatList
-          data={donateReminders}
-          keyExtractor={(_, idx) => idx.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.cardWrapper}>
-              <ReminderCard {...item} />
-            </View>
-          )}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
+        <DonateOptionCard
+          title="Easy Donation"
+          description="Make a quick donation to a trusted cause."
+          buttonText="Start"
+          image={{ uri: 'https://www.dropbox.com/scl/fi/22o4c0wipz0dzml93djol/EasyDonationImage.png?rlkey=gtsn13ctlswa6lc7c7lk5ff3v&st=w69kglrq&dl=1' }}
+          onPress={() => navigation.navigate('ManualAmountEntry')}
+          backgroundColor="rgba(255,255,255,0.85)"
+        />
+        <DonateOptionCard
+          title="Charity Verification"
+          description="Get help or find a charity in need."
+          buttonText="Verify"
+          image={{ uri: 'https://www.dropbox.com/scl/fi/c2m5ixp7ogi9ap2i9zr4w/CharityVerificationImage.png?rlkey=21t2yiyr5jvbnazdzpojgkvs5&st=rxfjs2vf&dl=1' }}
+          onPress={() => navigation.navigate('RequestHelp')}
+          backgroundColor="rgba(255,255,255,0.85)"
         />
       </Container>
     </View>
@@ -88,20 +41,25 @@ const Donate: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 16,
-    paddingHorizontal: 8,
+    backgroundColor: '#F7FAFC',
+    paddingBottom: 100,
+    paddingTop: 24,
+    // paddingHorizontal: 0,
   },
-  heading: {
-    marginBottom: 16,
-    marginLeft: 8,
+  cardBg: {
+    padding: 0,
+    borderRadius: 16,
+    backgroundColor: 'red',
+    overflow: 'hidden',
+    marginBottom: 24,
+    marginHorizontal: 12,
+    elevation: 2,
   },
-  cardWrapper: {
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  listContent: {
-    paddingBottom: 20,
+  cardImage: {
+    width: '100%',
+    height: 180,
+    resizeMode: 'cover',
+    borderRadius: 16,
   },
 });
 
