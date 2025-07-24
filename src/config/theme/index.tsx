@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions , StatusBar, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -306,6 +306,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   return (
     <ThemeContext.Provider value={{ theme: currentTheme, isDark, toggleTheme, setTheme }}>
+      <StatusBar />
       {children}
     </ThemeContext.Provider>
   );
