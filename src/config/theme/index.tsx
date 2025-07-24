@@ -306,7 +306,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   return (
     <ThemeContext.Provider value={{ theme: currentTheme, isDark, toggleTheme, setTheme }}>
-      <StatusBar />
       {children}
     </ThemeContext.Provider>
   );
