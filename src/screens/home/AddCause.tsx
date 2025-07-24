@@ -67,7 +67,7 @@ const AddCause = () => {
         {media && media.type === 'image' && (
           <Image source={{ uri: media.uri }} style={styles.imagePreview} />
         )}
-        {media && media.type === 'video' && (
+        {(
           <View style={styles.videoPreview}>
             <TouchableOpacity
               onPress={() => setShowVideo(true)}
@@ -82,11 +82,11 @@ const AddCause = () => {
             />
             <Video
               fullscreen={showVideo}
-              source={{ uri: media.uri }}
+              source={{ uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }}
               style={{ width: '100%', height: '100%' }}
-              controls={showVideo}
+            //   controls={showVideo}
               resizeMode="cover"
-              paused={!showVideo}
+            //   paused={!showVideo}
             />
           </View>
         )}
