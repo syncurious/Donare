@@ -6,7 +6,7 @@ const App = () => {
   return (
     <ThemeProvider>
         <View style={{flex : 1,paddingTop : Platform.OS == 'ios' ? 30 : 0}}>
-      <MainNavigation />
+            <MainNavigation />
         </View>
     </ThemeProvider>
   );
