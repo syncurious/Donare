@@ -7,6 +7,8 @@ export { default as Input } from './Input';
 export { default as Container } from './Container';
 export { default as Loader } from './Loader';
 export { default as Divider } from './Divider';
+export { default as Select } from './Select';
+export { default as Modal } from './Modal';
 
 // Type exports
 export type {

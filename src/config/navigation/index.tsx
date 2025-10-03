@@ -1,12 +1,23 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { useAuthStore } from '../../store/auth';
 import AuthNavigation from './AuthNavigation';
 import UserNavigation from './UserNavigation';
+import AdminNavigation from './AdminNavigation';
 
 const MainNavigation = () => {
-  const isAuth = false;
+  const isAuth = useAuthStore(state => state.isLoggedIn);
+  const isAdmin = useAuthStore(state => state.user?.role === 'admin');
   return (
     <NavigationContainer>
-      {isAuth ? <UserNavigation /> : <AuthNavigation />}
+      {isAuth ? (
+        isAdmin ? (
+          <AdminNavigation />
+        ) : (
+          <UserNavigation />
+        )
+      ) : (
+        <AuthNavigation />
+      )}
     </NavigationContainer>
   );
 };

@@ -170,8 +170,9 @@ const Container: React.FC<ContainerProps> = ({
     style,
   ];
 
+  // For ScrollView, flexGrow: 1 ensures content stretches and scrolls
   const contentStyle: StyleProp<ViewStyle> = [
-    styles.content,
+    { flexGrow: 1 },
     contentContainerStyle,
   ];
 
@@ -257,9 +258,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  content: {
-    flex: 1,
-  },
+  content: {},
 });
 
 export default Container; 

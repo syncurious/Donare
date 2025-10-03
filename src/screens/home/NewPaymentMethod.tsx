@@ -1,0 +1,111 @@
+import React, { useState } from 'react';
+import { Touchable, TouchableOpacity, View } from 'react-native';
+import Container from '../../components/base/Container';
+import Heading from '../../components/base/Heading';
+import Button from '../../components/base/Button';
+import CheckBox from '../../components/base/CheckBox';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useTheme } from '../../config/theme';
+import BefitsListCard from '../../components/cards/befitsListCard';
+import { UserStackParamList } from '../../config/navigation/UserNavigation';
+
+const PAYMENT_OPTIONS = [
+  {
+    icon: require('../../assets/icons/DebitCardIcon.png'),
+    key: 'card',
+    label: 'Credit/Debit Card',
+    description: 'Add your credit/debit card to donate easily and securely.',
+  },
+  {
+    icon: require('../../assets/icons/bankPayIcon.png'),
+    key: 'bank',
+    label: 'Bank Transfer',
+    description: 'Transfer funds directly from your bank account.',
+  },
+  {
+    icon: require('../../assets/icons/Paypalcon.png'),
+    key: 'wallet',
+    label: 'Wallet',
+    description: 'Donate from your digital wallet.',
+  },
+  {
+    icon: require('../../assets/icons/AppleIcon.png'),
+    key: 'ApplePay',
+    label: 'Apple Pay',
+    description: 'Donate from your Apple Pay account.',
+  },
+];
+
+const SelectPaymentMethod = () => {
+  const navigation = useNavigation<any>();
+  const { theme } = useTheme();
+  const [selected, setSelected] = useState('card');
+  const { amount, donationType } =
+    useRoute<RouteProp<UserStackParamList, 'NewPaymentMethod'>>().params;
+
+  const handleContinue = () => {
+    navigation.navigate('PaymentConfirmation', {
+      donationType: donationType,
+      amount: amount,
+      paymentMethod: selected,
+    });
+  };
+
+  return (
+    <Container
+      scrollable
+      padding="small"
+      style={{ backgroundColor: theme.colors.background.primary }}
+    >
+      <Heading level={2} style={{ marginBottom: theme.spacing[4] }}>
+        Select Payment Method
+      </Heading>
+      <View style={{ gap: theme.spacing[3], marginBottom: theme.spacing[5] }}>
+        {PAYMENT_OPTIONS.map(option => (
+          <TouchableOpacity
+            onPress={() => setSelected(option.key)}
+            style={{
+              borderWidth: selected === option.key ? 2 : 1,
+              borderColor:
+                selected === option.key
+                  ? theme.colors.primary[500]
+                  : theme.colors.secondary[200],
+              borderRadius: theme.borderRadius.md,
+              padding: theme.spacing[3],
+              backgroundColor:
+                selected === option.key
+                  ? theme.colors.primary[50]
+                  : theme.colors.background.secondary,
+            }}
+          >
+            <BefitsListCard
+              title={option.label}
+              key={option.key}
+              description={option.description}
+              icon={option.icon}
+            />
+          </TouchableOpacity>
+          //   <CheckBox
+          //     key={option.key}
+          //     checked={selected === option.key}
+          //     onPress={() => setSelected(option.key)}
+          //     label={option.label}
+          //
+          //     labelStyle={{ fontWeight: selected === option.key ? 'bold' : 'normal' }}
+          //   />
+        ))}
+      </View>
+      <Button
+        variant="contained"
+        color="primary"
+        onPress={handleContinue}
+        style={{ marginTop: theme.spacing[5] }}
+        fullWidth
+      >
+        Continue
+      </Button>
+    </Container>
+  );
+};
+
+export default SelectPaymentMethod;
