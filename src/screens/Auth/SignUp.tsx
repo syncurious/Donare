@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { Alert } from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
@@ -15,26 +16,72 @@ import CheckBox from '../../components/base/CheckBox';
 import theme from '../../config/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Signup } from '../../service/handler';
 
 // Placeholder PNGs (replace with actual PNGs as needed)
 import logoPng from '../../assets/images/logoWihtoutText.png';
 import facebookPng from '../../assets/icons/facebookIcon.png';
 import googlePng from '../../assets/icons/googleIcon.png';
 
+type SignUpPayload = {
+  email: string;
+  password: string;
+  full_name: string;
+  city: string;
+  role: 'user' | 'admin' | string;
+  userPreferences: {
+    last_zakat_date: string; // ISO string
+    zakat_reminders_enabled: boolean;
+    campaign_updates_enabled: boolean;
+  };
+  // UI-only field (not sent to API)
+  confirmPassword?: string;
+};
+
 const SignUp = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [city, setCity] = useState('');
-  const [zakatDate, setZakatDate] = useState('');
-  const [reminders, setReminders] = useState(false);
-  const [campaigns, setCampaigns] = useState(false);
 
-  const handleSignUp = () => {
-    navigation.navigate('Home');
-    // TODO: Implement sign up logic
+  const [payload, setPayload] = useState<SignUpPayload>({
+    email: 'aqib@gmail.com',
+    password: '123456',
+    full_name: 'Aqib',
+    city: 'Karachi',
+    role: 'user',
+    userPreferences: {
+      last_zakat_date: '2025-01-01',
+      zakat_reminders_enabled: false,
+      campaign_updates_enabled: false,
+    },
+    confirmPassword: '123456',
+  });
+
+  const handleSignUp = async () => {
+    const { confirmPassword, ...apiPayload } = payload;
+
+    if (!payload.email || !payload.password || !payload.full_name) {
+      Alert.alert('Missing fields', 'Please fill in all required fields.');
+      return;
+    }
+
+    if (payload.password !== confirmPassword) {
+      Alert.alert('Password mismatch', 'Passwords do not match.');
+      return;
+    }
+
+    try {
+      const response = await Signup(apiPayload);
+      console.log('response', response);
+      Alert.alert('Success', 'Account created. Please log in.', [
+        { text: 'OK', onPress: () => navigation.navigate('Login') },
+      ]);
+    } catch (error: any) {
+      console.log('error', error);
+      const message =
+        error?.data?.message ||
+        error?.message ||
+        'Signup failed. Please try again.';
+      Alert.alert('Error', String(message));
+    }
   };
 
   return (
@@ -59,8 +106,10 @@ const SignUp = () => {
             <Input
               label="Full Name"
               placeholder="Enter your full name"
-              value={fullName}
-              onChangeText={setFullName}
+              value={payload.full_name}
+              onChangeText={text =>
+                setPayload(prev => ({ ...prev, full_name: text }))
+              }
               variant="outlined"
               style={styles.input}
               inputStyle={{ fontSize: 16 }}
@@ -68,8 +117,10 @@ const SignUp = () => {
             <Input
               label="Email"
               placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
+              value={payload.email}
+              onChangeText={text =>
+                setPayload(prev => ({ ...prev, email: text }))
+              }
               variant="outlined"
               style={styles.input}
               inputStyle={{ fontSize: 16 }}
@@ -79,8 +130,10 @@ const SignUp = () => {
             <Input
               label="Password"
               placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
+              value={payload.password}
+              onChangeText={text =>
+                setPayload(prev => ({ ...prev, password: text }))
+              }
               variant="outlined"
               style={styles.input}
               inputStyle={{ fontSize: 16 }}
@@ -89,8 +142,10 @@ const SignUp = () => {
             <Input
               label="Confirm Password"
               placeholder="Confirm your password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
+              value={payload.confirmPassword}
+              onChangeText={text =>
+                setPayload(prev => ({ ...prev, confirmPassword: text }))
+              }
               variant="outlined"
               style={styles.input}
               inputStyle={{ fontSize: 16 }}
@@ -99,8 +154,10 @@ const SignUp = () => {
             <Input
               label="City"
               placeholder="Enter your city"
-              value={city}
-              onChangeText={setCity}
+              value={payload.city}
+              onChangeText={text =>
+                setPayload(prev => ({ ...prev, city: text }))
+              }
               variant="outlined"
               style={styles.input}
               inputStyle={{ fontSize: 16 }}
@@ -108,8 +165,16 @@ const SignUp = () => {
             <Input
               label="Last Zakat Date (Optional)"
               placeholder="Select date"
-              value={zakatDate}
-              onChangeText={setZakatDate}
+              value={payload.userPreferences.last_zakat_date}
+              onChangeText={text =>
+                setPayload(prev => ({
+                  ...prev,
+                  userPreferences: {
+                    ...prev.userPreferences,
+                    last_zakat_date: text,
+                  },
+                }))
+              }
               variant="outlined"
               style={styles.input}
               inputStyle={{ fontSize: 16 }}
@@ -119,15 +184,33 @@ const SignUp = () => {
             </Text>
             <View style={styles.checkRow}>
               <CheckBox
-                checked={reminders}
-                onPress={() => setReminders(!reminders)}
+                checked={payload.userPreferences.zakat_reminders_enabled}
+                onPress={() =>
+                  setPayload(prev => ({
+                    ...prev,
+                    userPreferences: {
+                      ...prev.userPreferences,
+                      zakat_reminders_enabled:
+                        !prev.userPreferences.zakat_reminders_enabled,
+                    },
+                  }))
+                }
                 label="Receive Zakat reminders"
               />
             </View>
             <View style={styles.checkRow}>
               <CheckBox
-                checked={campaigns}
-                onPress={() => setCampaigns(!campaigns)}
+                checked={payload.userPreferences.campaign_updates_enabled}
+                onPress={() =>
+                  setPayload(prev => ({
+                    ...prev,
+                    userPreferences: {
+                      ...prev.userPreferences,
+                      campaign_updates_enabled:
+                        !prev.userPreferences.campaign_updates_enabled,
+                    },
+                  }))
+                }
                 label="Stay updated on new campaigns"
               />
             </View>
