@@ -3,6 +3,10 @@ import apiCaller from '.';
 export const Auth = {
   LOGIN: 'api/auth/signin',
   SIGNUP: 'api/auth/signup',
+  GET_PROFILE: 'user/profile',
+  UPDATE_PROFILE: 'user/profile',
+  GET_PREFERENCES: 'user/preferences',
+  UPDATE_PREFERENCES: 'user/preferences',
 };
 
 const Login = async (body: any) => {
@@ -13,4 +17,39 @@ const Signup = async (body: any) => {
   return await apiCaller('post', Auth.SIGNUP, body, undefined, false);
 };
 
-export { Login, Signup };
+const GetProfile = async () => {
+  return await apiCaller('get', Auth.GET_PROFILE, undefined, undefined, false);
+};
+
+const UpdateProfile = async (body: any) => {
+  return await apiCaller('post', Auth.UPDATE_PROFILE, body, undefined, false);
+};
+
+const GetPreferences = async () => {
+  return await apiCaller(
+    'get',
+    Auth.GET_PREFERENCES,
+    undefined,
+    undefined,
+    false,
+  );
+};
+
+const UpdatePreferences = async (body: any) => {
+  return await apiCaller(
+    'post',
+    Auth.UPDATE_PREFERENCES,
+    body,
+    undefined,
+    false,
+  );
+};
+
+export {
+  Login,
+  Signup,
+  GetProfile,
+  UpdateProfile,
+  GetPreferences,
+  UpdatePreferences,
+};
