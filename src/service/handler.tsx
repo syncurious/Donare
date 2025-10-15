@@ -7,6 +7,7 @@ export const Auth = {
   UPDATE_PROFILE: 'user/profile',
   GET_PREFERENCES: 'user/preferences',
   UPDATE_PREFERENCES: 'user/preferences',
+  FILE_UPLOAD: 'file/upload',
 };
 
 const Login = async (body: any) => {
@@ -45,6 +46,11 @@ const UpdatePreferences = async (body: any) => {
   );
 };
 
+const FileUpload = async (body: any) => {
+  // Use multipart for file uploads
+  return await apiCaller('post', Auth.FILE_UPLOAD, body, undefined, true);
+};
+
 export {
   Login,
   Signup,
@@ -52,4 +58,5 @@ export {
   UpdateProfile,
   GetPreferences,
   UpdatePreferences,
+  FileUpload,
 };
