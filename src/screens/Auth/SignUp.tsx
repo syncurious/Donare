@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { Alert } from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
@@ -17,11 +16,12 @@ import theme from '../../config/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Signup } from '../../service/handler';
-
-// Placeholder PNGs (replace with actual PNGs as needed)
 import logoPng from '../../assets/images/logoWihtoutText.png';
 import facebookPng from '../../assets/icons/facebookIcon.png';
 import googlePng from '../../assets/icons/googleIcon.png';
+import { useDispatch } from 'react-redux';
+import { setProfile } from '../../store/reducers/profile';
+import { showToast } from '../../utils/toast';
 
 type SignUpPayload = {
   email: string;
@@ -39,8 +39,8 @@ type SignUpPayload = {
 };
 
 const SignUp = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
   const [payload, setPayload] = useState<SignUpPayload>({
     email: 'aqib@gmail.com',
     password: '123456',
@@ -59,28 +59,26 @@ const SignUp = () => {
     const { confirmPassword, ...apiPayload } = payload;
 
     if (!payload.email || !payload.password || !payload.full_name) {
-      Alert.alert('Missing fields', 'Please fill in all required fields.');
+      showToast('error', 'Please fill in all required fields.');
       return;
     }
 
     if (payload.password !== confirmPassword) {
-      Alert.alert('Password mismatch', 'Passwords do not match.');
+      showToast('error', 'Passwords do not match.');
       return;
     }
 
     try {
-      const response = await Signup(apiPayload);
-      console.log('response', response);
-      Alert.alert('Success', 'Account created. Please log in.', [
-        { text: 'OK', onPress: () => navigation.navigate('Login') },
-      ]);
+      const response = (await Signup(apiPayload)) as any;
+      dispatch(setProfile(response?.data));
+      showToast('error', 'Signup Toast Succesfully !');
     } catch (error: any) {
       console.log('error', error);
       const message =
         error?.data?.message ||
         error?.message ||
         'Signup failed. Please try again.';
-      Alert.alert('Error', String(message));
+      showToast('error', String(message));
     }
   };
 

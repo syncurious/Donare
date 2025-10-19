@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
@@ -8,22 +8,21 @@ import Button from '../../components/base/Button';
 import theme from '../../config/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useAuthStore } from '../../store/auth';
-
-// Placeholder PNGs (replace with actual PNGs as needed)
 import logoPng from '../../assets/images/logoWihtoutText.png';
 import facebookPng from '../../assets/icons/facebookIcon.png';
 import googlePng from '../../assets/icons/googleIcon.png';
 import { Login } from '../../service/handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { setProfile } from '../../store/reducers/profile';
+import { showToast } from '../../utils/toast';
 
 const LoginScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [payload, setPayload] = useState({
     email: 'aqib@gmail.com',
     password: '123456',
   });
-  const loginAuth = useAuthStore(state => state.login);
 
   const handleInputChange = (key: 'email' | 'password', value: string) => {
     setPayload(prev => ({ ...prev, [key]: value }));
@@ -32,10 +31,10 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       const response = (await Login(payload)) as any;
-      loginAuth(response?.data);
-      AsyncStorage.setItem('token', response?.data?.token);
+      dispatch(setProfile(response?.data));
+      showToast('success', 'Login Succes');
     } catch (error: any) {
-      Alert.alert('Error', error.message || 'Login failed. Please try again.');
+      showToast('error', error.message || 'Login failed. Please try again.');
     }
   };
 

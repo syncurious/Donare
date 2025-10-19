@@ -6,48 +6,45 @@ import Section from '../../components/base/Section';
 import Text from '../../components/base/Text';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../config/theme';
-import { useAuthStore } from '../../store/auth';
 import ProfileCard from '../../components/cards/ProfileCard';
 import Loader from '../../components/base/Loader';
 import { GetProfile } from '../../service/handler';
+import { useDispatch } from 'react-redux';
+import { clearProfile } from '../../store/reducers/profile';
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
   const { theme } = useTheme();
-  const logout = useAuthStore(state => state.logout);
-  const isAdmin = useAuthStore(state => state.user?.role == 'admin');
-  const storeUser = useAuthStore(state => state.user);
-  const setUser = useAuthStore(state => state.setUser);
   const [loading, setLoading] = useState<boolean>(false);
+  const [user, setUser] = useState({
+    fullName: '',
+    memberSince: '',
+    email: '',
+    phone: '',
+    image: '',
+    role: '',
+  });
+  const isAdmin = false;
+
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const res: any = await GetProfile();
+      const data = res?.data?.user ?? res;
+      if (data) {
+        setUser(data);
+      }
+    } catch (e) {
+      // Silent fail; UI will show fallback values
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        setLoading(true);
-        const res: any = await GetProfile();
-        const data = res?.data?.user ?? res;
-        if (data) {
-          setUser({
-            ...data,
-          });
-        }
-      } catch (e) {
-        // Silent fail; UI will show fallback values
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProfile();
-  }, [setUser]);
-
-  const user = {
-    fullName: storeUser?.fullName || '—',
-    memberSince: '—',
-    email: storeUser?.email || '—',
-    phone: storeUser?.phone || '—',
-    image:
-      storeUser?.profilePicture ?? 'https://avatar.iran.liara.run/public/boy',
-  };
+  }, []);
 
   return (
     <Container
@@ -150,8 +147,7 @@ const Profile = () => {
               ]}
               activeOpacity={0.7}
               onPress={() => {
-                logout();
-                // navigation.navigate('Login');
+                dispatch(clearProfile());
               }}
             >
               <Text
@@ -185,8 +181,7 @@ const Profile = () => {
             ]}
             activeOpacity={0.7}
             onPress={() => {
-              logout();
-              // navigation.navigate('Login');
+              dispatch(clearProfile());
             }}
           >
             <Text

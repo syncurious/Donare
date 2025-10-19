@@ -1,9 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, {
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { store } from '../store';
 
 export const baseURL = 'http://54.255.168.207:3001/api/';
 
@@ -24,7 +24,7 @@ const ApiHandler = ({
   // Request interceptor
   instance.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-      const token = await AsyncStorage.getItem('token');
+      const token = store.getState()?.profile?.profile?.token;
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
