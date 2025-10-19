@@ -4,6 +4,8 @@ import theme, { ThemeProvider } from './src/config/theme';
 import { Platform, StatusBar, View } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './src/store';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/utils/toastconfig';
 
 const App = () => {
   return (
@@ -16,6 +18,7 @@ const App = () => {
         <Provider store={store}>
           <PersistGate loading={<View />} persistor={persistor}>
             <MainNavigation />
+            <Toast config={toastConfig} />
           </PersistGate>
         </Provider>
       </View>

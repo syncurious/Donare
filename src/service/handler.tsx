@@ -8,6 +8,8 @@ export const Auth = {
   GET_PREFERENCES: 'user/preferences',
   UPDATE_PREFERENCES: 'user/preferences',
   FILE_UPLOAD: 'file/upload',
+  REJISTER_VOLUNTEER: 'volunteer/register',
+  GET_VOLUNTEER: 'volunteer',
 };
 
 const Login = async (body: any) => {
@@ -50,6 +52,26 @@ const FileUpload = async (body: any) => {
   return await apiCaller('post', Auth.FILE_UPLOAD, body, undefined, true);
 };
 
+const GetVolunteer = async () => {
+  return await apiCaller(
+    'get',
+    Auth.GET_VOLUNTEER,
+    undefined,
+    undefined,
+    false,
+  );
+};
+
+const RejisterVolunteer = async (body: any) => {
+  return await apiCaller(
+    'post',
+    Auth.REJISTER_VOLUNTEER,
+    body,
+    undefined,
+    false,
+  );
+};
+
 export {
   Login,
   Signup,
@@ -58,4 +80,6 @@ export {
   GetPreferences,
   UpdatePreferences,
   FileUpload,
+  RejisterVolunteer,
+  GetVolunteer,
 };
