@@ -3,15 +3,13 @@ import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Container from '../../components/base/Container';
 import Section from '../../components/base/Section';
-import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
-import Button from '../../components/base/Button';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../config/theme';
 import { useAuthStore } from '../../store/auth';
 import ProfileCard from '../../components/cards/ProfileCard';
 import Loader from '../../components/base/Loader';
-import { GetProfile } from '../../utils';
+import { GetProfile } from '../../service/handler';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -27,13 +25,10 @@ const Profile = () => {
       try {
         setLoading(true);
         const res: any = await GetProfile();
-        const data = res?.data ?? res;
+        const data = res?.data?.user ?? res;
         if (data) {
           setUser({
-            id: String(data.id ?? data._id ?? ''),
-            name: String(data.full_name ?? data.name ?? ''),
-            email: String(data.email ?? ''),
-            role: (data.role ?? 'user') as any,
+            ...data,
           });
         }
       } catch (e) {
@@ -46,11 +41,12 @@ const Profile = () => {
   }, [setUser]);
 
   const user = {
-    name: storeUser?.name || '—',
+    fullName: storeUser?.fullName || '—',
     memberSince: '—',
     email: storeUser?.email || '—',
-    phone: '—',
-    image: 'https://avatar.iran.liara.run/public/boy',
+    phone: storeUser?.phone || '—',
+    image:
+      storeUser?.profilePicture ?? 'https://avatar.iran.liara.run/public/boy',
   };
 
   return (

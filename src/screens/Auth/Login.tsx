@@ -15,6 +15,7 @@ import logoPng from '../../assets/images/logoWihtoutText.png';
 import facebookPng from '../../assets/icons/facebookIcon.png';
 import googlePng from '../../assets/icons/googleIcon.png';
 import { Login } from '../../service/handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -31,7 +32,8 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       const response = (await Login(payload)) as any;
-      loginAuth(response);
+      loginAuth(response?.data);
+      AsyncStorage.setItem('token', response?.data?.token);
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Login failed. Please try again.');
     }

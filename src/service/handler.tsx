@@ -1,8 +1,8 @@
 import apiCaller from '.';
 
 export const Auth = {
-  LOGIN: 'api/auth/signin',
-  SIGNUP: 'api/auth/signup',
+  LOGIN: 'auth/signin',
+  SIGNUP: 'auth/signup',
   GET_PROFILE: 'user/profile',
   UPDATE_PROFILE: 'user/profile',
   GET_PREFERENCES: 'user/preferences',

@@ -1,18 +1,20 @@
-import { GetProfile as _GetProfile, UpdateProfile as _UpdateProfile, FileUpload } from '../service/handler';
+import {
+  UpdateProfile as _UpdateProfile,
+  FileUpload,
+} from '../service/handler';
 
 type UpdateProfilePayload = {
   email: string;
   full_name: string;
   phone: string;
-  profile_picture: string | { uri: string; name?: string; type?: string } | null;
+  profile_picture:
+    | string
+    | { uri: string; name?: string; type?: string }
+    | null;
 };
 
 export const UploadFile = async (file: any) => {
   return await FileUpload(file);
-};
-
-export const GetProfile = async () => {
-  return await _GetProfile();
 };
 
 const buildFormData = (file: { uri: string; name?: string; type?: string }) => {
