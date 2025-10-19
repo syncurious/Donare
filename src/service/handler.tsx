@@ -47,7 +47,6 @@ const UpdatePreferences = async (body: any) => {
 };
 
 const FileUpload = async (body: any) => {
-  // Use multipart for file uploads
   return await apiCaller('post', Auth.FILE_UPLOAD, body, undefined, true);
 };
 
