@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Section from '../../components/base/Section';
@@ -9,25 +16,100 @@ import { useTheme } from '../../config/theme';
 import BefitsListCard from '../../components/cards/befitsListCard';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { donationCoinIcon } from '../../assets/icons';
+import { GetDonations } from '../../service/handler';
+import { showToast } from '../../utils/toast';
 
-const DONATION_TYPES = ['All', 'Zakat', 'Sadaqah', 'Fidyah'];
+const DONATION_TYPES = ['All', 'ZAKAT', 'SADAQAH', 'FITRAH', 'FIDYAH'];
 
-const SAMPLE_DONATIONS = [
-  { id: 1, type: 'Zakat', title: 'Donated ', amount: 100, date: '2024-06-01' },
-  { id: 2, type: 'Sadaqah', title: 'Donated ', amount: 50, date: '2024-05-15' },
-  { id: 3, type: 'Fidyah', title: 'Donated ', amount: 25, date: '2024-04-20' },
-  { id: 4, type: 'Zakat', title: 'Donated ', amount: 75, date: '2024-03-10' },
-];
+interface Donation {
+  id: string;
+  donation_type: string;
+  amount: number;
+  is_in_kind: boolean;
+  zakat_year?: number;
+  zakat_calculation_method?: string;
+  zakat_assets_value?: number;
+  zakat_percentage?: number;
+  payment_method: string;
+  payment_status: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
 
 const DonationHistory = () => {
   const { theme } = useTheme();
   const [selectedType, setSelectedType] = useState('All');
   const navigation = useNavigation<NavigationProp<any>>();
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchDonations = async () => {
+    try {
+      setLoading(true);
+      const response = (await GetDonations()) as any;
+      console.log('Donations Response:', response);
+
+      if (response.status || response.success) {
+        const donationsData = response.data?.donations || response.data || [];
+        setDonations(donationsData);
+      } else {
+        showToast('error', response.message || 'Failed to fetch donations.');
+      }
+    } catch (error: any) {
+      console.error('Error fetching donations:', error);
+      showToast(
+        'error',
+        error?.data?.error?.message || 'Failed to load donation history.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDonations();
+  }, []);
 
   const filteredDonations =
     selectedType === 'All'
-      ? SAMPLE_DONATIONS
-      : SAMPLE_DONATIONS.filter(d => d.type === selectedType);
+      ? donations
+      : donations.filter(d => d.donation_type === selectedType);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'COMPLETED':
+        return theme.colors.success[600];
+      case 'PENDING':
+        return theme.colors.warning[600];
+      case 'FAILED':
+        return theme.colors.error[600];
+      default:
+        return theme.colors.neutral[600];
+    }
+  };
+
+  if (loading) {
+    return (
+      <Container style={{ backgroundColor: '#fff', flex: 1 }} padding="small">
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary[500]} />
+          <Text variant="body2" color="secondary" style={{ marginTop: 16 }}>
+            Loading donations...
+          </Text>
+        </View>
+      </Container>
+    );
+  }
 
   return (
     <Container
@@ -64,36 +146,61 @@ const DonationHistory = () => {
       <Section title="Recent Donations">
         <View style={{ gap: 12, marginVertical: 12 }}>
           {filteredDonations.length === 0 ? (
-            <Text variant="body2" color="secondary">
-              No donations found for this type.
-            </Text>
+            <View style={styles.emptyState}>
+              <Text variant="h5" color="primary" style={{ marginBottom: 8 }}>
+                No Donations Found
+              </Text>
+              <Text
+                variant="body2"
+                color="secondary"
+                style={{ textAlign: 'center' }}
+              >
+                {selectedType === 'All'
+                  ? "You haven't made any donations yet."
+                  : `No ${selectedType.toLowerCase()} donations found.`}
+              </Text>
+            </View>
           ) : (
             filteredDonations.map(donation => (
               <TouchableOpacity
                 activeOpacity={0.7}
                 key={donation.id}
-                onPress={() => {navigation.navigate('Impact')}}
+                onPress={() => {
+                  navigation.navigate('Impact');
+                }}
                 style={{
                   borderWidth: 1,
                   borderColor: theme.colors.neutral[200],
                   borderRadius: 12,
                   padding: 12,
+                  backgroundColor: theme.colors.background.secondary,
                 }}
               >
                 <BefitsListCard
                   icon={donationCoinIcon}
                   RightComponent={
-                    <Text
-                      variant="h6"
-                      color="primary"
-                      style={{ marginLeft: 12 }}
-                    >
-                      {' '}
-                      ${donation.amount}{' '}
-                    </Text>
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Text
+                        variant="h6"
+                        color="primary"
+                        style={{ marginBottom: 4 }}
+                      >
+                        PKR {donation.amount.toFixed(2)}
+                      </Text>
+                      <Text
+                        variant="caption"
+                        style={{ color: getStatusColor(donation.status) }}
+                      >
+                        {donation.status}
+                      </Text>
+                    </View>
                   }
-                  title={donation.title}
-                  description={donation.type}
+                  title={`${donation.donation_type} ${
+                    donation.is_in_kind ? '(In Kind)' : ''
+                  }`}
+                  description={`${formatDate(donation.created_at)} • ${
+                    donation.payment_method
+                  }`}
                 />
               </TouchableOpacity>
             ))
@@ -115,6 +222,16 @@ const styles = StyleSheet.create({
   },
   filterList: {
     marginBottom: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyState: {
+    paddingVertical: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
