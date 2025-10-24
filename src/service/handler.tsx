@@ -12,6 +12,12 @@ export const Auth = {
   GET_VOLUNTEER: 'volunteer',
   Add_CAUSES: 'causes',
   GET_CAUSES: 'causes',
+  DONATE_ZAKAT: 'donations/zakat',
+  DONATE_FITRAH: 'donations/fitrah',
+  DONATE_SADAQAH: 'donations/sadaqah',
+  DONATE: 'donations',
+  GET_DONATIONS: 'donation',
+  GET_DONATION_BY_ID: 'donation',
 };
 
 const Login = async (body: any) => {
@@ -82,6 +88,42 @@ const AddCauses = async (body: any) => {
   return await apiCaller('post', Auth.Add_CAUSES, body, undefined, false);
 };
 
+const DonateZakat = async (body: any) => {
+  return await apiCaller('post', Auth.DONATE_ZAKAT, body, undefined, false);
+};
+
+const DonateFitrah = async (body: any) => {
+  return await apiCaller('post', Auth.DONATE_FITRAH, body, undefined, false);
+};
+
+const DonateSadaqah = async (body: any) => {
+  return await apiCaller('post', Auth.DONATE_SADAQAH, body, undefined, false);
+};
+
+const Donate = async (body: any) => {
+  return await apiCaller('post', Auth.DONATE, body, undefined, false);
+};
+
+const GetDonations = async () => {
+  return await apiCaller(
+    'get',
+    Auth.GET_DONATIONS,
+    undefined,
+    undefined,
+    false,
+  );
+};
+
+const GetDonationById = async (id: string) => {
+  return await apiCaller(
+    'get',
+    Auth.GET_DONATION_BY_ID + '/' + id,
+    undefined,
+    undefined,
+    false,
+  );
+};
+
 export {
   Login,
   Signup,
@@ -94,4 +136,10 @@ export {
   GetVolunteer,
   AddCauses,
   GetCauses,
+  DonateZakat,
+  DonateFitrah,
+  DonateSadaqah,
+  Donate,
+  GetDonations,
+  GetDonationById,
 };
