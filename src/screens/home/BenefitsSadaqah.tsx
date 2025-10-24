@@ -9,7 +9,8 @@ const sadaqahBenefits = [
   {
     icon: heartIconFilled,
     title: 'Continuous Charity',
-    description: 'Sadaqah provides ongoing rewards and blessings, even after death.',
+    description:
+      'Sadaqah provides ongoing rewards and blessings, even after death.',
   },
   {
     icon: duoIconFilled,
@@ -27,15 +28,17 @@ const BenefitsSadaqah = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   return (
     <BenefitsCard
-      image={"https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+      image={'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
       title="Benefits of Sadaqah"
       description="Sadaqah is a voluntary act of charity that brings countless rewards and benefits to both giver and receiver."
       benefits={sadaqahBenefits}
       buttonText="Give Sadaqah"
       sectionTitle="Why Give Sadaqah?"
-      onButtonPress={() => navigation.navigate('ManualAmountEntry', { donationType: 'Sadaqah' })}
+      onButtonPress={() =>
+        navigation.navigate('ManualAmountEntry', { donationType: 'Sadaqah' })
+      }
     />
   );
 };
 
-export default BenefitsSadaqah; 
+export default BenefitsSadaqah;

@@ -1,15 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { RouteProp, useRoute, useNavigation, NavigationProp } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
+import {
+  RouteProp,
+  useRoute,
+  useNavigation,
+  NavigationProp,
+} from '@react-navigation/native';
 import type { UserStackParamList } from '../../config/navigation/UserNavigation';
 import BenefitsCard from '../../components/cards/VolunteerCard';
-
-const checkmark = require('../../assets/icons/heartIconFilled.png');
-
-type ThankYouRouteParams = {
-  donationType?: string;
-  amount?: number | string;
-};
 
 const ThankYou = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -17,17 +15,17 @@ const ThankYou = () => {
   const { donationType, amount } = route.params || {};
 
   return (
-      <BenefitsCard
-        image="https://images.unsplash.com/photo-1593113616828-6f22bca04804?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        title="Thank Your Donation"
-        description={`Your ${
-          donationType ? donationType : 'donation'
-        } of $${amount} has been received.`}
-        sectionTitle=""
-        buttonText="Back To Home"
-        benefits={[]}
-        onButtonPress={() => navigation.navigateDeprecated('BottomTabs')}
-      />
+    <BenefitsCard
+      image="https://images.unsplash.com/photo-1593113616828-6f22bca04804?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      title="Thank Your Donation"
+      description={`Your ${
+        donationType ? donationType : 'donation'
+      } of $${amount} has been received.`}
+      sectionTitle=""
+      buttonText="Back To Home"
+      benefits={[]}
+      onButtonPress={() => navigation.navigateDeprecated('BottomTabs')}
+    />
   );
 };
 

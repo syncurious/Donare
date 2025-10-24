@@ -12,8 +12,6 @@ import {
   RouteProp,
   NavigationProp,
 } from '@react-navigation/native';
-import { helpIcon } from '../../assets/icons';
-import ReaminderCard from '../../components/cards/ReminderCard';
 import ReminderCard from '../../components/cards/ReminderCard';
 import Text from '../../components/base/Text';
 
@@ -33,6 +31,7 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [isKindSelected, setIsKindSelected] = useState(false);
   const [kindFields, setKindFields] = useState({
+    amount: '',
     name: '',
     phone: '',
     address: '',
@@ -52,7 +51,12 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
       return;
     }
     if (isKindSelected) {
-      if (!kindFields.name || !kindFields.phone || !kindFields.address) {
+      if (
+        !kindFields.amount ||
+        !kindFields.name ||
+        !kindFields.phone ||
+        !kindFields.address
+      ) {
         setError('Please fill all required fields for Donate in Kind');
         return;
       }
@@ -61,7 +65,7 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
     navigation.navigate('PaymentConfirmation', {
       donationType,
       amount: isKindSelected ? undefined : amount,
-      paymentMethod: '', // To be selected in next step
+      paymentMethod: 'CASH',
       kindFields: isKindSelected ? kindFields : undefined,
       isKindSelected,
     });
@@ -120,10 +124,7 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
           <Paragraph variant="h2" color="primary">
             Or
           </Paragraph>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={handleKindSelect}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={handleKindSelect}>
             <ReminderCard
               style={{
                 borderColor: isKindSelected
@@ -144,10 +145,49 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
           </TouchableOpacity>
           {isKindSelected && (
             <View style={{ gap: 12 }}>
-              <Input label="Name" placeholder="Enter Name" value={kindFields.name} onChangeText={val => setKindFields(f => ({ ...f, name: val }))} style={{ marginTop: 8 }} />
-              <Input label="Phone No" placeholder="Enter Phone Number" value={kindFields.phone} onChangeText={val => setKindFields(f => ({ ...f, phone: val }))} keyboardType="phone-pad" style={{ marginTop: 8 }} />
-              <Input label="Take From Address" placeholder="Enter Address" value={kindFields.address} onChangeText={val => setKindFields(f => ({ ...f, address: val }))} />
-              <Input label="Description (optional)" placeholder="Enter Description" value={kindFields.description} onChangeText={val => setKindFields(f => ({ ...f, description: val }))} style={{ marginTop: 8 }} />
+              <Input
+                label="Amount"
+                placeholder="Enter Amount"
+                value={kindFields.amount}
+                onChangeText={val =>
+                  setKindFields(f => ({ ...f, amount: val }))
+                }
+                style={{ marginTop: 8 }}
+                keyboardType="number-pad"
+              />
+              <Input
+                label="Name"
+                placeholder="Enter Name"
+                value={kindFields.name}
+                onChangeText={val => setKindFields(f => ({ ...f, name: val }))}
+                style={{ marginTop: 8 }}
+              />
+              <Input
+                label="Phone No"
+                placeholder="Enter Phone Number"
+                value={kindFields.phone}
+                onChangeText={val => setKindFields(f => ({ ...f, phone: val }))}
+                keyboardType="phone-pad"
+                style={{ marginTop: 8 }}
+                maxLength={11}
+              />
+              <Input
+                label="Take From Address"
+                placeholder="Enter Address"
+                value={kindFields.address}
+                onChangeText={val =>
+                  setKindFields(f => ({ ...f, address: val }))
+                }
+              />
+              <Input
+                label="Description (optional)"
+                placeholder="Enter Description"
+                value={kindFields.description}
+                onChangeText={val =>
+                  setKindFields(f => ({ ...f, description: val }))
+                }
+                style={{ marginTop: 8 }}
+              />
               {error && (
                 <Text style={{ color: 'red', marginTop: 4 }}>{error}</Text>
               )}

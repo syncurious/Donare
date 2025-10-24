@@ -33,11 +33,37 @@ type UserStackParamList = {
   ZakatHomeAssets: undefined;
   ZakatBusinessAssets: { homeAssets: string };
   ZakatSummary: { homeAssets: string; businessAssets: string };
-  NewPaymentMethod: { amount: string; donationType: string };
+  NewPaymentMethod: {
+    amount: string;
+    donationType: string;
+    zakatData?: {
+      calculationMethod?: string;
+      assetsValue?: string;
+      homeAssets?: any;
+      businessAssets?: any;
+      itemName?: string;
+      donorName?: string;
+      donorPhone?: string;
+      pickupAddress?: string;
+    };
+    isInKind?: boolean;
+  };
   PaymentConfirmation: {
     donationType: string;
     amount: number | string;
     paymentMethod: string;
+    kindFields?: {
+      calculationMethod?: string;
+      assetsValue?: string;
+      homeAssets?: any;
+      businessAssets?: any;
+      itemName?: string;
+      donorName?: string;
+      donorPhone?: string;
+      pickupAddress?: string;
+      amount?: string;
+    };
+    isInKind?: boolean;
   };
   ThankYou: { donationType: string; amount: number | string };
   ManualAmountEntry: undefined;

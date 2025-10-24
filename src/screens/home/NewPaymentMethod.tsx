@@ -40,7 +40,7 @@ const SelectPaymentMethod = () => {
   const navigation = useNavigation<any>();
   const { theme } = useTheme();
   const [selected, setSelected] = useState('card');
-  const { amount, donationType } =
+  const { amount, donationType, zakatData, isInKind } =
     useRoute<RouteProp<UserStackParamList, 'NewPaymentMethod'>>().params;
 
   const handleContinue = () => {
@@ -48,6 +48,8 @@ const SelectPaymentMethod = () => {
       donationType: donationType,
       amount: amount,
       paymentMethod: selected,
+      zakatData: zakatData,
+      isInKind: isInKind,
     });
   };
 
