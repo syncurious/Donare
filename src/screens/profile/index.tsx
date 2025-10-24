@@ -129,7 +129,7 @@ const Profile = () => {
             <TouchableOpacity
               style={styles.listRow}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('VolunteerRecord' as never)}
+              onPress={() => navigation.navigate('ViewVolunteer' as never)}
             >
               <Text variant="body2" style={styles.listRowText}>
                 View Your Volunteer Form

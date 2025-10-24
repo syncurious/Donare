@@ -20,9 +20,11 @@ import RequestHelp from '../../../screens/home/RequestHelp';
 import Impact from '../../../screens/home/Impact';
 import AddCause from '../../../screens/home/AddCause';
 import QuickDonate from '../../../screens/home/QuickDonate';
+import ViewVolunteer from '../../../screens/profile/viewvolunteer';
 
 type UserStackParamList = {
   BottomTabs: undefined;
+  ViewVolunteer: undefined;
   VolunteerForm: undefined;
   BenefitsZakat: undefined;
   BenefitsSadaqah: undefined;
@@ -67,6 +69,15 @@ const UserNavigation = () => {
           title: 'Volunteer Form',
         }}
         component={VolunteerFrom}
+      />
+      <Stack.Screen
+        name="ViewVolunteer"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Volunteer',
+        }}
+        component={ViewVolunteer}
       />
       <Stack.Screen
         name="RequestHelp"
