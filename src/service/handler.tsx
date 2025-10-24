@@ -10,6 +10,8 @@ export const Auth = {
   FILE_UPLOAD: 'file/upload',
   REJISTER_VOLUNTEER: 'volunteer/register',
   GET_VOLUNTEER: 'volunteer',
+  Add_CAUSES: 'causes',
+  GET_CAUSES: 'causes',
 };
 
 const Login = async (body: any) => {
@@ -72,6 +74,14 @@ const RejisterVolunteer = async (body: any) => {
   );
 };
 
+const GetCauses = async () => {
+  return await apiCaller('get', Auth.GET_CAUSES, undefined, undefined, false);
+};
+
+const AddCauses = async (body: any) => {
+  return await apiCaller('post', Auth.Add_CAUSES, body, undefined, false);
+};
+
 export {
   Login,
   Signup,
@@ -82,4 +92,6 @@ export {
   FileUpload,
   RejisterVolunteer,
   GetVolunteer,
+  AddCauses,
+  GetCauses,
 };

@@ -1,46 +1,90 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
   TouchableOpacity,
   Image,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import { Text } from '../../components/base';
 import BefitsListCard from '../../components/cards/befitsListCard';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import theme from '../../config/theme';
+import { GetCauses } from '../../service/handler';
 
-const causes = [
-  {
-    title: 'Clean Water Initiative',
-    description: 'Help provide clean water to communities in need.',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    title: 'Education for All',
-    description: 'Support education programs for underprivileged children.',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    title: 'Disaster Relief Fund',
-    description: 'Provide food and shelter to families affected by disasters.',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    title: 'Healthcare Access',
-    description: 'Support healthcare services in underserved areas.',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    title: 'Women Empowerment Program',
-    description: 'Empower women through vocational training and support.',
-    image: 'https://via.placeholder.com/150',
-  },
-];
+interface Cause {
+  id: string;
+  name: string;
+  description: string;
+  media: string;
+  media_type: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface CausesResponse {
+  status: boolean;
+  code: number;
+  message: string;
+  data: {
+    causes: Cause[];
+    total: number;
+  };
+}
 
 const Causes = () => {
   const navigation = useNavigation<any>();
+  const [causes, setCauses] = useState<Cause[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCauses = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = (await GetCauses()) as CausesResponse;
+      console.log('Response', response?.data?.causes);
+      if (response.data.causes) {
+        setCauses(response.data.causes);
+      } else {
+        setError('Failed to fetch causes');
+      }
+    } catch (err) {
+      setError('An error occurred while fetching causes');
+      console.error('Error fetching causes:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchCauses();
+    }, []),
+  );
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <ActivityIndicator size="large" color={theme.colors.primary[500]} />
+        <Text style={styles.loadingText}>Loading causes...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={fetchCauses}>
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity
@@ -50,19 +94,25 @@ const Causes = () => {
         <Text style={styles.addButtonText}>+ Add Cause</Text>
       </TouchableOpacity>
       <View style={styles.listContainer}>
-        {causes.map((cause, idx) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CauseDetails', { cause })}
-            style={styles.causeItem}
-          >
-            <BefitsListCard
-              key={idx}
-              image={{ uri: cause.image }}
-              title={cause.title}
-              description={cause.description}
-            />
-          </TouchableOpacity>
-        ))}
+        {causes.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No causes available</Text>
+          </View>
+        ) : (
+          causes.map((cause, idx) => (
+            <TouchableOpacity
+              key={cause.id}
+              onPress={() => navigation.navigate('CauseDetails', { cause })}
+              style={styles.causeItem}
+            >
+              <BefitsListCard
+                image={{ uri: cause.media }}
+                title={cause.name}
+                description={cause.description}
+              />
+            </TouchableOpacity>
+          ))
+        )}
       </View>
     </ScrollView>
   );
@@ -73,6 +123,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
+  },
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   addButton: {
     backgroundColor: '#E8EDF5',
@@ -97,6 +151,39 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1,
     borderColor: '#E8EDF5',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: theme.colors.text.primary,
+  },
+  errorText: {
+    fontSize: 16,
+    color: theme.colors.error[500],
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: theme.colors.primary[500],
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: theme.colors.text.secondary,
+    textAlign: 'center',
   },
 });
 
