@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     flexDirection: 'row',
-    marginHorizontal:5,
+    // marginHorizontal:5,
     // marginRight: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
