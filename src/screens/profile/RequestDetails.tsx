@@ -1,106 +1,205 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import Container from '../../components/base/Container';
-import Paragraph from '../../components/base/Paragraph';
-import Button from '../../components/base/Button';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import Section from '../../components/base/Section';
-
-const statusColors = {
-  Pending: '#FFA500',
-  Resolved: '#4CAF50',
-};
-
-// Dummy data for the request
-const dummyRequest = {
-  id: 'REQ-2024-001',
-  type: 'Medical Assistance',
-  status: 'Pending',
-  submittedOn: 'October 20, 2024',
-  description:
-    'Need urgent help with medical supplies for a sick family member. My mother requires medication and medical equipment that we cannot afford. Any assistance would be greatly appreciated during this difficult time.',
-  contact: {
-    name: 'Sara Ahmed',
-    email: 'sara.ahmed@example.com',
-    phone: '+92 312 4567890',
-  },
-  address: 'House 25, Street 10, G-11/3, Islamabad',
-  city: 'Islamabad',
-  zipCode: '44000',
-  country: 'Pakistan',
-};
+import Heading from '../../components/base/Heading';
+import Text from '../../components/base/Text';
+import { useNavigation } from '@react-navigation/native';
+import { HelpRequest, getHelpRequests } from '../../service/helpRequest';
+import { showToast } from '../../utils/toast';
+import { useTheme } from '../../config/theme';
 
 const RequestDetails = () => {
+  const { theme } = useTheme();
   const navigation = useNavigation();
-  const route = useRoute();
+  const [request, setRequest] = useState<HelpRequest | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Get request from route params or use dummy data
-  const request = (route.params as any)?.request || dummyRequest;
+  useEffect(() => {
+    fetchRequestDetails();
+  }, []);
+
+  const fetchRequestDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await getHelpRequests();
+      if (
+        response.data.help_requests &&
+        response.data.help_requests.length > 0
+      ) {
+        const userRequest = response.data.help_requests[0];
+        setRequest(userRequest);
+      } else {
+        setRequest(null);
+      }
+    } catch (error: any) {
+      console.error('Error fetching request details:', error);
+      showToast('error', 'Failed to load request details');
+      navigation.goBack();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    const isPending = status === 'PENDING';
+    const isResolved = status === 'RESOLVED';
+
+    return (
+      <View
+        style={[
+          styles.badge,
+          {
+            backgroundColor: isResolved
+              ? theme.colors.success[100]
+              : isPending
+              ? theme.colors.warning[100]
+              : theme.colors.error[100],
+          },
+        ]}
+      >
+        <Text
+          variant="caption"
+          style={{
+            color: isResolved
+              ? theme.colors.success[700]
+              : isPending
+              ? theme.colors.warning[700]
+              : theme.colors.error[700],
+            fontWeight: '600',
+          }}
+        >
+          {status}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderRequestCard = () => {
+    if (!request) return null;
+
+    return (
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: theme.colors.background.secondary,
+            borderColor: theme.colors.border.primary,
+          },
+        ]}
+      >
+        <View style={styles.cardHeader}>
+          <View style={styles.headerLeft}>
+            <Text variant="h5" color="primary" style={styles.name}>
+              Help Request
+            </Text>
+            <Text variant="caption" color="secondary" style={styles.email}>
+              ID: {request.id.slice(-8)}
+            </Text>
+          </View>
+          {getStatusBadge(request.status)}
+        </View>
+
+        <View style={styles.contactInfo}>
+          <Text variant="body2" color="primary">
+            📅 {new Date(request.created_at).toLocaleDateString()}
+          </Text>
+        </View>
+
+        <View style={styles.expandedContent}>
+          <View
+            style={[
+              styles.divider,
+              { backgroundColor: theme.colors.border.primary },
+            ]}
+          />
+
+          <View style={styles.section}>
+            <Text variant="caption" color="secondary" style={styles.label}>
+              Description
+            </Text>
+            <Text variant="body2" color="primary" style={styles.value}>
+              {request.description}
+            </Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text variant="caption" color="secondary" style={styles.label}>
+              Contact Information
+            </Text>
+            <Text variant="body2" color="primary" style={styles.value}>
+              {request.full_name}
+            </Text>
+            <Text variant="body2" color="primary" style={styles.value}>
+              📞 {request.phone}
+            </Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text variant="caption" color="secondary" style={styles.label}>
+              Address
+            </Text>
+            <Text variant="body2" color="primary" style={styles.value}>
+              {request.address}
+            </Text>
+            <Text variant="body2" color="primary" style={styles.value}>
+              {request.city}, {request.country}
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <Text variant="h4" color="primary" style={styles.emptyTitle}>
+        No Help Request Found
+      </Text>
+      <Text variant="body2" color="secondary" style={styles.emptyText}>
+        You haven't submitted any help requests yet.
+      </Text>
+    </View>
+  );
+
+  if (loading) {
+    return (
+      <Container
+        style={[
+          styles.container,
+          { backgroundColor: theme.colors.background.secondary },
+        ]}
+      >
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary[500]} />
+          <Text variant="body2" color="secondary" style={styles.loadingText}>
+            Loading request details...
+          </Text>
+        </View>
+      </Container>
+    );
+  }
 
   return (
     <Container
+      scrollable
       padding="small"
-      style={styles.container}
-      scrollable={true}
-      contentContainerStyle={styles.containerContent}
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.background.secondary },
+      ]}
     >
-      <View style={{ flex: 1, width: '100%' }}>
-        <Section title="Request Details" style={styles.sectionCard}>
-          <View style={styles.rowBetween}>
-            <Paragraph style={styles.requestTitle}>{request.type}</Paragraph>
-            <Paragraph
-              style={[
-                styles.status,
-                {
-                  color:
-                    statusColors[request.status as keyof typeof statusColors],
-                },
-              ]}
-            >
-              {request.status}
-            </Paragraph>
-          </View>
-          <View style={styles.rowBetween}>
-            <Paragraph style={styles.requestId}>
-              Request ID: {request.id}
-            </Paragraph>
-            <Paragraph style={styles.submittedOn}>
-              Submitted on: {request.submittedOn}
-            </Paragraph>
-          </View>
-        </Section>
-        <Section title="Description" style={styles.sectionCard}>
-          <Paragraph style={styles.description}>
-            {request.description}
-          </Paragraph>
-        </Section>
-        <Section title="Contact Information" style={styles.sectionCard}>
-          <Paragraph style={styles.contactName}>
-            {request.contact.name}
-          </Paragraph>
-          <Paragraph style={styles.contactInfo}>
-            Email: {request.contact.email}
-          </Paragraph>
-          <Paragraph style={styles.contactInfo}>
-            Phone: {request.contact.phone}
-          </Paragraph>
-        </Section>
-        <Section title="Address" style={styles.sectionCard}>
-          <Paragraph style={styles.description}>{request.address}</Paragraph>
-          <Paragraph style={styles.contactInfo}>
-            {request.city}, {request.zipCode}
-          </Paragraph>
-          <Paragraph style={styles.contactInfo}>{request.country}</Paragraph>
-        </Section>
+      <View style={styles.header}>
+        <Heading level={3} style={styles.heading}>
+          Your Help Request
+        </Heading>
+        {request && (
+          <Text variant="body2" color="secondary" style={styles.subheading}>
+            Status: {request.status}
+          </Text>
+        )}
       </View>
-      <Button
-        style={styles.button}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        Mark as Resolved
-      </Button>
+
+      {request ? renderRequestCard() : renderEmptyState()}
     </Container>
   );
 };
@@ -108,63 +207,83 @@ const RequestDetails = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
   },
-  containerContent: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 32,
   },
-  sectionCard: {
-    padding: 16,
-    marginBottom: 18,
-    width: '100%',
+  loadingText: {
+    marginTop: 16,
   },
-  sectionTitle: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 8,
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 12,
   },
-  requestTitle: {
-    fontWeight: 'bold',
-    fontSize: 16,
+  heading: {
+    marginBottom: 4,
   },
-  status: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    marginLeft: 8,
+  subheading: {
+    marginTop: 4,
   },
-  requestId: {
-    color: '#6B7582',
-    fontSize: 14,
+  card: {
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    marginBottom: 12,
   },
-  submittedOn: {
-    color: '#6B7582',
-    fontSize: 14,
-  },
-  description: {
-    color: '#555',
-    fontSize: 15,
-  },
-  contactName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  contactInfo: {
-    color: '#6B7582',
-    fontSize: 14,
-  },
-  rowBetween: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
-  button: {
-    borderRadius: 24,
-    alignSelf: 'center',
-    minWidth: 200,
+  headerLeft: {
+    flex: 1,
+  },
+  name: {
+    marginBottom: 4,
+  },
+  email: {
+    marginTop: 2,
+  },
+  contactInfo: {
+    marginTop: 8,
+  },
+  expandedContent: {
+    marginTop: 12,
+  },
+  divider: {
+    height: 1,
+    marginBottom: 16,
+  },
+  section: {
+    marginBottom: 12,
+  },
+  label: {
+    fontWeight: '600',
+    marginBottom: 6,
+  },
+  badge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  value: {
+    lineHeight: 20,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  emptyTitle: {
+    marginBottom: 8,
+  },
+  emptyText: {
+    textAlign: 'center',
   },
 });
 
