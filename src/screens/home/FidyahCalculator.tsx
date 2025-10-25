@@ -53,7 +53,7 @@ const FidyahCalculator: React.FC = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleSkip = () => {
-    navigation.navigate('ManualAmountEntry', { donationType: 'Fidyah' });
+    navigation.navigate('ManualAmountEntry', { donationType: 'OTHER' });
   };
 
   const handleFoodSelect = () => setModalVisible(true);
@@ -144,7 +144,7 @@ const FidyahCalculator: React.FC = () => {
         </View>
       </Modal>
       {/* Skip Row */}
-      <SkipButton onPress={handleSkip}/>
+      <SkipButton onPress={handleSkip} />
       {/* Title & Description */}
       <View style={styles.headerSection}>
         <Heading level={2} style={styles.heading}>

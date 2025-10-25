@@ -36,7 +36,7 @@ const ZakatBusinessAssets = () => {
 
   const handleSkip = () => {
     navigation.navigate('ManualAmountEntry', {
-      donationType: 'Zakat',
+      donationType: 'ZAKAT',
       amount: 0,
     });
   };

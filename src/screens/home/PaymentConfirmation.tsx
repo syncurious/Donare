@@ -1,44 +1,113 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { UserStackParamList } from '../../config/navigation/UserNavigation';
-import Volunteer from './Volunteer';
 import BenefitsCard from '../../components/cards/VolunteerCard';
+import { showToast } from '../../utils/toast';
+import { Donate } from '../../service/handler';
 
 const PaymentConfirmation = () => {
   const navigation = useNavigation<any>();
   const route =
     useRoute<RouteProp<UserStackParamList, 'PaymentConfirmation'>>();
-  const { donationType, amount, paymentMethod } = route.params;
+  const { donationType, amount, paymentMethod, kindFields, isInKind } =
+    route.params;
   const [loading, setLoading] = useState(false);
 
-  const handlePayNow = () => {
+  // Helper function to get the donation amount
+  const getDonationAmount = (): number => {
+    if (amount) {
+      return Number(amount);
+    }
+    if (kindFields?.assetsValue) {
+      return parseFloat(kindFields.assetsValue);
+    }
+    if (kindFields?.amount) {
+      return parseFloat(kindFields.amount);
+    }
+    return 0;
+  };
+
+  const donationAmount = getDonationAmount();
+
+  const handlePayNow = async () => {
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      let payload: any;
+
+      if (isInKind) {
+        // Zakat in kind payload
+        payload = {
+          donation_type: donationType,
+          zakat_year: new Date().getFullYear(),
+          zakat_calculation_method: kindFields?.calculationMethod || 'SILVER',
+          zakat_assets_value: donationAmount,
+          is_in_kind: true,
+          item_name: kindFields?.itemName || '',
+          donor_name: kindFields?.donorName || '',
+          donor_phone: kindFields?.donorPhone || '',
+          pickup_address: kindFields?.pickupAddress || '',
+        };
+      } else {
+        // Zakat in amount payload
+        payload = {
+          donation_type: donationType,
+          amount: donationAmount,
+          zakat_year: new Date().getFullYear(),
+          zakat_calculation_method: kindFields?.calculationMethod || 'CASH',
+          zakat_assets_value: donationAmount,
+          zakat_percentage: 2.5,
+          payment_method:
+            paymentMethod?.toUpperCase().replace(/\s/g, '_') || 'CREDIT_CARD',
+          is_in_kind: false,
+        };
+      }
+
+      const response = (await Donate(payload)) as any;
+
+      if (response.status || response.success) {
+        showToast('success', `${donationType} donation successful!`);
+        navigation.navigate('ThankYou', {
+          donationType,
+          amount: donationAmount,
+        });
+      } else {
+        showToast(
+          'error',
+          response.message || 'Donation failed. Please try again.',
+        );
+      }
+    } catch (error: any) {
+      console.error('Donation error:', error);
+      showToast(
+        'error',
+        error?.data?.error?.message ||
+          'Failed to process donation. Please try again.',
+      );
+    } finally {
       setLoading(false);
-      navigation.navigate('ThankYou', { donationType, amount });
-    }, 2000);
+    }
   };
 
   return (
-      <BenefitsCard
-        image={
-          'https://images.unsplash.com/photo-1593113616828-6f22bca04804?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-        }
-        title="Confirm Your Donation"
-        description={`You are about to donate $${amount} for ${donationType} using ${paymentMethod}.`}
-        benefits={[]}
-        buttonText={loading ? 'Processing...' : 'Pay Now'}
-        sectionTitle=""
-        onButtonPress={handlePayNow}
-      />
+    <BenefitsCard
+      image={
+        'https://images.unsplash.com/photo-1593113616828-6f22bca04804?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      }
+      title="Confirm Your Donation"
+      description={
+        isInKind
+          ? `You are about to donate ${
+              kindFields?.itemName || 'items'
+            } as ${donationType} in kind. Our team will contact you for pickup.`
+          : `You are about to donate PKR ${donationAmount} for ${donationType} using ${paymentMethod}.`
+      }
+      benefits={[]}
+      buttonText={loading ? 'Processing...' : 'Pay Now'}
+      sectionTitle=""
+      onButtonPress={handlePayNow}
+    />
   );
 };
 

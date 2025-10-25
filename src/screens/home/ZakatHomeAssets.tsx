@@ -36,7 +36,7 @@ const ZakatHomeAssets = () => {
       <SkipButton
         onPress={() =>
           navigation.navigate('ManualAmountEntry', {
-            donationType: 'Zakat',
+            donationType: 'ZAKAT',
             amount: 0,
           })
         }
@@ -93,7 +93,7 @@ const ZakatHomeAssets = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    flex:1,
+    flex: 1,
     // justifyContent: 'center',
     backgroundColor: '#fff',
   },

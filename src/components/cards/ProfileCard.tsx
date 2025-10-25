@@ -13,7 +13,7 @@ const getInitials = (name: string): string => {
 };
 
 interface User {
-  name: string;
+  fullName: string;
   memberSince: string;
   email: string;
   phone: string;
@@ -63,7 +63,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, theme }) => {
               ]}
             >
               <Text style={styles.avatarInitials}>
-                {getInitials(user.name)}
+                {getInitials(user?.fullName || '')}
               </Text>
             </View>
           )}
@@ -82,7 +82,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, theme }) => {
           </TouchableOpacity>
         </View>
         <Heading level={2} style={styles.name}>
-          {user.name}
+          {user?.fullName || ''}
         </Heading>
         <Text variant="caption" color="secondary" style={styles.memberSince}>
           Member since {user.memberSince}
@@ -155,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileCard; 
+export default ProfileCard;

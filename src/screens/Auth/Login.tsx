@@ -8,36 +8,34 @@ import Button from '../../components/base/Button';
 import theme from '../../config/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useAuthStore, UserRole } from '../../store/auth';
-
-// Placeholder PNGs (replace with actual PNGs as needed)
 import logoPng from '../../assets/images/logoWihtoutText.png';
 import facebookPng from '../../assets/icons/facebookIcon.png';
 import googlePng from '../../assets/icons/googleIcon.png';
+import { Login } from '../../service/handler';
+import { useDispatch } from 'react-redux';
+import { setProfile } from '../../store/reducers/profile';
+import { showToast } from '../../utils/toast';
 
-const Login = () => {
+const LoginScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const [form, setForm] = useState({ email: '', password: '' });
-  const login = useAuthStore(state => state.login);
+  const [payload, setPayload] = useState({
+    email: 'aqib@gmail.com',
+    password: '123456',
+  });
 
   const handleInputChange = (key: 'email' | 'password', value: string) => {
-    setForm(prev => ({ ...prev, [key]: value }));
+    setPayload(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleLogin = () => {
-    let userPayload = {
-      id: '1',
-      name: 'John Doe',
-      email: form.email,
-      role: 'user' as UserRole,
-    }; // Dummy login: set a fake user
-    if (form.email == 'admin@gmail.com') {
-      userPayload.role = 'admin' as UserRole;
+  const handleLogin = async () => {
+    try {
+      const response = (await Login(payload)) as any;
+      dispatch(setProfile(response?.data));
+      showToast('success', 'Login Succes');
+    } catch (error: any) {
+      showToast('error', error.message || 'Login failed. Please try again.');
     }
-    console.log(userPayload)
-    login(userPayload);
-    // Navigate to user home or dashboard as needed
-    // navigation.navigate('Home');
   };
 
   return (
@@ -57,7 +55,7 @@ const Login = () => {
         <Input
           label="Email"
           placeholder="Enter your email"
-          value={form.email}
+          value={payload.email}
           onChangeText={text => handleInputChange('email', text)}
           variant="outlined"
           style={styles.input}
@@ -69,7 +67,7 @@ const Login = () => {
         <Input
           label="Password"
           placeholder="Enter your password"
-          value={form.password}
+          value={payload.password}
           onChangeText={text => handleInputChange('password', text)}
           variant="outlined"
           style={styles.input}
@@ -213,4 +211,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default LoginScreen;

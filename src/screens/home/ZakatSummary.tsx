@@ -219,7 +219,14 @@ const ZakatSummary = () => {
             onPress={() =>
               navigation.navigate('NewPaymentMethod', {
                 amount: zakat.toString(),
-                donationType: 'Zakat',
+                donationType: 'ZAKAT',
+                zakatData: {
+                  calculationMethod: 'CASH',
+                  assetsValue: totalAssets.toString(),
+                  homeAssets: home,
+                  businessAssets: business,
+                },
+                isInKind: false,
               })
             }
           >

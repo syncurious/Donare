@@ -1,36 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Container from '../../components/base/Container';
 import Section from '../../components/base/Section';
-import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
-import Button from '../../components/base/Button';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../config/theme';
-import { useAuthStore } from '../../store/auth';
 import ProfileCard from '../../components/cards/ProfileCard';
-
-const getInitials = (name: string): string => {
-  return name
-    .split(' ')
-    .map((n: string) => n[0])
-    .join('')
-    .toUpperCase();
-};
+import Loader from '../../components/base/Loader';
+import { GetProfile } from '../../service/handler';
+import { useDispatch } from 'react-redux';
+import { clearProfile } from '../../store/reducers/profile';
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
   const { theme } = useTheme();
-  const logout = useAuthStore(state => state.logout);
-  const isAdmin = useAuthStore(state => state.user?.role == 'admin');
-  const user = {
-    name: 'Omar Hassan',
-    memberSince: '2022',
-    email: 'omar.hassan@gmail.com',
-    phone: '+1(555)123-4567',
-    image: 'https://avatar.iran.liara.run/public/boy',
+  const [loading, setLoading] = useState<boolean>(false);
+  const [user, setUser] = useState({
+    fullName: '',
+    memberSince: '',
+    email: '',
+    phone: '',
+    image: '',
+    role: '',
+  });
+  const isAdmin = false;
+
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const res: any = await GetProfile();
+      const data = res?.data?.user ?? res;
+      if (data) {
+        setUser(data);
+      }
+    } catch (e) {
+      // Silent fail; UI will show fallback values
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <Container
@@ -38,6 +52,11 @@ const Profile = () => {
       padding="none"
       style={{ backgroundColor: theme.colors.background.primary }}
     >
+      {loading ? (
+        <View style={{ padding: 16 }}>
+          <Loader size="large" />
+        </View>
+      ) : null}
       {/* Top Section with Avatar and Edit */}
       <ProfileCard user={user} theme={theme} />
 
@@ -96,7 +115,7 @@ const Profile = () => {
             <TouchableOpacity
               style={styles.listRow}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('RequestHelp' as never)}
+              onPress={() => navigation.navigate('RequestDetails' as never)}
             >
               <Text variant="body2" style={styles.listRowText}>
                 View Your Help Requests
@@ -110,7 +129,7 @@ const Profile = () => {
             <TouchableOpacity
               style={styles.listRow}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('VolunteerRecord' as never)}
+              onPress={() => navigation.navigate('ViewVolunteer' as never)}
             >
               <Text variant="body2" style={styles.listRowText}>
                 View Your Volunteer Form
@@ -128,8 +147,7 @@ const Profile = () => {
               ]}
               activeOpacity={0.7}
               onPress={() => {
-                logout();
-                // navigation.navigate('Login');
+                dispatch(clearProfile());
               }}
             >
               <Text
@@ -163,8 +181,7 @@ const Profile = () => {
             ]}
             activeOpacity={0.7}
             onPress={() => {
-              logout();
-              // navigation.navigate('Login');
+              dispatch(clearProfile());
             }}
           >
             <Text

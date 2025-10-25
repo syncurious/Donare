@@ -3,8 +3,6 @@ import { View, TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import HomeIcon from '../../assets/icons/homeIcon.png';
 import HomeIconFilled from '../../assets/icons/homeIconFilled.png';
-import CompassIcon from '../../assets/icons/compassIcon.png';
-import CompassIconFilled from '../../assets/icons/compassIconFilled.png';
 import DuoIcon from '../../assets/icons/duoIcon.png';
 import DuoIconFilled from '../../assets/icons/duoIconFilled.png';
 import HeartIcon from '../../assets/icons/heartIcon.png';
@@ -12,8 +10,9 @@ import HeartIconFilled from '../../assets/icons/heartIconFilled.png';
 import ProfileIcon from '../../assets/icons/profileIcon.png';
 import ProfileIconFilled from '../../assets/icons/profileIconFilled.png';
 import theme from '../../config/theme';
-import { useAuthStore } from '../../store/auth';
 import { helpIcon } from '../../assets/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const UserTabs = [
   {
@@ -66,25 +65,25 @@ const AdminTabs = [
     label: 'Volunteers',
     icon: DuoIcon,
     iconActive: DuoIconFilled,
-    },
-    {
-      name: 'HelpRequest',
-      label: 'Requests',
-      icon: HeartIcon,
-      iconActive: HeartIconFilled,
-    },
-    {
-      name: 'DonationList',
-      label: 'Donations',
-      icon: HeartIcon,
-      iconActive: HeartIconFilled,
-    },
-    {
-      name: 'Profile',
-      label: 'Profile',
-      icon: ProfileIcon,
-      iconActive: ProfileIconFilled,
-    },
+  },
+  {
+    name: 'HelpRequest',
+    label: 'Requests',
+    icon: HeartIcon,
+    iconActive: HeartIconFilled,
+  },
+  {
+    name: 'DonationList',
+    label: 'Donations',
+    icon: HeartIcon,
+    iconActive: HeartIconFilled,
+  },
+  {
+    name: 'Profile',
+    label: 'Profile',
+    icon: ProfileIcon,
+    iconActive: ProfileIconFilled,
+  },
 ];
 
 const BottomNavBar: React.FC<BottomTabBarProps> = ({
@@ -92,7 +91,8 @@ const BottomNavBar: React.FC<BottomTabBarProps> = ({
   descriptors,
   navigation,
 }) => {
-  const isAdmin = useAuthStore(state => state.user?.role === 'admin');
+  const isAdmin = useSelector((state: RootState) => state?.profile?.profile?.role);;
+
   const TABS = isAdmin ? AdminTabs : UserTabs;
   return (
     <View style={styles.container}>
@@ -118,9 +118,7 @@ const BottomNavBar: React.FC<BottomTabBarProps> = ({
             accessibilityLabel={
               descriptors[route.key]?.options.tabBarAccessibilityLabel
             }
-            testID={
-              descriptors[route.key]?.options.tabBarButtonTestID
-            }
+            testID={descriptors[route.key]?.options.tabBarButtonTestID}
             onPress={onPress}
             style={styles.tab}
             activeOpacity={0.7}

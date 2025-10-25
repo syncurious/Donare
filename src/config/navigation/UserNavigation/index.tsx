@@ -20,9 +20,12 @@ import RequestHelp from '../../../screens/home/RequestHelp';
 import Impact from '../../../screens/home/Impact';
 import AddCause from '../../../screens/home/AddCause';
 import QuickDonate from '../../../screens/home/QuickDonate';
+import ViewVolunteer from '../../../screens/profile/viewvolunteer';
+import RequestDetails from '../../../screens/profile/RequestDetails';
 
 type UserStackParamList = {
   BottomTabs: undefined;
+  ViewVolunteer: undefined;
   VolunteerForm: undefined;
   BenefitsZakat: undefined;
   BenefitsSadaqah: undefined;
@@ -31,11 +34,37 @@ type UserStackParamList = {
   ZakatHomeAssets: undefined;
   ZakatBusinessAssets: { homeAssets: string };
   ZakatSummary: { homeAssets: string; businessAssets: string };
-  NewPaymentMethod: { amount: string; donationType: string };
+  NewPaymentMethod: {
+    amount: string;
+    donationType: string;
+    zakatData?: {
+      calculationMethod?: string;
+      assetsValue?: string;
+      homeAssets?: any;
+      businessAssets?: any;
+      itemName?: string;
+      donorName?: string;
+      donorPhone?: string;
+      pickupAddress?: string;
+    };
+    isInKind?: boolean;
+  };
   PaymentConfirmation: {
     donationType: string;
     amount: number | string;
     paymentMethod: string;
+    kindFields?: {
+      calculationMethod?: string;
+      assetsValue?: string;
+      homeAssets?: any;
+      businessAssets?: any;
+      itemName?: string;
+      donorName?: string;
+      donorPhone?: string;
+      pickupAddress?: string;
+      amount?: string;
+    };
+    isInKind?: boolean;
   };
   ThankYou: { donationType: string; amount: number | string };
   ManualAmountEntry: undefined;
@@ -47,6 +76,7 @@ type UserStackParamList = {
   Impact: undefined;
   AddCause: undefined;
   QuickDonate: undefined;
+  RequestDetails: { request: any }; 
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -67,6 +97,15 @@ const UserNavigation = () => {
           title: 'Volunteer Form',
         }}
         component={VolunteerFrom}
+      />
+      <Stack.Screen
+        name="ViewVolunteer"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Volunteer',
+        }}
+        component={ViewVolunteer}
       />
       <Stack.Screen
         name="RequestHelp"
@@ -238,6 +277,15 @@ const UserNavigation = () => {
           title: 'Quick Donate',
         }}
         component={QuickDonate}
+      />
+      <Stack.Screen
+        name="RequestDetails"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Request Details',
+        }}
+        component={RequestDetails}
       />
     </Stack.Navigator>
   );
