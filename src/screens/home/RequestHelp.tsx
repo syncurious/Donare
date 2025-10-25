@@ -60,9 +60,14 @@ const RequestHelp = () => {
     } catch (error: any) {
       console.error('Help request error:', error);
       setError(
-        error?.data?.message || 'Failed to submit request. Please try again.',
+        error?.data?.error?.message ||
+          'Failed to submit request. Please try again.',
       );
-      showToast('error', 'Failed to submit help request');
+      showToast(
+        'error',
+        error?.data?.error?.message ||
+          'Failed to submit request. Please try again.',
+      );
     } finally {
       setLoading(false);
     }
@@ -145,11 +150,6 @@ const RequestHelp = () => {
         numberOfLines={4}
         style={{ marginBottom: 14 }}
       />
-      {error ? (
-        <Paragraph color="error" style={{ marginBottom: 8 }}>
-          {error}
-        </Paragraph>
-      ) : null}
       {success ? (
         <Paragraph color="success" style={{ marginBottom: 8 }}>
           Thank you for your request! A volunteer will contact you soon.
