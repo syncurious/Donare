@@ -21,6 +21,7 @@ import Impact from '../../../screens/home/Impact';
 import AddCause from '../../../screens/home/AddCause';
 import QuickDonate from '../../../screens/home/QuickDonate';
 import ViewVolunteer from '../../../screens/profile/viewvolunteer';
+import RequestDetails from '../../../screens/profile/RequestDetails';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -75,6 +76,7 @@ type UserStackParamList = {
   Impact: undefined;
   AddCause: undefined;
   QuickDonate: undefined;
+  RequestDetails: { request: any }; 
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -275,6 +277,15 @@ const UserNavigation = () => {
           title: 'Quick Donate',
         }}
         component={QuickDonate}
+      />
+      <Stack.Screen
+        name="RequestDetails"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          title: 'Request Details',
+        }}
+        component={RequestDetails}
       />
     </Stack.Navigator>
   );

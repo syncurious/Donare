@@ -115,7 +115,7 @@ const Profile = () => {
             <TouchableOpacity
               style={styles.listRow}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('RequestHelp' as never)}
+              onPress={() => navigation.navigate('RequestDetails' as never)}
             >
               <Text variant="body2" style={styles.listRowText}>
                 View Your Help Requests

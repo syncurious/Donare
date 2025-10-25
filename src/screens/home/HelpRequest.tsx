@@ -3,6 +3,7 @@ import Container from '../../components/base/Container';
 import { View } from 'react-native';
 import HelpRequestCard from '../../components/cards/HelpRequestCard';
 import { useNavigation } from '@react-navigation/native';
+import { UserStackParamList } from '../../config/navigation/UserNavigation';
 
 const helpRequests = [
   {
@@ -83,7 +84,7 @@ const helpRequests = [
 ];
 
 const HelpRequest = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   return (
     <Container
       scrollable
