@@ -9,7 +9,8 @@ const kaffarahBenefits = [
   {
     icon: heartIconFilled,
     title: 'Atonement for Mistakes',
-    description: 'Kaffarah provides a means to seek forgiveness and atone for missed obligations.',
+    description:
+      'Kaffarah provides a means to seek forgiveness and atone for missed obligations.',
   },
   {
     icon: duoIconFilled,
@@ -19,7 +20,8 @@ const kaffarahBenefits = [
   {
     icon: compassIconFilled,
     title: 'Supporting the Needy',
-    description: 'Kaffarah contributions aid those in need, turning mistakes into positive action.',
+    description:
+      'Kaffarah contributions aid those in need, turning mistakes into positive action.',
   },
 ];
 
@@ -27,15 +29,17 @@ const BenefitsKaffarah = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   return (
     <BenefitsCard
-      image={"https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+      image={'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
       title="Benefits of Kaffarah"
       description="Kaffarah is a charitable act of atonement, offering spiritual and social benefits for those seeking forgiveness."
       benefits={kaffarahBenefits}
       buttonText="Give Kaffarah"
       sectionTitle="Why Give Kaffarah?"
-      onButtonPress={() => navigation.navigate('ManualAmountEntry', { donationType: 'Kaffarah' })}
+      onButtonPress={() =>
+        navigation.navigate('ManualAmountEntry', { donationType: 'OTHER' })
+      }
     />
   );
 };
 
-export default BenefitsKaffarah; 
+export default BenefitsKaffarah;

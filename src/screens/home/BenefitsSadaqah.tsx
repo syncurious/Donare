@@ -35,7 +35,7 @@ const BenefitsSadaqah = () => {
       buttonText="Give Sadaqah"
       sectionTitle="Why Give Sadaqah?"
       onButtonPress={() =>
-        navigation.navigate('ManualAmountEntry', { donationType: 'Sadaqah' })
+        navigation.navigate('ManualAmountEntry', { donationType: 'SADAQAH' })
       }
     />
   );

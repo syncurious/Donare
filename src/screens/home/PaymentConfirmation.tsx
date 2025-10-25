@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { UserStackParamList } from '../../config/navigation/UserNavigation';
 import BenefitsCard from '../../components/cards/VolunteerCard';
-import { DonateZakat } from '../../service/handler';
 import { showToast } from '../../utils/toast';
+import { Donate } from '../../service/handler';
 
 const PaymentConfirmation = () => {
   const navigation = useNavigation<any>();
@@ -34,60 +34,49 @@ const PaymentConfirmation = () => {
     setLoading(true);
 
     try {
-      // Check if this is a Zakat donation
-      if (donationType === 'Zakat') {
-        let payload: any;
+      let payload: any;
 
-        if (isInKind) {
-          // Zakat in kind payload
-          payload = {
-            donation_type: 'ZAKAT',
-            zakat_year: new Date().getFullYear(),
-            zakat_calculation_method: kindFields?.calculationMethod || 'SILVER',
-            zakat_assets_value: donationAmount,
-            is_in_kind: true,
-            item_name: kindFields?.itemName || '',
-            donor_name: kindFields?.donorName || '',
-            donor_phone: kindFields?.donorPhone || '',
-            pickup_address: kindFields?.pickupAddress || '',
-          };
-        } else {
-          // Zakat in amount payload
-          payload = {
-            donation_type: 'ZAKAT',
-            amount: donationAmount,
-            zakat_year: new Date().getFullYear(),
-            zakat_calculation_method: kindFields?.calculationMethod || 'CASH',
-            zakat_assets_value: donationAmount,
-            zakat_percentage: 2.5,
-            payment_method:
-              paymentMethod?.toUpperCase().replace(/\s/g, '_') || 'CREDIT_CARD',
-            is_in_kind: false,
-          };
-        }
-
-        const response = (await DonateZakat(payload)) as any;
-
-        if (response.status || response.success) {
-          showToast('success', 'Zakat donation successful!');
-          navigation.navigate('ThankYou', {
-            donationType,
-            amount: donationAmount,
-          });
-        } else {
-          showToast(
-            'error',
-            response.message || 'Donation failed. Please try again.',
-          );
-        }
+      if (isInKind) {
+        // Zakat in kind payload
+        payload = {
+          donation_type: donationType,
+          zakat_year: new Date().getFullYear(),
+          zakat_calculation_method: kindFields?.calculationMethod || 'SILVER',
+          zakat_assets_value: donationAmount,
+          is_in_kind: true,
+          item_name: kindFields?.itemName || '',
+          donor_name: kindFields?.donorName || '',
+          donor_phone: kindFields?.donorPhone || '',
+          pickup_address: kindFields?.pickupAddress || '',
+        };
       } else {
-        // For other donation types, use the old flow for now
-        setTimeout(() => {
-          navigation.navigate('ThankYou', {
-            donationType,
-            amount: donationAmount,
-          });
-        }, 1000);
+        // Zakat in amount payload
+        payload = {
+          donation_type: donationType,
+          amount: donationAmount,
+          zakat_year: new Date().getFullYear(),
+          zakat_calculation_method: kindFields?.calculationMethod || 'CASH',
+          zakat_assets_value: donationAmount,
+          zakat_percentage: 2.5,
+          payment_method:
+            paymentMethod?.toUpperCase().replace(/\s/g, '_') || 'CREDIT_CARD',
+          is_in_kind: false,
+        };
+      }
+
+      const response = (await Donate(payload)) as any;
+
+      if (response.status || response.success) {
+        showToast('success', `${donationType} donation successful!`);
+        navigation.navigate('ThankYou', {
+          donationType,
+          amount: donationAmount,
+        });
+      } else {
+        showToast(
+          'error',
+          response.message || 'Donation failed. Please try again.',
+        );
       }
     } catch (error: any) {
       console.error('Donation error:', error);
@@ -111,7 +100,7 @@ const PaymentConfirmation = () => {
         isInKind
           ? `You are about to donate ${
               kindFields?.itemName || 'items'
-            } as Zakat in kind. Our team will contact you for pickup.`
+            } as ${donationType} in kind. Our team will contact you for pickup.`
           : `You are about to donate PKR ${donationAmount} for ${donationType} using ${paymentMethod}.`
       }
       benefits={[]}

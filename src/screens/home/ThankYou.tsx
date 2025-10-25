@@ -24,7 +24,7 @@ const ThankYou = () => {
       sectionTitle=""
       buttonText="Back To Home"
       benefits={[]}
-      onButtonPress={() => navigation.navigateDeprecated('BottomTabs')}
+      onButtonPress={() => navigation.navigate('BottomTabs')}
     />
   );
 };

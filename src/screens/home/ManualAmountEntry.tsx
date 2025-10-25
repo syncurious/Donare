@@ -40,7 +40,7 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
 
   // Prefer prop, then route param, then default
   const donationType =
-    props.donationType || route.params?.donationType || 'Sadaqah';
+    props.donationType || route.params?.donationType || 'SADAQAH';
 
   const handleDonate = () => {
     if (
