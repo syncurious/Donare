@@ -236,3 +236,60 @@ export const calculateCountdown = (
     seconds: s.toString().padStart(2, '0'),
   };
 };
+
+export interface QuranVerse {
+  number: number;
+  text: string;
+  edition: {
+    identifier: string;
+    language: string;
+    name: string;
+    englishName: string;
+    format: string;
+    type: string;
+  };
+  surah: {
+    number: number;
+    name: string;
+    englishName: string;
+    englishNameTranslation: string;
+    revelationType: string;
+    numberOfAyahs: number;
+  };
+  numberInSurah: number;
+  juz: number;
+  manzil: number;
+  page: number;
+  ruku: number;
+  hizbQuarter: number;
+  sajda: boolean;
+}
+
+export interface QuranVerseResponse {
+  code: number;
+  status: string;
+  data: QuranVerse;
+}
+
+/**
+ * Fetch a random Quranic verse
+ * @param edition - Translation edition (default: 'en.asad' for English)
+ * @returns Random Quranic verse with translation
+ */
+export const getRandomQuranVerse = async (
+  edition: string = 'en.asad',
+): Promise<QuranVerseResponse> => {
+  try {
+    // Use a random ayah number from the entire Quran (1-6236 total ayahs)
+    const randomAyahNumber = Math.floor(Math.random() * 6236) + 1;
+    
+    // Use AlQuran Cloud API instead
+    const response = await axios.get<QuranVerseResponse>(
+      `https://api.alquran.cloud/v1/ayah/${randomAyahNumber}/${edition}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching random Quran verse:', error);
+    throw error;
+  }
+};

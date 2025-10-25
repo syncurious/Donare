@@ -21,39 +21,27 @@ const VerseCard: React.FC<VerseCardProps> = ({
 }) => {
   return (
     <View style={styles.card}>
-      <View
-        style={{
-          width: '60%',
-          justifyContent: 'space-between',
-          height: '100%',
-        }}
-      >
-        <View>
-          <Text style={styles.verse}>{verse}</Text>
-          {reference && <Text style={styles.reference}>{reference}</Text>}
-          <Text style={styles.description}>{description}</Text>
+      <View style={styles.contentContainer}>
+        <View style={styles.textContainer}>
+          <Text style={styles.verse} numberOfLines={4} ellipsizeMode="tail">
+            {verse}
+          </Text>
+          {reference && (
+            <Text style={styles.reference} numberOfLines={1}>
+              {reference}
+            </Text>
+          )}
+          {description && (
+            <Text style={styles.description} numberOfLines={2} ellipsizeMode="tail">
+              {description}
+            </Text>
+          )}
         </View>
         {buttonText && buttonAction ? (
           <TouchableOpacity style={styles.button} onPress={buttonAction}>
             <Text style={styles.buttonText}>{buttonText}</Text>
           </TouchableOpacity>
         ) : null}
-      </View>
-      <View style={{ width: '40%' }}>
-        {image ? (
-          <Image
-            source={{ uri: image }}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        ) : (
-          <View
-            style={[
-              styles.image,
-              { backgroundColor: theme.colors.neutral[100], borderRadius: 12 },
-            ]}
-          />
-        )}
       </View>
     </View>
   );
@@ -64,17 +52,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 16,
-    flexDirection: 'row',
     marginRight: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-    gap :12,
     width: 350,
-    height: 180,
-    alignItems: 'flex-start',
+    minHeight: 180,
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  textContainer: {
+    flex: 1,
+    marginBottom: 12,
   },
   image: {
     width: '100%',
@@ -84,22 +77,25 @@ const styles = StyleSheet.create({
   },
   verse: {
     fontWeight: '500',
-    fontSize: 16,
-    color: theme.colors.neutral[600],
-    marginBottom: 4,
+    fontSize: 15,
+    color: theme.colors.neutral[700],
+    marginBottom: 8,
     textAlign: 'left',
+    lineHeight: 22,
   },
   reference: {
-    color: theme.colors.neutral[400],
+    color: theme.colors.neutral[500],
     fontSize: 13,
-    marginBottom: 4,
-    textAlign: 'left',
+    fontWeight: '600',
+    marginBottom: 8,
+    textAlign: 'right',
   },
   description: {
-    color: '#666',
+    color: theme.colors.neutral[500],
     fontSize: 13,
-    marginBottom: 4,
+    marginBottom: 8,
     textAlign: 'left',
+    lineHeight: 18,
   },
   progressBarContainer: {
     width: '100%',
@@ -116,18 +112,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   button: {
-    marginTop: 8,
     backgroundColor: theme.colors.neutral[100],
     borderRadius: 20,
     paddingVertical: 8,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     alignSelf: 'flex-start',
   },
   buttonText: {
-    color: theme.colors.neutral[400],
-    fontWeight: 'bold',
-    fontSize: 15,
-    textAlign: 'left',
+    color: theme.colors.neutral[600],
+    fontWeight: '600',
+    fontSize: 14,
   },
 });
 
