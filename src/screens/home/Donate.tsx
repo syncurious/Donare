@@ -15,7 +15,7 @@ const Donate: React.FC = () => {
       title: 'Give your Zakat',
       description:
         'Zakat is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+      image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=400&q=80',
       buttonText: 'Donate Now',
       buttonAction: () => navigation.navigate('BenefitsZakat'),
     },
@@ -23,7 +23,7 @@ const Donate: React.FC = () => {
       title: 'Give your Sadaqah',
       description:
         'Sadaqah is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
+      image: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=400&q=80',
       buttonText: 'Donate Now',
       buttonAction: () => navigation.navigate('BenefitsSadaqah'),
     },
@@ -31,7 +31,7 @@ const Donate: React.FC = () => {
       title: 'Give your Fidyah',
       description:
         'Fidyah is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2',
+      image: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&q=80',
       buttonText: 'Donate Now',
       buttonAction: () => navigation.navigate('BenefitsFidyah'),
     },
@@ -39,7 +39,7 @@ const Donate: React.FC = () => {
       title: 'Give your Kaffarah',
       description:
         'Kaffarah is a religious obligation for Muslims to give a portion of their wealth to the poor and needy.',
-      image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2',
+      image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&q=80',
       buttonText: 'Donate Now',
       buttonAction: () => navigation.navigate('BenefitsKaffarah'),
     },
