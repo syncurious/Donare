@@ -4,13 +4,18 @@ import Input from '../../components/base/Input';
 import Button from '../../components/base/Button';
 import Heading from '../../components/base/Heading';
 import Paragraph from '../../components/base/Paragraph';
+import { SubmitHelpRequest } from '../../service/handler';
+import { showToast } from '../../utils/toast';
 
 const RequestHelp = () => {
   const [form, setForm] = useState({
-    name: '',
-    contact: '',
+    full_name: '',
+    phone: '',
     address: '',
-    details: '',
+    city: '',
+    zipCode: '',
+    country: 'Pakistan',
+    description: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,62 +25,121 @@ const RequestHelp = () => {
     setForm(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setError('');
     setSuccess(false);
-    if (!form.name || !form.contact || !form.address || !form.details) {
+
+    // Validate required fields
+    if (
+      !form.full_name ||
+      !form.phone ||
+      !form.address ||
+      !form.city ||
+      !form.description
+    ) {
       setError('Please fill in all required fields.');
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      const response = await SubmitHelpRequest(form);
       setSuccess(true);
-      setForm({ name: '', contact: '', address: '', details: '' });
-    }, 1200);
+      showToast('success', 'Help request submitted successfully!');
+      // Reset form
+      setForm({
+        full_name: '',
+        phone: '',
+        address: '',
+        city: '',
+        zipCode: '',
+        country: 'Pakistan',
+        description: '',
+      });
+    } catch (error: any) {
+      console.error('Help request error:', error);
+      setError(
+        error?.data?.message || 'Failed to submit request. Please try again.',
+      );
+      showToast('error', 'Failed to submit help request');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Container scrollable padding="large" style={{ flex: 1, borderRadius: 16, backgroundColor: '#fff' }}>
-      <Heading level={2} style={{ marginBottom: 8, textAlign: 'center' }}>
-        Request Help
-      </Heading>
-      <Paragraph color="muted" style={{ marginBottom: 16, textAlign: 'center' }}>
-        Submit Your Request
-      </Paragraph>
-      <Paragraph color="muted" style={{ marginBottom: 24, textAlign: 'center' }}>
-        Please provide detailed information about your situation. A volunteer will contact you personally to discuss your request.
+    <Container
+      scrollable
+      padding="medium"
+      style={{
+        flex: 1,
+        borderRadius: 16,
+        backgroundColor: '#fff',
+      }}
+    >
+      <Paragraph
+        color="muted"
+        style={{ marginBottom: 24, textAlign: 'center' }}
+      >
+        Please provide detailed information about your situation. A volunteer
+        will contact you personally to discuss your request.
       </Paragraph>
       <Input
         label="Full Name"
         placeholder="Enter your full name"
-        value={form.name}
-        onChangeText={value => handleChange('name', value)}
+        value={form.full_name}
+        onChangeText={value => handleChange('full_name', value)}
         required
         style={{ marginBottom: 14 }}
       />
       <Input
-        label="Contact Number"
-        placeholder="Enter your contact number"
-        value={form.contact}
-        onChangeText={value => handleChange('contact', value)}
+        label="Phone Number"
+        placeholder="+92 300 1234567"
+        value={form.phone}
+        onChangeText={value => handleChange('phone', value)}
         required
         keyboardType="phone-pad"
         style={{ marginBottom: 14 }}
+        maxLength={12}
       />
       <Input
         label="Address"
-        placeholder="Enter your address"
+        placeholder="House/Street address"
         value={form.address}
         onChangeText={value => handleChange('address', value)}
         required
         style={{ marginBottom: 14 }}
       />
       <Input
-        label="Detailed Request"
+        label="City"
+        placeholder="Enter your city"
+        value={form.city}
+        onChangeText={value => handleChange('city', value)}
+        required
+        style={{ marginBottom: 14 }}
+      />
+      <Input
+        label="Zip Code (Optional)"
+        placeholder="Enter zip code"
+        value={form.zipCode}
+        onChangeText={value => handleChange('zipCode', value)}
+        keyboardType="numeric"
+        style={{ marginBottom: 14 }}
+      />
+      <Input
+        label="Country"
+        placeholder="Enter country"
+        value={form.country}
+        onChangeText={value => handleChange('country', value)}
+        required
+        style={{ marginBottom: 14 }}
+      />
+      <Input
+        label="Description of Need"
         placeholder="Describe your situation in detail"
-        value={form.details}
-        onChangeText={value => handleChange('details', value)}
+        value={form.description}
+        onChangeText={value => handleChange('description', value)}
         required
         multiline
         numberOfLines={4}
@@ -91,11 +155,15 @@ const RequestHelp = () => {
           Thank you for your request! A volunteer will contact you soon.
         </Paragraph>
       ) : null}
-      <Button onPress={handleSubmit} loading={loading} style={{ marginTop: 16, borderRadius: 30 }}>
+      <Button
+        onPress={handleSubmit}
+        loading={loading}
+        style={{ borderRadius: 30, marginBottom: 40 }}
+      >
         Submit Request
       </Button>
     </Container>
   );
 };
 
-export default RequestHelp; 
+export default RequestHelp;

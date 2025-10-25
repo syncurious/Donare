@@ -18,6 +18,7 @@ export const Auth = {
   DONATE: 'donation',
   GET_DONATIONS: 'donation',
   GET_DONATION_BY_ID: 'donation',
+  HELP_REQUEST: 'help-request',
 };
 
 const Login = async (body: any) => {
@@ -124,6 +125,10 @@ const GetDonationById = async (id: string) => {
   );
 };
 
+const SubmitHelpRequest = async (body: any) => {
+  return await apiCaller('post', Auth.HELP_REQUEST, body, undefined, false);
+};
+
 export {
   Login,
   Signup,
@@ -142,4 +147,5 @@ export {
   Donate,
   GetDonations,
   GetDonationById,
+  SubmitHelpRequest,
 };
