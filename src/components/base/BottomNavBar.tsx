@@ -91,34 +91,34 @@ const BottomNavBar: React.FC<BottomTabBarProps> = ({
   descriptors,
   navigation,
 }) => {
-  const isAdmin = useSelector((state: RootState) => state?.profile?.profile?.role);;
+  const isAdmin = useSelector(
+    (state: RootState) => state?.profile?.profile?.user?.role,
+  );
 
-  const TABS = isAdmin ? AdminTabs : UserTabs;
+  const TABS = isAdmin === 'admin' ? AdminTabs : UserTabs;
   return (
     <View style={styles.container}>
-      {state.routes.map((route, idx) => {
-        const tab = TABS.find(t => t.name === route.name);
-        if (!tab) return null;
+      {TABS?.map((tab, idx) => {
         const isFocused = state.index === idx;
         const onPress = () => {
           const event = navigation.emit({
             type: 'tabPress',
-            target: route.key,
+            target: tab.name,
             canPreventDefault: true,
           });
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+            navigation.navigate(tab.name);
           }
         };
         return (
           <TouchableOpacity
-            key={route.key}
+            key={tab.name}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={
-              descriptors[route.key]?.options.tabBarAccessibilityLabel
+              descriptors[tab.name]?.options.tabBarAccessibilityLabel
             }
-            testID={descriptors[route.key]?.options.tabBarButtonTestID}
+            testID={descriptors[tab.name]?.options.tabBarButtonTestID}
             onPress={onPress}
             style={styles.tab}
             activeOpacity={0.7}
