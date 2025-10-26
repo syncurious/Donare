@@ -9,6 +9,7 @@ export const AdminEndpoints = {
   USERS: 'admin/users',
   UPDATE_VOLUNTEER_STATUS: 'admin/volunteer',
   RESOLVE_HELP_REQUEST: 'admin/help-requests/resolve',
+  UPDATE_HELP_REQUEST_STATUS: 'help-request/admin',
 };
 
 // TypeScript interfaces for admin API responses
@@ -124,6 +125,13 @@ const ResolveHelpRequest = async (requestId: string): Promise<{ status: boolean;
   return await apiCaller('post', `${AdminEndpoints.RESOLVE_HELP_REQUEST}/${requestId}`, undefined, undefined, false);
 };
 
+const UpdateHelpRequestStatus = async (
+  requestId: string,
+  status: 'APPROVED' | 'REJECTED'
+): Promise<{ status: boolean; message: string }> => {
+  return await apiCaller('post', `${AdminEndpoints.UPDATE_HELP_REQUEST_STATUS}/${requestId}`, { status }, undefined, false);
+};
+
 export {
   GetDashboardStats,
   GetVolunteers,
@@ -132,4 +140,5 @@ export {
   GetUsers,
   UpdateVolunteerStatus,
   ResolveHelpRequest,
+  UpdateHelpRequestStatus,
 };

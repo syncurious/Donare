@@ -1,108 +1,154 @@
 import React from 'react';
-import { View } from 'react-native';
-import HelpRequestCard from '../../../components/cards/HelpRequestCard';
+import { View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Container from '../../../components/base/Container';
+import Loader from '../../../components/base/Loader';
+import Text from '../../../components/base/Text';
+import Heading from '../../../components/base/Heading';
+import theme from '../../../config/theme';
+import { getHelpRequests, type HelpRequest as HelpRequestType } from '../../../service/helpRequest';
+import VolunteerApplicationCard from '../../../components/cards/VolunteerApplicationCard';
 
-const helpRequests = [
-  {
-    id: '1',
-    name: 'Aisha Khan',
-    location: 'Location: Mecca, Saudi Arabia',
-    type: 'Financial Aid',
-    status: 'Pending',
-    submittedOn: '2024-01-15',
-    description:
-      'A family of five is facing financial hardship and needs assistance with groceries and essential food items. They have been struggling to make ends meet due to recent job loss and are seeking support to ensure they can provide for their children.',
-    contact: {
-      name: 'Aisha Khan',
-      email: 'aisha.khan@example.com',
-      phone: '+1-555-123-4567',
-    },
-  },
-  {
-    id: '2',
-    name: 'Fatima Ali',
-    location: 'Location: Medina, Saudi Arabia',
-    type: 'Medical Assistance',
-    status: 'Resolved',
-    submittedOn: '2024-01-20',
-    description:
-      'Fatima needs urgent medical assistance for her child. The family is unable to cover the medical expenses and is seeking help from the community.',
-    contact: {
-      name: 'Fatima Ali',
-      email: 'fatima.ali@example.com',
-      phone: '+1-555-987-6543',
-    },
-  },
-  {
-    id: '3',
-    name: 'Zainab Hassan',
-    location: 'Location: Riyadh, Saudi Arabia',
-    type: 'Food Assistance',
-    status: 'Pending',
-    submittedOn: '2024-01-22',
-    description:
-      'Zainab is struggling to provide food for her family due to recent financial difficulties. Any support would be greatly appreciated.',
-    contact: {
-      name: 'Zainab Hassan',
-      email: 'zainab.hassan@example.com',
-      phone: '+1-555-222-3333',
-    },
-  },
-  {
-    id: '4',
-    name: 'Sara Ahmed',
-    location: 'Location: Jeddah, Saudi Arabia',
-    type: 'Shelter',
-    status: 'Resolved',
-    submittedOn: '2024-01-25',
-    description:
-      'Sara and her children are in need of temporary shelter after losing their home in a fire. They are seeking urgent help.',
-    contact: {
-      name: 'Sara Ahmed',
-      email: 'sara.ahmed@example.com',
-      phone: '+1-555-444-5555',
-    },
-  },
-  {
-    id: '5',
-    name: 'Layla Khan',
-    location: 'Location: Dammam, Saudi Arabia',
-    type: 'Education Support',
-    status: 'Pending',
-    submittedOn: '2024-01-28',
-    description:
-      'Layla is seeking support to continue her education. Her family is unable to pay for school fees and supplies.',
-    contact: {
-      name: 'Layla Khan',
-      email: 'layla.khan@example.com',
-      phone: '+1-555-666-7777',
-    },
-  },
-];
+interface HelpRequestsState {
+  helpRequests: HelpRequestType[];
+  loading: boolean;
+  refreshing: boolean;
+  error: string | null;
+  total: number;
+}
 
 const HelpRequest = () => {
   const navigation = useNavigation<any>();
+  const [state, setState] = React.useState<HelpRequestsState>({
+    helpRequests: [],
+    loading: true,
+    refreshing: false,
+    error: null,
+    total: 0,
+  });
+
+  const fetchHelpRequests = async (isRefreshing = false) => {
+    try {
+      setState(prev => ({
+        ...prev,
+        loading: !isRefreshing,
+        refreshing: isRefreshing,
+        error: null,
+      }));
+
+      const response = await getHelpRequests();
+
+      if (response.status && response.data && response.data.help_requests) {
+        setState(prev => ({
+          ...prev,
+          helpRequests: response.data.help_requests,
+          total: response.data.total,
+          loading: false,
+          refreshing: false,
+        }));
+      } else {
+        throw new Error(response.message || 'Failed to fetch help requests');
+      }
+    } catch (error: any) {
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        refreshing: false,
+        error: error.message || 'Failed to load help requests',
+      }));
+    }
+  };
+
+  React.useEffect(() => {
+    fetchHelpRequests();
+  }, []);
+
+  const onRefresh = () => fetchHelpRequests(true);
+
+  const getStatusDisplay = (status: string): 'Pending' | 'Approved' | 'Rejected' | 'Completed' => {
+    switch (status) {
+      case 'APPROVED':
+        return 'Approved';
+      case 'REJECTED':
+        return 'Rejected';
+      case 'RESOLVED':
+        return 'Completed';
+      case 'PENDING':
+      default:
+        return 'Pending';
+    }
+  };
+
+  if (state.loading) {
+    return (
+      <Container
+        padding="small"
+        style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Loader />
+      </Container>
+    );
+  }
+
+  if (state.error) {
+    return (
+      <Container
+        padding="small"
+        style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Text style={{ color: theme.colors.error[500], textAlign: 'center', marginBottom: 16 }}>
+          {state.error}
+        </Text>
+        <TouchableOpacity
+          style={{ backgroundColor: theme.colors.primary[500], paddingHorizontal: 24, paddingVertical: 12, borderRadius: 8 }}
+          onPress={() => fetchHelpRequests()}
+        >
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Retry</Text>
+        </TouchableOpacity>
+      </Container>
+    );
+  }
+
   return (
     <Container
       scrollable
       padding="small"
       style={{ flex: 1, backgroundColor: '#fff' }}
+      refreshControl={true}
+      refreshing={state.refreshing}
+      onRefresh={onRefresh}
     >
+      <Heading level={3} style={{ marginBottom: 16 }}>
+        Help Requests
+      </Heading>
       <View>
-        {helpRequests.map(request => (
-          <HelpRequestCard
-            onPress={() => {
-              navigation.navigate('RequestDetails', { request });
+        {state.helpRequests.length > 0 ? (
+          state.helpRequests.map(request => (
+            <VolunteerApplicationCard
+              key={request.id}
+              name={request.full_name}
+              email={request.phone}
+              image={`https://avatar.iran.liara.run/public/boy?seed=${request.phone}`}
+              status={getStatusDisplay(request.status)}
+              onView={() => navigation.navigate('RequestDetails', { requestId: request.id, request })}
+            />
+          ))
+        ) : (
+          <View
+            style={{
+              backgroundColor: '#fff',
+              padding: 24,
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: theme.colors.neutral[200],
+              alignItems: 'center',
             }}
-            key={request.id}
-            name={request.name}
-            location={request.location}
-            type={request.type}
-            status={request.status as 'Pending' | 'Resolved'}
-          />
-        ))}
+          >
+            <Text style={{ color: theme.colors.neutral[500], textAlign: 'center' }}>
+              No help requests found
+            </Text>
+          </View>
+        )}
       </View>
     </Container>
   );

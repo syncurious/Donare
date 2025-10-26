@@ -2,7 +2,7 @@ import apiCaller from './index';
 
 export interface HelpRequest {
   id: string;
-  status: 'PENDING' | 'RESOLVED';
+  status: 'PENDING' | 'RESOLVED' | 'APPROVED' | 'REJECTED';
   full_name: string;
   phone: string;
   address: string;
@@ -39,15 +39,6 @@ export const getHelpRequests = async (): Promise<HelpRequestResponse> => {
 };
 
 /**
- * Get a single help request by ID
- */
-export const getHelpRequestById = async (
-  id: string,
-): Promise<HelpRequestDetailResponse> => {
-  return apiCaller<HelpRequestDetailResponse>('get', `help-request/${id}`);
-};
-
-/**
  * Create a new help request
  */
 export const createHelpRequest = async (
@@ -63,7 +54,7 @@ export const updateHelpRequestStatus = async (
   id: string,
   status: 'PENDING' | 'RESOLVED',
 ): Promise<HelpRequestDetailResponse> => {
-  return apiCaller<HelpRequestDetailResponse>('patch', `help-request/${id}`, {
+  return apiCaller<HelpRequestDetailResponse>('post', `help-request/${id}`, {
     status,
   });
 };
