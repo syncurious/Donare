@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import Container from '../../../components/base/Container';
 import Heading from '../../../components/base/Heading';
 import Text from '../../../components/base/Text';
@@ -8,19 +8,11 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import theme from '../../../config/theme';
 import Section from '../../../components/base/Section';
 import ProfileCard from '../../../components/cards/ProfileCard';
-
-interface VolunteerDetails {
-  name: string;
-  email: string;
-  phone: string;
-  joined: string;
-  skills: string[];
-  availability: { label: string; value: string }[];
-  message: string;
-}
+import { UpdateVolunteerStatus, type Volunteer } from '../../../service/admin';
+import Loader from '../../../components/base/Loader';
 
 type VolunteerDetailsScreenRouteProp = RouteProp<
-  { params: { volunteer: VolunteerDetails } },
+  { params: { volunteer: Volunteer } },
   'params'
 >;
 
@@ -28,17 +20,77 @@ const VolunteerDetailsScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute<VolunteerDetailsScreenRouteProp>();
   const volunteer = route.params?.volunteer;
+  const [loading, setLoading] = useState(false);
 
   if (!volunteer) return null;
 
-  const handleApprove = () => {
-    // TODO: Implement approve logic
-    navigation.goBack();
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   };
 
-  const handleReject = () => {
-    // TODO: Implement reject logic
-    navigation.goBack();
+  const getAvailabilityText = (availability: string) => {
+    return availability === 'AVAILABLE' ? 'Available' : 'Not Available';
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'PENDING': return theme.colors.warning[500];
+      case 'APPROVED': return theme.colors.success[500];
+      case 'REJECTED': return theme.colors.error[500];
+      case 'COMPLETED': return theme.colors.primary[500];
+      case 'CANCELLED': return theme.colors.neutral[500];
+      default: return theme.colors.neutral[500];
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'PENDING': return 'Pending';
+      case 'APPROVED': return 'Approved';
+      case 'REJECTED': return 'Rejected';
+      case 'COMPLETED': return 'Completed';
+      case 'CANCELLED': return 'Cancelled';
+      default: return status;
+    }
+  };
+
+  const handleStatusUpdate = async (newStatus: 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED') => {
+    const actionText = newStatus.toLowerCase();
+    const actionTextCapitalized = actionText.charAt(0).toUpperCase() + actionText.slice(1);
+    
+    Alert.alert(
+      `${actionTextCapitalized} Volunteer`,
+      `Are you sure you want to ${actionText} ${volunteer.full_name}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: actionTextCapitalized,
+          style: newStatus === 'REJECTED' || newStatus === 'CANCELLED' ? 'destructive' : 'default',
+          onPress: async () => {
+            try {
+              setLoading(true);
+              const response = await UpdateVolunteerStatus(volunteer.id, newStatus);
+              if (response.status) {
+                Alert.alert('Success', `Volunteer ${actionText} successfully!`, [
+                  { text: 'OK', onPress: () => navigation.goBack() }
+                ]);
+              } else {
+                Alert.alert('Error', response.message || `Failed to ${actionText} volunteer`);
+              }
+            } catch (error: any) {
+              Alert.alert('Error', error.message || `Failed to ${actionText} volunteer`);
+            } finally {
+              setLoading(false);
+            }
+          }
+        }
+      ]
+    );
   };
 
   return (
@@ -50,19 +102,27 @@ const VolunteerDetailsScreen: React.FC = () => {
     >
       <View style={styles.profileCard}>
         <ProfileCard user={{
-          name: volunteer.name,
+          fullName: volunteer.full_name,
           email: volunteer.email,
           phone: volunteer.phone, 
-          image: "https://avatar.iran.liara.run/public/boy",
-          memberSince: "2022",
+          image: `https://avatar.iran.liara.run/public/boy?seed=${volunteer.email}`,
+          memberSince: formatDate(volunteer.created_at),
         }} theme={theme} />
       </View>
-      <View style={{ width : "100%"}}>
+
+      {/* Status Badge */}
+      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(volunteer.status) + '20' }]}>
+        <Text style={[styles.statusText, { color: getStatusColor(volunteer.status) }]}>
+          {getStatusText(volunteer.status)}
+        </Text>
+      </View>
+
+      <View style={{ width: "100%" }}>
         <Section title="Skills">
           <View style={styles.skillsRow}>
-            {volunteer.skills.map(skill => (
-              <View key={skill} style={styles.skillBadge}>
-                <Text variant="body2">{skill}</Text>
+            {volunteer.skills.split(',').map((skill, index) => (
+              <View key={index} style={styles.skillBadge}>
+                <Text variant="body2">{skill.trim()}</Text>
               </View>
             ))}
           </View>
@@ -70,14 +130,18 @@ const VolunteerDetailsScreen: React.FC = () => {
 
         <Section title="Availability">
           <View style={styles.availabilityRow}>
-            {volunteer.availability.map(avail => (
-              <View key={avail.label} style={styles.availCol}>
-                <Text variant="body2" color="secondary">
-                  {avail.label}
-                </Text>
-                <Text variant="body2">{avail.value}</Text>
-              </View>
-            ))}
+            <View style={styles.availCol}>
+              <Text variant="body2" color="secondary">
+                Weekdays
+              </Text>
+              <Text variant="body2">{getAvailabilityText(volunteer.on_week_days)}</Text>
+            </View>
+            <View style={styles.availCol}>
+              <Text variant="body2" color="secondary">
+                Weekends
+              </Text>
+              <Text variant="body2">{getAvailabilityText(volunteer.on_week_ends)}</Text>
+            </View>
           </View>
         </Section>
 
@@ -97,24 +161,48 @@ const VolunteerDetailsScreen: React.FC = () => {
             </View>
           </View>
         </Section>
+
+        <Section title="Application Date">
+          <Text variant="body2">
+            {formatDate(volunteer.created_at)}
+          </Text>
+        </Section>
+
         <Section title="Message">
           <Text variant="body2">
             {volunteer.message}
           </Text>
         </Section>
       </View>
-      <View style={styles.actionsRow}>
-        <Button
-          variant="outlined"
-          style={styles.rejectBtn}
-          onPress={handleReject}
-        >
-          Reject
-        </Button>
-        <Button style={styles.approveBtn} onPress={handleApprove}>
-          Approve
-        </Button>
-      </View>
+
+      {volunteer.status === 'PENDING' || volunteer.status === 'COMPLETED' && (
+        <View style={styles.actionsRow}>
+          <Button
+            variant="outlined"
+            style={styles.rejectBtn}
+            onPress={() => handleStatusUpdate('REJECTED')}
+            disabled={loading}
+          >
+            {loading ? <Loader size="small" /> : 'Reject'}
+          </Button>
+          <Button 
+            style={styles.approveBtn} 
+            onPress={() => handleStatusUpdate('APPROVED')}
+            disabled={loading}
+          >
+            {loading ? <Loader size="small" /> : 'Approve'}
+          </Button>
+        </View>
+      )}
+
+
+      {(volunteer.status === 'REJECTED' || volunteer.status === 'APPROVED' || volunteer.status === 'CANCELLED') && (
+        <View style={styles.statusMessage}>
+          <Text style={[styles.statusMessageText, { color: getStatusColor(volunteer.status) }]}>
+            This volunteer has been {getStatusText(volunteer.status).toLowerCase()}
+          </Text>
+        </View>
+      )}
     </Container>
   );
 };
@@ -204,9 +292,44 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#F2F2F5',
   },
+  cancelBtn: {
+    flex: 1,
+    marginLeft: 8,
+    borderRadius: 20,
+    backgroundColor: '#F2F2F5',
+  },
+  completeBtn: {
+    flex: 1,
+    marginRight: 8,
+    borderRadius: 20,
+    backgroundColor: theme.colors.primary[500],
+  },
   closeBtn: {
     marginTop: 8,
     alignSelf: 'center',
+  },
+  statusBadge: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    alignSelf: 'center',
+    marginBottom: 16,
+  },
+  statusText: {
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  statusMessage: {
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: theme.colors.neutral[100],
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  statusMessageText: {
+    fontWeight: '500',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 

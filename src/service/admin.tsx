@@ -3,12 +3,11 @@ import apiCaller from '.';
 // Admin API endpoints
 export const AdminEndpoints = {
   DASHBOARD: 'admin/dashboard',
-  VOLUNTEERS: 'admin/volunteers',
+  VOLUNTEERS: 'admin/volunteer',
   HELP_REQUESTS: 'admin/help-requests',
   DONATIONS: 'admin/donations',
   USERS: 'admin/users',
-  APPROVE_VOLUNTEER: 'admin/volunteers/approve',
-  REJECT_VOLUNTEER: 'admin/volunteers/reject',
+  UPDATE_VOLUNTEER_STATUS: 'admin/volunteer',
   RESOLVE_HELP_REQUEST: 'admin/help-requests/resolve',
 };
 
@@ -58,13 +57,27 @@ export interface AdminDashboardResponse {
 
 export interface Volunteer {
   id: string;
-  name: string;
-  email: string;
+  user_id: string;
+  full_name: string;
   phone: string;
-  status: 'pending' | 'approved' | 'rejected';
-  applicationDate: string;
-  skills?: string[];
-  experience?: string;
+  email: string;
+  on_week_days: 'AVAILABLE' | 'NOT_AVAILABLE';
+  on_week_ends: 'AVAILABLE' | 'NOT_AVAILABLE';
+  skills: string;
+  message: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface VolunteersResponse {
+  status: boolean;
+  code: number;
+  message: string;
+  data: {
+    volunteers: Volunteer[];
+    total: number;
+  };
 }
 
 export interface HelpRequest {
@@ -84,7 +97,7 @@ const GetDashboardStats = async (): Promise<AdminDashboardResponse> => {
   return await apiCaller('get', AdminEndpoints.DASHBOARD, undefined, undefined, false);
 };
 
-const GetVolunteers = async (): Promise<{ status: boolean; data: Volunteer[] }> => {
+const GetVolunteers = async (): Promise<VolunteersResponse> => {
   return await apiCaller('get', AdminEndpoints.VOLUNTEERS, undefined, undefined, false);
 };
 
@@ -100,12 +113,11 @@ const GetUsers = async (): Promise<{ status: boolean; data: any[] }> => {
   return await apiCaller('get', AdminEndpoints.USERS, undefined, undefined, false);
 };
 
-const ApproveVolunteer = async (volunteerId: string): Promise<{ status: boolean; message: string }> => {
-  return await apiCaller('post', `${AdminEndpoints.APPROVE_VOLUNTEER}/${volunteerId}`, undefined, undefined, false);
-};
-
-const RejectVolunteer = async (volunteerId: string): Promise<{ status: boolean; message: string }> => {
-  return await apiCaller('post', `${AdminEndpoints.REJECT_VOLUNTEER}/${volunteerId}`, undefined, undefined, false);
+const UpdateVolunteerStatus = async (
+  volunteerId: string, 
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED'
+): Promise<{ status: boolean; message: string }> => {
+  return await apiCaller('patch', `${AdminEndpoints.UPDATE_VOLUNTEER_STATUS}/${volunteerId}`, { status }, undefined, false);
 };
 
 const ResolveHelpRequest = async (requestId: string): Promise<{ status: boolean; message: string }> => {
@@ -118,7 +130,6 @@ export {
   GetHelpRequests,
   GetDonations,
   GetUsers,
-  ApproveVolunteer,
-  RejectVolunteer,
+  UpdateVolunteerStatus,
   ResolveHelpRequest,
 };
