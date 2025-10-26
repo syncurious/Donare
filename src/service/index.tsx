@@ -84,3 +84,6 @@ const apiCaller = async <T,>(
 };
 
 export default apiCaller;
+
+// Export admin services
+export * from './admin';
