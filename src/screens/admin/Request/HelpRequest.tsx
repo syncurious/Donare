@@ -1,9 +1,8 @@
 import React from 'react';
-import Container from '../../components/base/Container';
 import { View } from 'react-native';
-import HelpRequestCard from '../../components/cards/HelpRequestCard';
+import HelpRequestCard from '../../../components/cards/HelpRequestCard';
 import { useNavigation } from '@react-navigation/native';
-import { UserStackParamList } from '../../config/navigation/UserNavigation';
+import Container from '../../../components/base/Container';
 
 const helpRequests = [
   {
