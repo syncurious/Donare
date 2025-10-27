@@ -40,12 +40,6 @@ const UserTabs = [
     iconActive: helpIcon,
   },
   {
-    name: 'HelpRequest',
-    label: 'Help',
-    icon: HeartIcon,
-    iconActive: HeartIconFilled,
-  },
-  {
     name: 'Profile',
     label: 'Profile',
     icon: ProfileIcon,

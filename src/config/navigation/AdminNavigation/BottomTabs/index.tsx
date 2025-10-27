@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomNavBar from '../../../../components/base/BottomNavBar';
-import Profile from '../../../../screens/profile';
 import AdminDashboard from '../../../../screens/admin/dashboard';
 import AdminVolunteerApplications from '../../../../screens/admin/volunteers';
 import DonationHistory from '../../../../screens/admin/donation/DonationHistory';
 import HelpRequest from '../../../../screens/admin/Request/HelpRequest';
+import AdminProfile from '../../../../screens/admin/profile';
 
 const Tab = createBottomTabNavigator();
 const AdminBottomNavigation = () => {
@@ -23,7 +23,7 @@ const AdminBottomNavigation = () => {
       />
       <Tab.Screen name="HelpRequest" component={HelpRequest} />
       <Tab.Screen name="DonationList" component={DonationHistory} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={AdminProfile} />
     </Tab.Navigator>
   );
 };

@@ -10,6 +10,7 @@ export const AdminEndpoints = {
   UPDATE_VOLUNTEER_STATUS: 'admin/volunteer',
   RESOLVE_HELP_REQUEST: 'admin/help-requests/resolve',
   UPDATE_HELP_REQUEST_STATUS: 'help-request/admin',
+  PROFILE: 'user/profile',
 };
 
 // TypeScript interfaces for admin API responses
@@ -93,6 +94,29 @@ export interface HelpRequest {
   priority: 'low' | 'medium' | 'high';
 }
 
+export interface UserProfile {
+  email: string;
+  fullName: string;
+  phone: string;
+  profilePicture: string;
+}
+
+export interface UpdateProfilePayload {
+  email?: string;
+  full_name?: string;
+  phone?: string;
+  profile_picture?: string;
+}
+
+export interface ProfileResponse {
+  status: boolean;
+  code: number;
+  message: string;
+  data: {
+    user: UserProfile;
+  };
+}
+
 // Admin API functions
 const GetDashboardStats = async (): Promise<AdminDashboardResponse> => {
   return await apiCaller('get', AdminEndpoints.DASHBOARD, undefined, undefined, false);
@@ -132,6 +156,14 @@ const UpdateHelpRequestStatus = async (
   return await apiCaller('post', `${AdminEndpoints.UPDATE_HELP_REQUEST_STATUS}/${requestId}`, { status }, undefined, false);
 };
 
+const GetUserProfile = async (): Promise<ProfileResponse> => {
+  return await apiCaller('get', AdminEndpoints.PROFILE, undefined, undefined, false);
+};
+
+const UpdateUserProfile = async (profileData: UpdateProfilePayload): Promise<ProfileResponse> => {
+  return await apiCaller('patch', AdminEndpoints.PROFILE, profileData, undefined, false);
+};
+
 export {
   GetDashboardStats,
   GetVolunteers,
@@ -141,4 +173,6 @@ export {
   UpdateVolunteerStatus,
   ResolveHelpRequest,
   UpdateHelpRequestStatus,
+  GetUserProfile,
+  UpdateUserProfile,
 };
