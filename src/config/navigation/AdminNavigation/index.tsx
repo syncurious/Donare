@@ -1,22 +1,28 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AdminBottomNavigation from './BottomTabs';
 import VolunteerDetailsScreen from '../../../screens/admin/volunteers/VolunteerDetailsScreen';
-import RequestDetails from '../../../screens/admin/RequestDetails';
+import RequestDetails from '../../../screens/admin/Request/RequestDetails';
 
 // Add VolunteerDetails type for navigation param
 interface VolunteerDetails {
-  name: string;
-  email: string;
+  id: string;
+  user_id: string;
+  full_name: string;
   phone: string;
-  joined: string;
-  skills: string[];
-  availability: { label: string; value: string }[];
+  email: string;
+  on_week_days: 'AVAILABLE' | 'NOT_AVAILABLE';
+  on_week_ends: 'AVAILABLE' | 'NOT_AVAILABLE';
+  skills: string;
+  message: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED';
+  created_at: string;
+  updated_at: string;
 }
 
 type AdminStackParamList = {
   AdminBottomTabs: undefined;
   VolunteerDetails: { volunteer: VolunteerDetails };
-  RequestDetails: { requestId: string };
+  RequestDetails: { requestId: string; request?: any };
 };
 
 const Stack = createNativeStackNavigator<AdminStackParamList>();

@@ -9,7 +9,7 @@ interface VolunteerApplicationCardProps {
   name: string;
   email: string;
   image: string;
-  status: 'Pending' | 'Approved';
+  status: 'Pending' | 'Approved' | 'Rejected' | 'Completed' | 'Cancelled';
   onView: () => void;
 }
 
@@ -38,7 +38,9 @@ const VolunteerApplicationCard: React.FC<VolunteerApplicationCardProps> = ({
             color={
               status === 'Approved'
                 ? 'success'
-                : status == 'Pending'
+                : status === 'Completed'
+                ? 'primary'
+                : status === 'Pending'
                 ? 'warning'
                 : 'error'
             }

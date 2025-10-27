@@ -1,109 +1,188 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '../../../components/base/Container';
 import Heading from '../../../components/base/Heading';
 import VolunteerApplicationCard from '../../../components/cards/VolunteerApplicationCard';
-import { View } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { AdminStackParamList } from '../../../config/navigation/AdminNavigation';
+import {
+  GetVolunteers,
+  type Volunteer,
+  type VolunteersResponse,
+} from '../../../service/admin';
+import Loader from '../../../components/base/Loader';
+import theme from '../../../config/theme';
 
-interface VolunteerDetails {
-  name: string;
-  email: string;
-  status: string;
-  phone: string;
-  joined: string;
-  skills: string[];
-  availability: { label: string; value: string }[];
-  image: string;
+interface VolunteersState {
+  volunteers: Volunteer[];
+  loading: boolean;
+  refreshing: boolean;
+  error: string | null;
+  total: number;
 }
-
-const volunteerApplications: VolunteerDetails[] = [
-  {
-    name: 'Ahmed Ali',
-    email: 'ahmed.ali@email.com',
-    image: 'https://avatar.iran.liara.run/public/boy',
-    status: 'Pending',
-    phone: '+1 (555) 111-2222',
-    joined: 'Joined 1 month ago',
-    skills: ['Teaching', 'Mentoring'],
-    availability: [
-      { label: 'Weekdays', value: 'Available' },
-      { label: 'Weekends', value: 'Not Available' },
-    ],
-  },
-  {
-    name: 'Fatima Khan',
-    email: 'fatima.khan@email.com',
-    image: 'https://avatar.iran.liara.run/public/boy',
-    status: 'Approved',
-    phone: '+1 (555) 333-4444',
-    joined: 'Joined 2 months ago',
-    skills: ['Community Outreach'],
-    availability: [
-      { label: 'Weekdays', value: 'Available' },
-      { label: 'Weekends', value: 'Available' },
-    ],
-  },
-  {
-    name: 'Omar Hassan',
-    email: 'omar.hassan@email.com',
-    image: 'https://avatar.iran.liara.run/public/boy',
-    status: 'Pending',
-    phone: '+1 (555) 123-4567',
-    joined: 'Joined 2 months ago',
-    skills: ['Teaching', 'Mentoring', 'Community Outreach'],
-    availability: [
-      { label: 'Weekdays', value: 'Available' },
-      { label: 'Weekends', value: 'Not Available' },
-    ],
-  },
-  {
-    name: 'Layla Ibrahim',
-    email: 'layla.ibrahim@email.com',
-    image: 'https://avatar.iran.liara.run/public/boy',
-    status: 'Approved',
-    phone: '+1 (555) 555-6666',
-    joined: 'Joined 3 weeks ago',
-    skills: ['Mentoring'],
-    availability: [
-      { label: 'Weekdays', value: 'Not Available' },
-      { label: 'Weekends', value: 'Available' },
-    ],
-  },
-];
 
 const AdminVolunteerApplications = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<AdminStackParamList>>();
 
-  const handleView = (email: string) => {
-    const volunteer = volunteerApplications.find(v => v.email === email);
-    if (volunteer) {
-      navigation.navigate('VolunteerDetails', { volunteer });
+  const [state, setState] = useState<VolunteersState>({
+    volunteers: [],
+    loading: true,
+    refreshing: false,
+    error: null,
+    total: 0,
+  });
+
+  const fetchVolunteers = async (isRefreshing = false) => {
+    try {
+      setState(prev => ({
+        ...prev,
+        loading: !isRefreshing,
+        refreshing: isRefreshing,
+        error: null,
+      }));
+
+      const response = await GetVolunteers();
+
+      if (response.status && response.data) {
+        setState(prev => ({
+          ...prev,
+          volunteers: response.data.volunteers,
+          total: response.data.total,
+          loading: false,
+          refreshing: false,
+        }));
+      } else {
+        throw new Error(response.message || 'Failed to fetch volunteers');
+      }
+    } catch (error: any) {
+      console.error('Volunteers fetch error:', error);
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        refreshing: false,
+        error: error.message || 'Failed to load volunteers',
+      }));
     }
   };
+
+  useEffect(() => {
+    fetchVolunteers();
+  }, []);
+
+  const onRefresh = () => {
+    fetchVolunteers(true);
+  };
+
+  const getStatusDisplay = (status: string): 'Pending' | 'Approved' | 'Rejected' | 'Completed' | 'Cancelled' => {
+    switch (status) {
+      case 'PENDING':
+        return 'Pending';
+      case 'APPROVED':
+        return 'Approved';
+      case 'REJECTED':
+        return 'Rejected';
+      case 'COMPLETED':
+        return 'Completed';
+      case 'CANCELLED':
+        return 'Cancelled';
+      default:
+        return 'Pending';
+    }
+  };
+
+  if (state.loading) {
+    return (
+      <Container
+        padding="small"
+        style={{
+          backgroundColor: '#fff',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Loader />
+      </Container>
+    );
+  }
+
+  if (state.error) {
+    return (
+      <Container
+        padding="small"
+        style={{
+          backgroundColor: '#fff',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            color: theme.colors.error[500],
+            textAlign: 'center',
+            marginBottom: 16,
+          }}
+        >
+          {state.error}
+        </Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: theme.colors.primary[500],
+            paddingHorizontal: 24,
+            paddingVertical: 12,
+            borderRadius: 8,
+          }}
+          onPress={() => fetchVolunteers()}
+        >
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Retry</Text>
+        </TouchableOpacity>
+      </Container>
+    );
+  }
 
   return (
     <Container
       scrollable
       padding="small"
       style={{ flex: 1, backgroundColor: '#fff' }}
+      refreshControl={true}
+      refreshing={state.refreshing}
+      onRefresh={onRefresh}
     >
-      {/* <Heading level={2} style={{ marginBottom: 16 }}>
+      <Heading level={3} style={{ marginBottom: 16 }}>
         Volunteer Applications
-      </Heading> */}
+      </Heading>
       <View>
-        {volunteerApplications.map((app, idx) => (
-          <VolunteerApplicationCard
-            key={app.email}
-            name={app.name}
-            email={app.email}
-            image={app.image}
-            status={app.status as 'Pending' | 'Approved'}
-            onView={() => handleView(app.email)}
-          />
-        ))}
+        {state.volunteers.length > 0 ? (
+          state.volunteers.map(volunteer => (
+            <VolunteerApplicationCard
+              key={volunteer.id}
+              name={volunteer.full_name}
+              email={volunteer.email}
+              image={`https://avatar.iran.liara.run/public/boy?seed=${volunteer.email}`}
+              status={getStatusDisplay(volunteer.status)}
+              onView={() => navigation.navigate('VolunteerDetails', { volunteer })}
+            />
+          ))
+        ) : (
+          <View
+            style={{
+              backgroundColor: '#fff',
+              padding: 24,
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: theme.colors.neutral[200],
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{ color: theme.colors.neutral[500], textAlign: 'center' }}
+            >
+              No volunteer applications found
+            </Text>
+          </View>
+        )}
       </View>
     </Container>
   );

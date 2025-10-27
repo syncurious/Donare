@@ -7,12 +7,12 @@ import { RootState } from '../../store';
 
 const MainNavigation = () => {
   const isAuth = useSelector((state: RootState) => state?.profile?.profile?.token);
-  const isAdmin = useSelector((state: RootState) => state?.profile?.profile?.role);
+  const isAdmin = useSelector((state: RootState) => state?.profile?.profile?.user?.role);
 
   return (
     <NavigationContainer>
       {isAuth ? (
-        isAdmin ? (
+        isAdmin === 'admin' ? (
           <AdminNavigation />
         ) : (
           <UserNavigation />
