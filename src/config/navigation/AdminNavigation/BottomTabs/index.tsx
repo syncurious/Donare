@@ -3,7 +3,7 @@ import BottomNavBar from '../../../../components/base/BottomNavBar';
 import Profile from '../../../../screens/profile';
 import AdminDashboard from '../../../../screens/admin/dashboard';
 import AdminVolunteerApplications from '../../../../screens/admin/volunteers';
-import DonationHistory from '../../../../screens/profile/DonationHistory';
+import DonationHistory from '../../../../screens/admin/donation/DonationHistory';
 import HelpRequest from '../../../../screens/admin/Request/HelpRequest';
 
 const Tab = createBottomTabNavigator();
