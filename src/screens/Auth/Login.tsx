@@ -9,8 +9,6 @@ import theme from '../../config/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import logoPng from '../../assets/images/logoWihtoutText.png';
-import facebookPng from '../../assets/icons/facebookIcon.png';
-import googlePng from '../../assets/icons/googleIcon.png';
 import { Login } from '../../service/handler';
 import { useDispatch } from 'react-redux';
 import { setProfile } from '../../store/reducers/profile';
@@ -20,8 +18,8 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [payload, setPayload] = useState({
-    email: 'aqib@gmail.com',
-    password: '123456',
+    email: '',
+    password: '',
   });
 
   const handleInputChange = (key: 'email' | 'password', value: string) => {
@@ -92,23 +90,6 @@ const LoginScreen = () => {
         >
           Login
         </Button>
-        {/* Social Login */}
-        <View style={styles.socialRow}>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={facebookPng}
-              style={styles.socialIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={googlePng}
-              style={styles.socialIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
       </View>
       {/* Sign Up Prompt */}
       <View style={styles.signupRow}>

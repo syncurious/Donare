@@ -17,8 +17,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Signup } from '../../service/handler';
 import logoPng from '../../assets/images/logoWihtoutText.png';
-import facebookPng from '../../assets/icons/facebookIcon.png';
-import googlePng from '../../assets/icons/googleIcon.png';
 import { useDispatch } from 'react-redux';
 import { setProfile } from '../../store/reducers/profile';
 import { showToast } from '../../utils/toast';
@@ -42,17 +40,17 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [payload, setPayload] = useState<SignUpPayload>({
-    email: 'aqib@gmail.com',
-    password: '123456',
-    full_name: 'Aqib',
-    city: 'Karachi',
+    email: '',
+    password: '',
+    full_name: '',
+    city: '',
     role: 'user',
     userPreferences: {
       last_zakat_date: '2025-01-01',
       zakat_reminders_enabled: false,
       campaign_updates_enabled: false,
     },
-    confirmPassword: '123456',
+    confirmPassword: '',
   });
 
   const handleSignUp = async () => {
@@ -221,22 +219,6 @@ const SignUp = () => {
             >
               Sign Up
             </Button>
-            <View style={styles.socialRow}>
-              <TouchableOpacity style={styles.socialButton}>
-                <Image
-                  source={facebookPng}
-                  style={styles.socialIcon}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton}>
-                <Image
-                  source={googlePng}
-                  style={styles.socialIcon}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-            </View>
           </View>
           <View style={styles.loginRow}>
             <Text variant="body2" color="secondary">
