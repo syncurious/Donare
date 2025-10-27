@@ -190,9 +190,6 @@ const DonationHistory = () => {
               <TouchableOpacity
                 activeOpacity={0.7}
                 key={donation.id}
-                onPress={() => {
-                  navigation.navigate('Impact');
-                }}
                 style={{
                   borderWidth: 1,
                   borderColor: theme.colors.neutral[200],
@@ -210,7 +207,7 @@ const DonationHistory = () => {
                         color="primary"
                         style={{ marginBottom: 4 }}
                       >
-                        PKR {donation.amount.toFixed(2)}
+                        PKR {donation?.amount?.toFixed(2)}
                       </Text>
                       <Text
                         variant="caption"
