@@ -34,7 +34,7 @@ const GetProfile = async () => {
 };
 
 const UpdateProfile = async (body: any) => {
-  return await apiCaller('post', Auth.UPDATE_PROFILE, body, undefined, false);
+  return await apiCaller('patch', Auth.UPDATE_PROFILE, body, undefined, false);
 };
 
 const GetPreferences = async () => {

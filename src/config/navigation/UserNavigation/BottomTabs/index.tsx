@@ -3,9 +3,8 @@ import Home from '../../../../screens/home/Home';
 import { Donate, Volunteer } from '../../../../screens/home';
 import Header from '../../../../components/base/Header';
 import BottomNavBar from '../../../../components/base/BottomNavBar';
-import Profile from '../../../../screens/profile';
-import Qibla from '../../../../screens/qibla';
 import Causes from '../../../../screens/home/Causes';
+import profile from '../../../../screens/profile/UserProfile';
 
 // Placeholder screens for other tabs
 const Placeholder = ({ label }: { label: string }) => (
@@ -29,8 +28,7 @@ const BottomNavigation = () => {
         component={Volunteer}
       />
       <Tab.Screen name="Causes" component={Causes} />
-      {/* <Tab.Screen name="Qibla" component={Qibla} /> */}
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={profile} />
     </Tab.Navigator>
   );
 };
