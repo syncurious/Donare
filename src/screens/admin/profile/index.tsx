@@ -11,9 +11,10 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector, useDispatch } from 'react-redux';
 import Container from '../../../components/base/Container';
-import Heading from '../../../components/base/Heading';
+import Section from '../../../components/base/Section';
 import Text from '../../../components/base/Text';
 import Input from '../../../components/base/Input';
+import Feather from 'react-native-vector-icons/Feather';
 import theme from '../../../config/theme';
 import {
   GetUserProfile,
@@ -66,6 +67,14 @@ const AdminProfile = () => {
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  const getInitials = (name: string): string => {
+    return name
+      .split(' ')
+      .map((n: string) => n[0])
+      .join('')
+      .toUpperCase();
+  };
 
   const fetchProfile = async () => {
     try {
@@ -293,12 +302,12 @@ const AdminProfile = () => {
       <Container
         padding="small"
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: theme.colors.background.primary,
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
-        <Loader />
+        <Loader size="large" />
       </Container>
     );
   }
@@ -308,7 +317,7 @@ const AdminProfile = () => {
       <Container
         padding="small"
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: theme.colors.background.primary,
           justifyContent: 'center',
           alignItems: 'center',
         }}
@@ -338,205 +347,291 @@ const AdminProfile = () => {
   }
 
   return (
-    <Container scrollable padding="small" style={{ backgroundColor: '#fff' }}>
-      <View style={styles.header}>
-        <Heading level={2} style={{ marginBottom: 8 }}>
-          Admin Profile
-        </Heading>
-        {!state.editing && (
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={handleEdit}
-            disabled={state.saving}
-          >
-            <Text style={styles.editButtonText}>Edit</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <View style={styles.profileContainer}>
-        {/* Profile Picture */}
-        <View style={styles.profilePictureContainer}>
-          <TouchableOpacity
-            onPress={handleImagePick}
-            disabled={!state.editing || state.uploading}
-            activeOpacity={0.8}
-          >
-            {formData.profile_picture ? (
-              <Image
-                source={{ uri: formData.profile_picture }}
-                style={styles.profilePicture}
-              />
-            ) : (
-              <View style={styles.profilePicturePlaceholder}>
-                <Text style={styles.profilePicturePlaceholderText}>
-                  {formData.full_name
-                    ? formData.full_name.charAt(0).toUpperCase()
-                    : 'A'}
-                </Text>
-              </View>
-            )}
-            {state.editing && (
-              <View style={styles.cameraIconContainer}>
-                {state.uploading ? (
-                  <ActivityIndicator color="#fff" size="small" />
-                ) : (
-                  <Text style={styles.cameraIcon}>📷</Text>
-                )}
-              </View>
-            )}
-          </TouchableOpacity>
-          {state.editing && (
-            <Text style={styles.uploadHint}>Tap to change photo</Text>
-          )}
-        </View>
-
-        {/* Form Fields */}
-        <View style={styles.formContainer}>
-          <Input
-            label="Full Name"
-            placeholder="Enter your full name"
-            value={formData.full_name}
-            onChangeText={text => {
-              setFormData(prev => ({ ...prev, full_name: text }));
-              if (errors.full_name) {
-                setErrors(prev => ({ ...prev, full_name: undefined }));
-              }
-            }}
-            error={errors.full_name}
-            editable={state.editing}
-            style={styles.input}
-            required
-          />
-
-          <Input
-            label="Email"
-            placeholder="Enter your email"
-            value={formData.email}
-            onChangeText={text => {
-              setFormData(prev => ({ ...prev, email: text }));
-              if (errors.email) {
-                setErrors(prev => ({ ...prev, email: undefined }));
-              }
-            }}
-            error={errors.email}
-            editable={state.editing}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            style={styles.input}
-            required
-          />
-
-          <Input
-            label="Phone"
-            placeholder="Enter your phone number"
-            value={formData.phone}
-            onChangeText={text => {
-              setFormData(prev => ({ ...prev, phone: text }));
-              if (errors.phone) {
-                setErrors(prev => ({ ...prev, phone: undefined }));
-              }
-            }}
-            error={errors.phone}
-            editable={state.editing}
-            keyboardType="phone-pad"
-            style={styles.input}
-            required
-          />
-        </View>
-
-        {/* Action Buttons */}
-        {state.editing && (
-          <View style={styles.buttonContainer}>
+    <Container
+      scrollable
+      padding="none"
+      style={{ backgroundColor: theme.colors.background.primary }}
+    >
+      {/* Profile Header */}
+      <View
+        style={[
+          styles.topBg,
+          {
+            backgroundColor: theme.colors.primary[50],
+            borderBottomLeftRadius: theme.borderRadius['2xl'],
+            borderBottomRightRadius: theme.borderRadius['2xl'],
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.profileCard,
+            {
+              backgroundColor: theme.colors.background.secondary,
+              borderRadius: theme.borderRadius.xl,
+            },
+          ]}
+        >
+          <View style={styles.avatarWrapper}>
             <TouchableOpacity
-              style={[styles.button, styles.cancelButton]}
-              onPress={handleCancel}
-              disabled={state.saving}
+              onPress={state.editing ? handleImagePick : undefined}
+              disabled={!state.editing || state.uploading}
+              activeOpacity={state.editing ? 0.7 : 1}
             >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.button,
-                styles.saveButton,
-                state.saving && styles.saveButtonDisabled,
-              ]}
-              onPress={handleSave}
-              disabled={state.saving}
-            >
-              {state.saving ? (
-                <ActivityIndicator color="#fff" size="small" />
+              {formData.profile_picture ? (
+                <Image
+                  source={{ uri: formData.profile_picture }}
+                  style={[styles.avatar, { borderColor: theme.colors.primary[500] }]}
+                />
               ) : (
-                <Text style={styles.saveButtonText}>Save Changes</Text>
+                <View
+                  style={[
+                    styles.avatarFallback,
+                    { backgroundColor: theme.colors.primary[500] },
+                  ]}
+                >
+                  <Text style={styles.avatarInitials}>
+                    {getInitials(formData.full_name || 'A')}
+                  </Text>
+                </View>
+              )}
+              {state.editing && (
+                <View
+                  style={[
+                    styles.editIconBtn,
+                    { backgroundColor: theme.colors.primary[500] },
+                  ]}
+                >
+                  {state.uploading ? (
+                    <ActivityIndicator color="#fff" size="small" />
+                  ) : (
+                    <Feather
+                      name="camera"
+                      size={16}
+                      color={theme.colors.text?.inverse || '#fff'}
+                    />
+                  )}
+                </View>
               )}
             </TouchableOpacity>
           </View>
-        )}
 
-        {/* Logout Button */}
-        {!state.editing && (
-          <View style={styles.logoutContainer}>
-            <TouchableOpacity
-              style={styles.logoutButton}
-              onPress={handleLogout}
-              disabled={state.saving}
-            >
-              <Text style={styles.logoutButtonText}>Logout</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+          {state.editing ? (
+            <View style={{ width: '100%', marginTop: 8 }}>
+              <Input
+                placeholder="Full Name"
+                value={formData.full_name}
+                onChangeText={text => {
+                  setFormData(prev => ({ ...prev, full_name: text }));
+                  if (errors.full_name) {
+                    setErrors(prev => ({ ...prev, full_name: undefined }));
+                  }
+                }}
+                error={errors.full_name}
+                style={styles.input}
+              />
+            </View>
+          ) : (
+            <>
+              <Text style={styles.name}>{formData.full_name || 'Admin'}</Text>
+              <Text variant="caption" color="secondary" style={styles.memberSince}>
+                {/* Admin doesn't have memberSince in this screen; keep spacing consistent */}
+              </Text>
+            </>
+          )}
+        </View>
       </View>
+
+      {/* Personal Info Section */}
+      <Container variant="card" style={styles.sectionCard}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Personal Info</Text>
+          {!state.editing && (
+            <TouchableOpacity onPress={handleEdit} disabled={state.saving}>
+              <Feather name="edit-2" size={18} color={theme.colors.primary[500]} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <Section title="" style={{ marginTop: 0 }}>
+          {state.editing ? (
+            <View style={styles.formContainer}>
+              <Input
+                label="Email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChangeText={text => {
+                  setFormData(prev => ({ ...prev, email: text }));
+                  if (errors.email) {
+                    setErrors(prev => ({ ...prev, email: undefined }));
+                  }
+                }}
+                error={errors.email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={styles.input}
+              />
+
+              <Input
+                label="Phone"
+                placeholder="Enter your phone number"
+                value={formData.phone}
+                onChangeText={text => {
+                  setFormData(prev => ({ ...prev, phone: text }));
+                  if (errors.phone) {
+                    setErrors(prev => ({ ...prev, phone: undefined }));
+                  }
+                }}
+                error={errors.phone}
+                keyboardType="phone-pad"
+                style={styles.input}
+              />
+            </View>
+          ) : (
+            <>
+              <View style={styles.infoRow}>
+                <Feather
+                  name="mail"
+                  size={16}
+                  color={theme.colors.primary[500]}
+                  style={styles.infoIcon}
+                />
+                <Text variant="body2" color="secondary" style={styles.infoLabel}>
+                  Email
+                </Text>
+                <Text variant="body2" style={styles.infoValue}>
+                  {formData.email}
+                </Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Feather
+                  name="phone"
+                  size={16}
+                  color={theme.colors.primary[500]}
+                  style={styles.infoIcon}
+                />
+                <Text variant="body2" color="secondary" style={styles.infoLabel}>
+                  Phone
+                </Text>
+                <Text variant="body2" style={styles.infoValue}>
+                  {formData.phone}
+                </Text>
+              </View>
+            </>
+          )}
+
+          {/* Action Buttons for Edit Mode */}
+          {state.editing && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={handleCancel}
+                disabled={state.saving}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  styles.saveButton,
+                  state.saving && styles.saveButtonDisabled,
+                ]}
+                onPress={handleSave}
+                disabled={state.saving}
+              >
+                {state.saving ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Text style={styles.saveButtonText}>Save Changes</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
+        </Section>
+      </Container>
+
+      {/* Logout Button */}
+      {!state.editing && (
+        <View style={styles.logoutContainer}>
+          <TouchableOpacity
+            style={[styles.logoutButton, { backgroundColor: theme.colors.error[500] }]}
+            activeOpacity={0.7}
+            onPress={handleLogout}
+            disabled={state.saving}
+          >
+            <Feather name="log-out" size={20} color="#fff" />
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  topBg: {
+    width: '100%',
+    paddingTop: 32,
+    paddingBottom: 24,
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 4,
   },
-  editButton: {
-    backgroundColor: theme.colors.primary[500],
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
+  profileCard: {
+    alignItems: 'center',
+    padding: 16,
+    width: '90%',
+    marginTop: 0,
+    marginBottom: 0,
   },
-  editButtonText: {
+  avatarWrapper: {
+    width: 88,
+    height: 88,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    zIndex: 2,
+  },
+  avatarFallback: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2,
+  },
+  avatarInitials: {
+    fontSize: 28,
     color: '#fff',
     fontWeight: '600',
-    fontSize: 14,
   },
-  profileContainer: {
-    flex: 1,
+  editIconBtn: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    borderRadius: 12,
+    padding: 6,
+    zIndex: 3,
   },
-  profilePictureContainer: {
-    alignItems: 'center',
-    marginBottom: 32,
+  name: {
+    marginBottom: 0,
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: 18,
+    letterSpacing: 0.2,
   },
-  profilePicture: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: theme.colors.primary[500],
+  memberSince: {
+    marginBottom: 0,
+    fontSize: 12,
   },
-  profilePicturePlaceholder: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: theme.colors.primary[100],
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
-    borderColor: theme.colors.primary[500],
-  },
-  profilePicturePlaceholderText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: theme.colors.primary[500],
+  sectionCard: {
+    marginHorizontal: 0,
+    marginVertical: 8,
   },
   formContainer: {
     gap: 16,
@@ -544,11 +639,28 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 8,
   },
+  infoRow: {
+    marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  infoIcon: {
+    marginRight: 12,
+  },
+  infoLabel: {
+    minWidth: 60,
+    marginRight: 0,
+    fontSize: 13,
+  },
+  infoValue: {
+    flex: 1,
+    textAlign: 'left',
+    fontSize: 13,
+  },
   buttonContainer: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 32,
-    marginBottom: 24,
+    marginTop: 24,
   },
   button: {
     flex: 1,
@@ -561,10 +673,10 @@ const styles = StyleSheet.create({
   cancelButton: {
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: theme.colors.neutral[300],
+    borderColor: '#ddd',
   },
   cancelButtonText: {
-    color: theme.colors.neutral[700],
+    color: '#666',
     fontWeight: '600',
     fontSize: 16,
   },
@@ -579,44 +691,35 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
   },
-  cameraIconContainer: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: theme.colors.primary[500],
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
-    borderColor: '#fff',
-  },
-  cameraIcon: {
-    fontSize: 20,
-  },
-  uploadHint: {
-    marginTop: 8,
-    fontSize: 12,
-    color: theme.colors.neutral[500],
-    textAlign: 'center',
-  },
   logoutContainer: {
-    marginTop: 32,
-    marginBottom: 24,
+    padding: 16,
+    marginTop: 8,
   },
   logoutButton: {
-    backgroundColor: theme.colors.error[500],
-    paddingVertical: 14,
-    borderRadius: 8,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 48,
+    paddingVertical: 14,
+    borderRadius: 8,
+    gap: 8,
   },
   logoutButtonText: {
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#222',
   },
 });
 
