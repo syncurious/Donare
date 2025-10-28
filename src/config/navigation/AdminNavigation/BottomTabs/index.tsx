@@ -4,7 +4,7 @@ import AdminDashboard from '../../../../screens/admin/dashboard';
 import AdminVolunteerApplications from '../../../../screens/admin/volunteers';
 import DonationHistory from '../../../../screens/admin/donation/DonationHistory';
 import HelpRequest from '../../../../screens/admin/Request/HelpRequest';
-import AdminProfile from '../../../../screens/admin/profile';
+import AdminProfile from '../../../../screens/admin/Profile';
 
 const Tab = createBottomTabNavigator();
 const AdminBottomNavigation = () => {
