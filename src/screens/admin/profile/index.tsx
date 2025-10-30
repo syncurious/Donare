@@ -16,6 +16,7 @@ import Text from '../../../components/base/Text';
 import Input from '../../../components/base/Input';
 import Feather from 'react-native-vector-icons/Feather';
 import theme from '../../../config/theme';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import {
   GetUserProfile,
   UpdateUserProfile,
@@ -45,6 +46,7 @@ interface FormData {
 
 const AdminProfile = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const [state, setState] = useState<ProfileState>({
     profile: null,
@@ -550,6 +552,57 @@ const AdminProfile = () => {
         </Section>
       </Container>
 
+      {/* Admin Shortcuts */}
+      {!state.editing && (
+        <Container variant="card" style={styles.sectionCard}>
+{/*          <Section style={{ marginVertical: 0 }} title="Shortcuts"> */}
+            <TouchableOpacity
+              style={styles.listRow}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('Dashboard' as never)}
+            >
+              <Text variant="body2" style={styles.listRowText}>
+                Go to Dashboard
+              </Text>
+              <Feather name="chevron-right" size={20} color={theme.colors.primary[500]} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.listRow}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('VolunteersList' as never)}
+            >
+              <Text variant="body2" style={styles.listRowText}>
+                Volunteers
+              </Text>
+              <Feather name="chevron-right" size={20} color={theme.colors.primary[500]} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.listRow}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('HelpRequest' as never)}
+            >
+              <Text variant="body2" style={styles.listRowText}>
+                Help Requests
+              </Text>
+              <Feather name="chevron-right" size={20} color={theme.colors.primary[500]} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.listRow}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('DonationList' as never)}
+            >
+              <Text variant="body2" style={styles.listRowText}>
+                Donations
+              </Text>
+              <Feather name="chevron-right" size={20} color={theme.colors.primary[500]} />
+            </TouchableOpacity>
+          {/* </Section> */}
+        </Container>
+      )}
+
       {/* Logout Button */}
       {!state.editing && (
         <View style={styles.logoutContainer}>
@@ -719,6 +772,22 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
+    color: '#222',
+  },
+  listRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+    marginTop: 2,
+    marginBottom: 2,
+  },
+  listRowText: {
+    fontWeight: '500',
+    fontSize: 15,
     color: '#222',
   },
 });
