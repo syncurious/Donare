@@ -63,6 +63,12 @@ type UserStackParamList = {
       donorPhone?: string;
       pickupAddress?: string;
       amount?: string;
+      // ManualAmountEntry (in-kind) fields
+      name?: string;
+      phone?: string;
+      address?: string;
+      description?: string;
+      item_image?: string;
     };
     isInKind?: boolean;
   };

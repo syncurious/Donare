@@ -156,8 +156,7 @@ const DonationHistory = () => {
                 style={{ textAlign: 'center' }}
               >
                 {selectedType === 'All'
-                  ? "You haven't made any donations yet."
-                  : `No ${selectedType.toLowerCase()} donations found.`}
+                  ? "You haven't made any donations yet."                  : `No ${selectedType?.toLowerCase()} donations found.`}
               </Text>
             </View>
           ) : (
@@ -185,7 +184,7 @@ const DonationHistory = () => {
                         color="primary"
                         style={{ marginBottom: 4 }}
                       >
-                        PKR {donation.amount.toFixed(2)}
+                        PKR {donation?.amount?.toFixed(2)}
                       </Text>
                       <Text
                         variant="caption"
