@@ -107,7 +107,7 @@ const PaymentConfirmation = () => {
           ? `You are about to donate ${
               kindFields?.itemName || 'items'
             } as ${donationType} in kind. Our team will contact you for pickup.`
-          : `You are about to donate PKR ${donationAmount} for ${donationType} using ${paymentMethod}.`
+          : `You are about to donate PKR ${donationAmount?.toFixed(2)} for ${donationType} using ${paymentMethod}.`
       }
       benefits={[]}
       buttonText={loading ? 'Processing...' : 'Pay Now'}
