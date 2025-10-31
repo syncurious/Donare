@@ -184,13 +184,7 @@ const DonationHistory = () => {
                         color="primary"
                         style={{ marginBottom: 4 }}
                       >
-                        PKR {donation?.amount?.toFixed(2)}
-                      </Text>
-                      <Text
-                        variant="caption"
-                        style={{ color: getStatusColor(donation.status) }}
-                      >
-                        {donation.status}
+                        PKR {donation?.amount?.toFixed(2) || donation?.zakat_assets_value?.toFixed(2)}
                       </Text>
                     </View>
                   }

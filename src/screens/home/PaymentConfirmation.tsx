@@ -43,7 +43,7 @@ const PaymentConfirmation = () => {
           is_in_kind: true,
           // If using Zakat in-kind, keep zakat related fields;
           zakat_year: new Date().getFullYear(),
-          zakat_calculation_method: kindFields?.calculationMethod || undefined,
+          zakat_calculation_method: kindFields?.calculationMethod || 'CASH',
           zakat_assets_value: kindFields?.assetsValue
             ? parseFloat(kindFields.assetsValue)
             : donationAmount || undefined,
