@@ -19,7 +19,7 @@ import { donationCoinIcon } from '../../assets/icons';
 import { GetDonations } from '../../service/handler';
 import { showToast } from '../../utils/toast';
 
-const DONATION_TYPES = ['All', 'ZAKAT', 'SADAQAH', 'FITRAH', 'FIDYAH'];
+const DONATION_TYPES = ['All', 'ZAKAT', 'SADAQAH', 'OTHER'];
 
 interface Donation {
   id: string;
