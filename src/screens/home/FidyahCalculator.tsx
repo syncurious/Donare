@@ -101,8 +101,8 @@ const FidyahCalculator: React.FC = () => {
         flexGrow: 1,
         backgroundColor: theme.colors.background.primary,
         paddingHorizontal: 0,
-paddingBottom:200
       }}
+      contentContainerStyle={{ paddingBottom: 50 }}
     >
       {/* Food Select Modal */}
       <Modal visible={modalVisible} onClose={() => setModalVisible(false)}>
