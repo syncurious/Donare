@@ -31,6 +31,10 @@ const ZakatSummary = () => {
   const home = homeAssets ? JSON.parse(homeAssets) : {};
   const business = businessAssets ? JSON.parse(businessAssets) : {};
 
+  // Extract zakat calculation info
+  const zakatType = home.zakatType || 'sunni';
+  const shiaRate = home.shiaRate || '5';
+
   // Calculate totals
   const homeTotal =
     (parseFloat(home.cash) || 0) +
@@ -43,7 +47,19 @@ const ZakatSummary = () => {
     (parseFloat(business.investments) || 0) +
     (parseFloat(business.otherBusinessAssets) || 0);
   const totalAssets = homeTotal + businessTotal;
-  const zakat = totalAssets * 0.025;
+  
+  // Calculate zakat based on type
+  let zakat = 0;
+  let zakatRateText = '';
+  
+  if (zakatType === 'sunni') {
+    zakat = totalAssets * 0.025; // 2.5%
+    zakatRateText = '2.5%';
+  } else if (zakatType === 'shia') {
+    const rate = parseFloat(shiaRate) / 100;
+    zakat = totalAssets * rate;
+    zakatRateText = `${shiaRate}%`;
+  }
 
   return (
     <View style={styles.root}>
@@ -221,10 +237,12 @@ const ZakatSummary = () => {
                 amount: zakat.toString(),
                 donationType: 'ZAKAT',
                 zakatData: {
-                  calculationMethod: 'CASH',
+                  calculationMethod: zakatType === 'sunni' ? 'SUNNI_2.5' : `SHIA_${shiaRate}`,
                   assetsValue: totalAssets.toString(),
                   homeAssets: home,
                   businessAssets: business,
+                  zakatType,
+                  shiaRate: zakatType === 'shia' ? shiaRate : undefined,
                 },
                 isInKind: false,
               })
@@ -236,7 +254,7 @@ const ZakatSummary = () => {
                 {zakat.toLocaleString(undefined, { maximumFractionDigits: 2 })}
               </Paragraph>
               <Paragraph variant="caption" color="secondary">
-                Is Your Zakat Which is 2.5% of your total assets
+                Is Your Zakat ({zakatType === 'sunni' ? 'Sunni' : 'Shia'}) - {zakatRateText} of your total assets
               </Paragraph>
             </View>
             <Feather
