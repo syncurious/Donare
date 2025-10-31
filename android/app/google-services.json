@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "694002077531",
+    "project_id": "donare-86c6f",
+    "storage_bucket": "donare-86c6f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694002077531:android:100d07458eabbeffc9147e",
+        "android_client_info": {
+          "package_name": "com.donare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTXFCvIF90nyb3MsST_UwC2vN27NCuj4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

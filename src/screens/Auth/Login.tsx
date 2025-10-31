@@ -13,6 +13,7 @@ import { Login } from '../../service/handler';
 import { useDispatch } from 'react-redux';
 import { setProfile } from '../../store/reducers/profile';
 import { showToast } from '../../utils/toast';
+import { initializeFirebaseMessaging } from '../../utils/firebase';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -28,9 +29,18 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = (await Login(payload)) as any;
+      // Get FCM token before login
+      const fcmToken = await initializeFirebaseMessaging();
+      
+      // Add FCM token to login payload
+      const loginPayload = {
+        ...payload,
+        fcm_token: fcmToken,
+      };
+
+      const response = (await Login(loginPayload)) as any;
       dispatch(setProfile(response?.data));
-      showToast('success', 'Login Succes');
+      showToast('success', 'Login Success');
     } catch (error: any) {
       showToast('error', error.message || 'Login failed. Please try again.');
     }
