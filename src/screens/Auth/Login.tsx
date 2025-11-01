@@ -9,19 +9,18 @@ import theme from '../../config/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import logoPng from '../../assets/images/logoWihtoutText.png';
-import facebookPng from '../../assets/icons/facebookIcon.png';
-import googlePng from '../../assets/icons/googleIcon.png';
 import { Login } from '../../service/handler';
 import { useDispatch } from 'react-redux';
 import { setProfile } from '../../store/reducers/profile';
 import { showToast } from '../../utils/toast';
+import { initializeFirebaseMessaging } from '../../utils/firebase';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [payload, setPayload] = useState({
-    email: 'aqib@gmail.com',
-    password: '123456',
+    email: '',
+    password: '',
   });
 
   const handleInputChange = (key: 'email' | 'password', value: string) => {
@@ -30,9 +29,22 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = (await Login(payload)) as any;
-      dispatch(setProfile(response?.data));
-      showToast('success', 'Login Succes');
+      // Get FCM token before login
+      const fcmToken = await initializeFirebaseMessaging();
+
+      // Add FCM token to login payload
+      const loginPayload = {
+        ...payload,
+        fcm_token: fcmToken,
+      };
+
+      const response = (await Login(loginPayload)) as any;
+      if (response?.status) {
+        dispatch(setProfile(response?.data));
+        showToast('success', 'Login Success');
+      } else {
+        showToast('error', response?.message || 'Login failed. Please try again.');
+      }
     } catch (error: any) {
       showToast('error', error.message || 'Login failed. Please try again.');
     }
@@ -92,23 +104,6 @@ const LoginScreen = () => {
         >
           Login
         </Button>
-        {/* Social Login */}
-        <View style={styles.socialRow}>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={facebookPng}
-              style={styles.socialIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={googlePng}
-              style={styles.socialIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
       </View>
       {/* Sign Up Prompt */}
       <View style={styles.signupRow}>

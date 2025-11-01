@@ -22,6 +22,7 @@ import AddCause from '../../../screens/home/AddCause';
 import QuickDonate from '../../../screens/home/QuickDonate';
 import ViewVolunteer from '../../../screens/profile/viewvolunteer';
 import RequestDetails from '../../../screens/profile/RequestDetails';
+import ZakatGuidance from '../../../screens/home/ZakatGuidance';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -63,6 +64,12 @@ type UserStackParamList = {
       donorPhone?: string;
       pickupAddress?: string;
       amount?: string;
+      // ManualAmountEntry (in-kind) fields
+      name?: string;
+      phone?: string;
+      address?: string;
+      description?: string;
+      item_image?: string;
     };
     isInKind?: boolean;
   };
@@ -77,6 +84,7 @@ type UserStackParamList = {
   AddCause: undefined;
   QuickDonate: undefined;
   RequestDetails: { request: any }; 
+  ZakatGuidance: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -97,6 +105,15 @@ const UserNavigation = () => {
           title: 'Volunteer Form',
         }}
         component={VolunteerFrom}
+      />
+      <Stack.Screen
+        name="ZakatGuidance"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Zakat Guidance',
+        }}
+        component={ZakatGuidance}
       />
       <Stack.Screen
         name="ViewVolunteer"

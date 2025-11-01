@@ -14,6 +14,8 @@ import {
 } from '@react-navigation/native';
 import ReminderCard from '../../components/cards/ReminderCard';
 import Text from '../../components/base/Text';
+import ImagePicker from 'react-native-image-crop-picker';
+import { FileUpload } from '../../service/handler';
 
 interface ManualAmountEntryProps {
   donationType?: 'Sadaqah' | 'Kaffarah' | 'Zakat' | 'Fidyah';
@@ -36,6 +38,7 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
     phone: '',
     address: '',
     description: '',
+    item_image: '',
   });
 
   // Prefer prop, then route param, then default
@@ -67,7 +70,7 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
       amount: isKindSelected ? undefined : amount,
       paymentMethod: 'CASH',
       kindFields: isKindSelected ? kindFields : undefined,
-      isKindSelected,
+      isInKind: isKindSelected,
     });
   };
 
@@ -76,12 +79,46 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
   };
 
   const handleKindSelect = () => {
-    setIsKindSelected(true);
+    setIsKindSelected(!isKindSelected);
     setAmount('');
   };
   const handleAmountChange = (val: string) => {
     setAmount(val);
     if (isKindSelected) setIsKindSelected(false);
+  };
+
+  const handleUploadImage = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        width: 800,
+        height: 800,
+        cropping: false,
+        mediaType: 'photo',
+        compressImageQuality: 0.8,
+      });
+
+      if (image) {
+        const form = new FormData();
+        form.append('image', {
+          uri: image.path,
+          type: image.mime || 'image/jpeg',
+          name: (image as any).filename || `donation_${Date.now()}.jpg`,
+        } as any);
+
+        const res: any = await FileUpload(form);
+
+        let mediaUrl: string | null = null;
+        if (res?.data?.url) mediaUrl = res.data.url;
+        else if (res?.url) mediaUrl = res.url;
+        else if (res?.data?.file?.url) mediaUrl = res.data.file.url;
+
+        if (mediaUrl) {
+          setKindFields(f => ({ ...f, item_image: mediaUrl }));
+        }
+      }
+    } catch (error: any) {
+      // ignore cancel
+    }
   };
 
   return (
@@ -134,11 +171,12 @@ const ManualAmountEntry: React.FC<ManualAmountEntryProps> = props => {
                   : '#E0E0E0',
                 borderWidth: isKindSelected ? 2 : 1,
               }}
-              buttonAction={() => {}}
+              buttonAction={handleUploadImage}
               buttonText="Upload Image"
               title="Donate in Kind"
               description="Share an image of the goods you wish to donate"
               image={
+                kindFields.item_image ||
                 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'
               }
             />

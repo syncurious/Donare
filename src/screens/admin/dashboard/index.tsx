@@ -27,7 +27,7 @@ interface DashboardState {
 
 const AdminDashboard = () => {
   const navigation =
-    useNavigation<NativeStackNavigationProp<AdminStackParamList>>();
+    useNavigation<any>();
   
   const [state, setState] = useState<DashboardState>({
     stats: null,
@@ -138,31 +138,11 @@ const AdminDashboard = () => {
     if (!state.stats) return [];
     
     const activities = [];
-    
-    // Add volunteer activities
-    if (state.stats.recent_activity.volunteers_last_7_days > 0) {
-      activities.push({
-        name: `${state.stats.recent_activity.volunteers_last_7_days} New Volunteer${state.stats.recent_activity.volunteers_last_7_days > 1 ? 's' : ''}`,
-        type: 'Volunteer Application',
-        action: 'volunteerApplication',
-      });
-    }
-    
-    // Add donation activities
-    if (state.stats.recent_activity.donations_last_7_days > 0) {
-      activities.push({
-        name: `${state.stats.recent_activity.donations_last_7_days} New Donation${state.stats.recent_activity.donations_last_7_days > 1 ? 's' : ''}`,
-        type: 'Donation Received',
-        action: 'donationReceived',
-      });
-    }
-    
-    // Add help request activities
+     
     if (state.stats.recent_activity.help_requests_last_7_days > 0) {
       activities.push({
         name: `${state.stats.recent_activity.help_requests_last_7_days} New Help Request${state.stats.recent_activity.help_requests_last_7_days > 1 ? 's' : ''}`,
-        type: 'Help Request',
-        action: 'helpRequest',
+        action: 'HelpRequest',
       });
     }
     
@@ -246,7 +226,7 @@ const AdminDashboard = () => {
                 }}
                 key={idx}
                 onPress={() =>
-                  navigation.navigate('RequestDetails', { requestId: '12345' })
+                  navigation.navigate('HelpRequest')
                 }
                 activeOpacity={0.8}
               >

@@ -19,7 +19,7 @@ import { donationCoinIcon } from '../../assets/icons';
 import { GetDonations } from '../../service/handler';
 import { showToast } from '../../utils/toast';
 
-const DONATION_TYPES = ['All', 'ZAKAT', 'SADAQAH', 'FITRAH', 'FIDYAH'];
+const DONATION_TYPES = ['All', 'ZAKAT', 'SADAQAH', 'OTHER'];
 
 interface Donation {
   id: string;
@@ -156,8 +156,7 @@ const DonationHistory = () => {
                 style={{ textAlign: 'center' }}
               >
                 {selectedType === 'All'
-                  ? "You haven't made any donations yet."
-                  : `No ${selectedType.toLowerCase()} donations found.`}
+                  ? "You haven't made any donations yet."                  : `No ${selectedType?.toLowerCase()} donations found.`}
               </Text>
             </View>
           ) : (
@@ -185,13 +184,7 @@ const DonationHistory = () => {
                         color="primary"
                         style={{ marginBottom: 4 }}
                       >
-                        PKR {donation.amount.toFixed(2)}
-                      </Text>
-                      <Text
-                        variant="caption"
-                        style={{ color: getStatusColor(donation.status) }}
-                      >
-                        {donation.status}
+                        PKR {donation?.amount?.toFixed(2) || donation?.zakat_assets_value?.toFixed(2)}
                       </Text>
                     </View>
                   }

@@ -83,9 +83,9 @@ const FidyahCalculator: React.FC = () => {
     }
     setError(undefined);
     navigation.navigate('PaymentConfirmation', {
-      donationType: 'Fidyah',
+      donationType: 'OTHER',
       amount: Number(days) * Number(customRate),
-      paymentMethod: '',
+      paymentMethod: 'CASH',
     });
   };
 
@@ -98,10 +98,11 @@ const FidyahCalculator: React.FC = () => {
     <Container
       scrollable
       style={{
-        flex: 1,
+        flexGrow: 1,
         backgroundColor: theme.colors.background.primary,
         paddingHorizontal: 0,
       }}
+      contentContainerStyle={{ paddingBottom: 50 }}
     >
       {/* Food Select Modal */}
       <Modal visible={modalVisible} onClose={() => setModalVisible(false)}>

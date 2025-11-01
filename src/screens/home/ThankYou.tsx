@@ -13,6 +13,11 @@ const ThankYou = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute<RouteProp<UserStackParamList, 'ThankYou'>>();
   const { donationType, amount } = route.params || {};
+  const numericAmount =
+    typeof amount === 'number' ? amount : typeof amount === 'string' ? parseFloat(amount) : 0;
+  const formattedAmount = Number.isFinite(numericAmount)
+    ? numericAmount.toFixed(2)
+    : '0.00';
 
   return (
     <BenefitsCard
@@ -20,7 +25,7 @@ const ThankYou = () => {
       title="Thank Your Donation"
       description={`Your ${
         donationType ? donationType : 'donation'
-      } of $${amount} has been received.`}
+      } of PKR ${formattedAmount} has been received.`}
       sectionTitle=""
       buttonText="Back To Home"
       benefits={[]}

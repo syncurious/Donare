@@ -67,7 +67,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, theme }) => {
               </Text>
             </View>
           )}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[
               styles.editIconBtn,
               { backgroundColor: theme.colors.primary[500] },
@@ -79,7 +79,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, theme }) => {
               size={16}
               color={theme.colors.text.inverse}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <Heading level={2} style={styles.name}>
           {user?.fullName || ''}

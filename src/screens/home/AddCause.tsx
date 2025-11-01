@@ -36,10 +36,9 @@ const AddCause = () => {
   };
 
   const pickAndSetMedia = async () => {
-    // Reset previous media first
     resetMedia();
     setLoading(true);
-    
+
     try {
       const result = await pickImage({
         cropping: false,
@@ -53,8 +52,6 @@ const AddCause = () => {
           type: (isVideo ? 'video' : 'image') as 'image' | 'video',
         };
         setPayload(prev => ({ ...prev, media: mediaData }));
-
-        // Upload media to server
         await uploadMedia(result);
       } else {
         showToast('error', 'No media selected');
@@ -80,8 +77,7 @@ const AddCause = () => {
 
       const response = (await FileUpload(formData)) as any;
       console.log('Upload response:', response);
-      
-      // Handle different possible response structures
+
       let mediaUrl = null;
       if (response?.data?.url) {
         mediaUrl = response.data.url;
@@ -158,136 +154,132 @@ const AddCause = () => {
 
   return (
     <Container scrollable contentContainerStyle={styles.root} padding="large">
-      <Heading level={4} style={styles.title}>
-        Add New Cause
-      </Heading>
-      <View style={styles.formContainer}>
-        <Input
-          label="Title"
-          placeholder="Enter title"
-          value={payload.title}
-          onChangeText={text => handleInputChange('title', text)}
-          variant="outlined"
-          style={styles.input}
-          inputStyle={{ fontSize: 16 }}
-        />
-        <Input
-          label="Description"
-          placeholder="Enter description"
-          value={payload.description}
-          onChangeText={text => handleInputChange('description', text)}
-          variant="outlined"
-          style={styles.input}
-          inputStyle={{ fontSize: 16 }}
-          multiline
-          numberOfLines={4}
-        />
-        <View style={styles.uploadSection}>
-          <Button
-            onPress={pickAndSetMedia}
-            loading={loading}
-            style={styles.uploadButton}
+      <View style={styles.content}>
+        <View style={styles.formContainer}>
+          <Input
+            label="Title"
+            placeholder="Enter title"
+            value={payload.title}
+            onChangeText={text => handleInputChange('title', text)}
             variant="outlined"
-            color="primary"
-          >
-            {loading
-              ? 'Uploading...'
-              : payload.uploadedMediaUrl
-              ? 'Media Uploaded ✓'
-              : 'Upload Image or Video'}
-          </Button>
-          {payload.media && !payload.uploadedMediaUrl && !loading && (
+            style={styles.input}
+            inputStyle={{ fontSize: 16 }}
+          />
+          <Input
+            label="Description"
+            placeholder="Enter description"
+            value={payload.description}
+            onChangeText={text => handleInputChange('description', text)}
+            variant="outlined"
+            style={styles.input}
+            inputStyle={{ fontSize: 16 }}
+            multiline
+            numberOfLines={4}
+          />
+          <View style={styles.uploadSection}>
             <Button
-              onPress={() => uploadMedia(payload.media)}
-              style={styles.retryButton}
+              onPress={pickAndSetMedia}
+              loading={loading}
+              style={styles.uploadButton}
               variant="outlined"
-              color="secondary"
+              color="primary"
             >
-              Retry Upload
+              {loading
+                ? 'Uploading...'
+                : payload.uploadedMediaUrl
+                ? 'Media Uploaded ✓'
+                : 'Upload Image or Video'}
             </Button>
+            {payload.media && !payload.uploadedMediaUrl && !loading && (
+              <Button
+                onPress={() => uploadMedia(payload.media)}
+                style={styles.retryButton}
+                variant="outlined"
+                color="secondary"
+              >
+                Retry Upload
+              </Button>
+            )}
+          </View>
+          {payload.media && payload.media.type === 'image' && (
+            <View style={styles.mediaContainer}>
+              <Image
+                source={{ uri: payload.media.uri }}
+                style={styles.imagePreview}
+              />
+              {loading && <Text style={styles.uploadStatus}>Uploading...</Text>}
+              {!loading && !payload.uploadedMediaUrl && payload.media && (
+                <Text style={styles.uploadError}>
+                  Upload failed - Try again
+                </Text>
+              )}
+              {payload.uploadedMediaUrl && (
+                <Text style={styles.uploadSuccess}>
+                  ✓ Uploaded Successfully
+                </Text>
+              )}
+            </View>
+          )}
+          {payload.media && payload.media.type === 'video' && (
+            <View style={styles.mediaContainer}>
+              <View style={styles.videoPreview}>
+                <TouchableOpacity
+                  onPress={() => setShowVideo(true)}
+                  style={styles.videoOverlay}
+                />
+                <Video
+                  fullscreen={showVideo}
+                  source={{ uri: payload.media.uri }}
+                  style={styles.video}
+                  controls={showVideo}
+                  resizeMode="cover"
+                  paused={!showVideo}
+                />
+              </View>
+              {loading && <Text style={styles.uploadStatus}>Uploading...</Text>}
+              {!loading && !payload.uploadedMediaUrl && payload.media && (
+                <Text style={styles.uploadError}>
+                  Upload failed - Try again
+                </Text>
+              )}
+              {payload.uploadedMediaUrl && (
+                <Text style={styles.uploadSuccess}>
+                  ✓ Uploaded Successfully
+                </Text>
+              )}
+            </View>
           )}
         </View>
-        {payload.media && payload.media.type === 'image' && (
-          <View style={styles.mediaContainer}>
-            <Image
-              source={{ uri: payload.media.uri }}
-              style={styles.imagePreview}
-            />
-            {loading && (
-              <Text style={styles.uploadStatus}>Uploading...</Text>
-            )}
-            {!loading && !payload.uploadedMediaUrl && payload.media && (
-              <Text style={styles.uploadError}>Upload failed - Try again</Text>
-            )}
-            {payload.uploadedMediaUrl && (
-              <Text style={styles.uploadSuccess}>✓ Uploaded Successfully</Text>
-            )}
-          </View>
-        )}
-        {payload.media && payload.media.type === 'video' && (
-          <View style={styles.mediaContainer}>
-            <View style={styles.videoPreview}>
-              <TouchableOpacity
-                onPress={() => setShowVideo(true)}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  position: 'absolute',
-                  zIndex: 500,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              />
-              <Video
-                fullscreen={showVideo}
-                source={{ uri: payload.media.uri }}
-                style={{ width: '100%', height: '100%' }}
-                controls={showVideo}
-                resizeMode="cover"
-                paused={!showVideo}
-              />
-            </View>
-            {loading && (
-              <Text style={styles.uploadStatus}>Uploading...</Text>
-            )}
-            {!loading && !payload.uploadedMediaUrl && payload.media && (
-              <Text style={styles.uploadError}>Upload failed - Try again</Text>
-            )}
-            {payload.uploadedMediaUrl && (
-              <Text style={styles.uploadSuccess}>✓ Uploaded Successfully</Text>
-            )}
-          </View>
-        )}
-        <Button
-          onPress={handleSubmit}
-          loading={submitting}
-          style={styles.submitButton}
-          variant="contained"
-          color="primary"
-          size="large"
-        >
-          {submitting ? 'Creating Cause...' : 'Submit'}
-        </Button>
       </View>
+      <Button
+        onPress={handleSubmit}
+        loading={submitting}
+        style={styles.submitButton}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
+        {submitting ? 'Creating Cause...' : 'Submit'}
+      </Button>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
   root: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
   },
   title: {
-    fontSize: 36,
-    marginTop: 12,
-    alignSelf: 'flex-start',
+    fontSize: 28,
     fontWeight: 'bold',
     color: theme.colors.text.primary,
-    marginBottom: 24,
+    marginBottom: 20,
   },
   formContainer: {
-    gap: 12,
+    gap: 16,
     width: '100%',
   },
   input: {
@@ -297,8 +289,7 @@ const styles = StyleSheet.create({
   },
   uploadSection: {
     width: '100%',
-    marginTop: 12,
-    gap: 8,
+    gap: 12,
   },
   uploadButton: {
     width: '100%',
@@ -309,22 +300,23 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   mediaContainer: {
+    width: '100%',
     alignItems: 'center',
-    marginVertical: 16,
+    marginTop: 8,
   },
   imagePreview: {
-    width: 120,
-    height: 120,
-    borderRadius: 16,
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
     marginBottom: 8,
   },
   videoPreview: {
     width: '100%',
-    position: 'relative',
     height: 200,
-    borderRadius: 16,
+    borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 8,
+    backgroundColor: '#000',
   },
   uploadStatus: {
     color: theme.colors.warning[600],
@@ -343,9 +335,21 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     width: '100%',
-    marginTop: 12,
-    borderRadius: 15,
+    marginTop: 16,
+    borderRadius: 12,
     backgroundColor: theme.colors.primary[500],
+  },
+  videoOverlay: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    zIndex: 500,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  video: {
+    width: '100%',
+    height: '100%',
   },
 });
 

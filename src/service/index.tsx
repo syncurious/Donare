@@ -5,7 +5,7 @@ import axios, {
 } from 'axios';
 import { store } from '../store';
 
-export const baseURL = 'http://54.255.168.207:3001/api/';
+export const baseURL = 'https://donare.backend.syncurious.com/api/';
 
 interface ApiHandlerConfig {
   isMultipart?: boolean;

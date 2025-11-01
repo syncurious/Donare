@@ -37,18 +37,24 @@ const PaymentConfirmation = () => {
       let payload: any;
 
       if (isInKind) {
-        // Zakat in kind payload
+        // In-kind payload (supports both Zakat and manual in-kind flow)
         payload = {
           donation_type: donationType,
-          zakat_year: new Date().getFullYear(),
-          zakat_calculation_method: kindFields?.calculationMethod || 'SILVER',
-          zakat_assets_value: donationAmount,
           is_in_kind: true,
-          item_name: kindFields?.itemName || '',
-          donor_name: kindFields?.donorName || '',
-          donor_phone: kindFields?.donorPhone || '',
-          pickup_address: kindFields?.pickupAddress || '',
-        };
+          // If using Zakat in-kind, keep zakat related fields;
+          zakat_year: new Date().getFullYear(),
+          zakat_calculation_method: kindFields?.calculationMethod || 'CASH',
+          zakat_assets_value: kindFields?.assetsValue
+            ? parseFloat(kindFields.assetsValue)
+            : donationAmount || undefined,
+          // Unified mapping for names/contacts from various flows
+          item_name: kindFields?.itemName || kindFields?.name || '',
+          donor_name: kindFields?.donorName || kindFields?.name || '',
+          donor_phone: kindFields?.donorPhone || kindFields?.phone || '',
+          pickup_address: kindFields?.pickupAddress || kindFields?.address || '',
+          // Uploaded image URL from ManualAmountEntry
+          item_image: kindFields?.item_image,
+        } as any;
       } else {
         // Zakat in amount payload
         payload = {
@@ -101,7 +107,7 @@ const PaymentConfirmation = () => {
           ? `You are about to donate ${
               kindFields?.itemName || 'items'
             } as ${donationType} in kind. Our team will contact you for pickup.`
-          : `You are about to donate PKR ${donationAmount} for ${donationType} using ${paymentMethod}.`
+          : `You are about to donate PKR ${donationAmount?.toFixed(2)} for ${donationType} using ${paymentMethod}.`
       }
       benefits={[]}
       buttonText={loading ? 'Processing...' : 'Pay Now'}
