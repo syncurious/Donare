@@ -1,4 +1,4 @@
-import apiCaller from '.';
+import apiCaller from './apiCaller';
 
 export const Auth = {
   LOGIN: 'auth/signin',

@@ -1,4 +1,4 @@
-import apiCaller from '.';
+import apiCaller from './apiCaller';
 
 // Admin API endpoints
 export const AdminEndpoints = {
