@@ -31,7 +31,7 @@ const LoginScreen = () => {
     try {
       // Get FCM token before login
       const fcmToken = await initializeFirebaseMessaging();
-      
+
       // Add FCM token to login payload
       const loginPayload = {
         ...payload,
@@ -39,8 +39,12 @@ const LoginScreen = () => {
       };
 
       const response = (await Login(loginPayload)) as any;
-      dispatch(setProfile(response?.data));
-      showToast('success', 'Login Success');
+      if (response?.status) {
+        dispatch(setProfile(response?.data));
+        showToast('success', 'Login Success');
+      } else {
+        showToast('error', response?.message || 'Login failed. Please try again.');
+      }
     } catch (error: any) {
       showToast('error', error.message || 'Login failed. Please try again.');
     }

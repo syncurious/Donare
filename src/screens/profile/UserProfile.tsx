@@ -6,7 +6,6 @@ import {
   Alert,
   ActivityIndicator,
   Image,
-  ScrollView,
 } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -48,12 +47,12 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
   const { theme } = useTheme();
-  
+
   const [loading, setLoading] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
-  
+
   const [user, setUser] = useState<UserData>({
     fullName: '',
     memberSince: '',
@@ -134,7 +133,7 @@ const Profile = () => {
 
       const response = (await FileUpload(formDataUpload)) as any;
       console.log('Upload response:', response);
-      
+
       // Handle different possible response structures
       let mediaUrl = null;
       if (response?.data?.url) {
@@ -207,7 +206,7 @@ const Profile = () => {
           phone: updatedData.phone || formData.phone,
           image: updatedData.image || formData.image,
         });
-        
+
         setEditing(false);
         Alert.alert('Success', 'Profile updated successfully');
       } else {
@@ -215,7 +214,8 @@ const Profile = () => {
       }
     } catch (error: any) {
       console.error('Profile update error:', error);
-      const errorMessage = error?.data?.message || error?.message || 'Failed to update profile';
+      const errorMessage =
+        error?.data?.message || error?.message || 'Failed to update profile';
       Alert.alert('Error', errorMessage);
     } finally {
       setSaving(false);
@@ -237,31 +237,14 @@ const Profile = () => {
     setEditing(true);
   };
 
-  const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              dispatch(clearProfile());
-              await persistor.purge();
-            } catch (error) {
-              console.error('Logout error:', error);
-              Alert.alert('Error', 'Failed to logout. Please try again.');
-            }
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+  const handleLogout = async () => {
+    try {
+      dispatch(clearProfile());
+      await persistor.purge();
+    } catch (error) {
+      console.error('Logout error:', error);
+      Alert.alert('Error', 'Failed to logout. Please try again.');
+    }
   };
 
   const getInitials = (name: string): string => {
@@ -378,7 +361,11 @@ const Profile = () => {
           ) : (
             <>
               <Text style={styles.name}>{user.fullName || 'User'}</Text>
-              <Text variant="caption" color="secondary" style={styles.memberSince}>
+              <Text
+                variant="caption"
+                color="secondary"
+                style={styles.memberSince}
+              >
                 Member since {user.memberSince}
               </Text>
             </>
@@ -392,11 +379,15 @@ const Profile = () => {
           <Text style={styles.sectionTitle}>Personal Info</Text>
           {!editing && (
             <TouchableOpacity onPress={handleEdit}>
-              <Feather name="edit-2" size={18} color={theme.colors.primary[500]} />
+              <Feather
+                name="edit-2"
+                size={18}
+                color={theme.colors.primary[500]}
+              />
             </TouchableOpacity>
           )}
         </View>
-        <Section title=""  style={{ marginTop: 0 }}>
+        <Section title="" style={{ marginTop: 0 }}>
           {editing ? (
             <View style={styles.formContainer}>
               <Input
@@ -439,7 +430,11 @@ const Profile = () => {
                   color={theme.colors.primary[500]}
                   style={styles.infoIcon}
                 />
-                <Text variant="body2" color="secondary" style={styles.infoLabel}>
+                <Text
+                  variant="body2"
+                  color="secondary"
+                  style={styles.infoLabel}
+                >
                   Email
                 </Text>
                 <Text variant="body2" style={styles.infoValue}>
@@ -453,7 +448,11 @@ const Profile = () => {
                   color={theme.colors.primary[500]}
                   style={styles.infoIcon}
                 />
-                <Text variant="body2" color="secondary" style={styles.infoLabel}>
+                <Text
+                  variant="body2"
+                  color="secondary"
+                  style={styles.infoLabel}
+                >
                   Phone
                 </Text>
                 <Text variant="body2" style={styles.infoValue}>
