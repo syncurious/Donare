@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { UserStackParamList } from '../../config/navigation/UserNavigation';
 import Heading from '../../components/base/Heading';
 import Paragraph from '../../components/base/Paragraph';
 import Input from '../../components/base/Input';
@@ -194,18 +192,6 @@ const ZakatHomeAssets = () => {
               Next
             </Button>
           </>
-        )}
-
-        {/* Guidance Link */}
-        {zakatType && (
-          <TouchableOpacity
-            style={styles.guidanceButton}
-            onPress={() => navigation.navigate('ZakatGuidance')}
-          >
-            <Text variant="body1" color="primary" style={styles.guidanceButtonText}>
-              Zakat Shariya Guidance →
-            </Text>
-          </TouchableOpacity>
         )}
       </Container>
     </View>

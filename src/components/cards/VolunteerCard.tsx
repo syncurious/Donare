@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Container from '../base/Container';
 import Heading from '../base/Heading';
 import Paragraph from '../base/Paragraph';
@@ -22,7 +22,9 @@ interface VolunteerCardProps {
   benefits: Benefit[];
   buttonText: string;
   sectionTitle: string;
+  donationType?: string;
   onButtonPress: () => void;
+  onNav: () => void;
 }
 
 // Rename VolunteerCard to BenefitsCard
@@ -63,6 +65,23 @@ const BenefitsCard: React.FC<BenefitsCardProps> = props => {
             ))}
           </Section>
         </View>
+        {/* Guidance Link */}
+        {props?.donationType && (
+          <TouchableOpacity
+            style={styles.guidanceButton}
+            onPress={() => {
+              props.onNav();
+            }}
+          >
+            <Text
+              variant="body1"
+              color="primary"
+              style={styles.guidanceButtonText}
+            >
+              {props?.donationType} Shariya Guidance →
+            </Text>
+          </TouchableOpacity>
+        )}
         <Button onPress={props.onButtonPress} style={styles.button}>
           {props.buttonText}
         </Button>
@@ -120,6 +139,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderRadius: 30,
     alignSelf: 'stretch',
+  },
+  guidanceButton: {
+    marginTop: 16,
+    alignSelf: 'stretch',
+  },
+  guidanceButtonText: {
+    textAlign: 'center',
   },
 });
 

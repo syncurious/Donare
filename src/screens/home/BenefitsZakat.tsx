@@ -34,6 +34,8 @@ const BenefitsZakat = () => {
       buttonText="Donate Zakat"
       sectionTitle="Why Give Zakat?"
       onButtonPress={() => navigation.navigate("ZakatHomeAssets")}
+      onNav={() => navigation.navigate("ZakatGuidance")}
+      donationType="Zakat"
     />
   );
 };

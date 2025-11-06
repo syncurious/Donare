@@ -37,6 +37,8 @@ const BenefitsSadaqah = () => {
       onButtonPress={() =>
         navigation.navigate('ManualAmountEntry', { donationType: 'SADAQAH' })
       }
+      onNav={() => navigation.navigate("SadaqahGuidance")}
+      donationType="Sadaqah"
     />
   );
 };
