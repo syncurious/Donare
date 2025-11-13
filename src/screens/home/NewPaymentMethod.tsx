@@ -21,19 +21,19 @@ const PAYMENT_OPTIONS = [
     key: 'bank',
     label: 'Bank Transfer',
     description: 'Transfer funds directly from your bank account.',
-  },
-  {
-    icon: require('../../assets/icons/Paypalcon.png'),
-    key: 'wallet',
-    label: 'Wallet',
-    description: 'Donate from your digital wallet.',
-  },
-  {
-    icon: require('../../assets/icons/AppleIcon.png'),
-    key: 'ApplePay',
-    label: 'Apple Pay',
-    description: 'Donate from your Apple Pay account.',
-  },
+  }
+  // {
+  //   icon: require('../../assets/icons/Paypalcon.png'),
+  //   key: 'wallet',
+  //   label: 'Wallet',
+  //   description: 'Donate from your digital wallet.',
+  // },
+  // {
+  //   icon: require('../../assets/icons/AppleIcon.png'),
+  //   key: 'ApplePay',
+  //   label: 'Apple Pay',
+  //   description: 'Donate from your Apple Pay account.',
+  // },
 ];
 
 const SelectPaymentMethod = () => {
