@@ -3,6 +3,7 @@ import apiCaller from './apiCaller';
 export const Auth = {
   LOGIN: 'auth/signin',
   SIGNUP: 'auth/signup',
+  LOGOUT: 'auth/logout',
   GET_PROFILE: 'user/profile',
   UPDATE_PROFILE: 'user/profile',
   GET_PREFERENCES: 'user/preferences',
@@ -27,6 +28,10 @@ const Login = async (body: any) => {
 
 const Signup = async (body: any) => {
   return await apiCaller('post', Auth.SIGNUP, body, undefined, false);
+};
+
+const Logout = async () => {
+  return await apiCaller('post', Auth.LOGOUT, undefined, undefined, false);
 };
 
 const GetProfile = async () => {
@@ -132,6 +137,7 @@ const SubmitHelpRequest = async (body: any) => {
 export {
   Login,
   Signup,
+  Logout,
   GetProfile,
   UpdateProfile,
   GetPreferences,

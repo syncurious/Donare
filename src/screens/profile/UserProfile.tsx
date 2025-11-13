@@ -17,7 +17,12 @@ import Input from '../../components/base/Input';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../../config/theme';
 import Loader from '../../components/base/Loader';
-import { GetProfile, UpdateProfile, FileUpload } from '../../service/handler';
+import {
+  GetProfile,
+  UpdateProfile,
+  FileUpload,
+  Logout,
+} from '../../service/handler';
 import { clearProfile } from '../../store/reducers/profile';
 import { persistor } from '../../store';
 
@@ -239,6 +244,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
+      await Logout();
       dispatch(clearProfile());
       await persistor.purge();
     } catch (error) {
