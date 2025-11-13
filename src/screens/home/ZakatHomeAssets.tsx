@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Heading from '../../components/base/Heading';
 import Paragraph from '../../components/base/Paragraph';
@@ -15,14 +15,35 @@ type ShiaRate = '5' | '10' | '20';
 
 const ZakatHomeAssets = () => {
   const navigation = useNavigation<NavigationProp<any, 'ZakatHomeAssets'>>();
-  const [zakatType, setZakatType] = useState<ZakatType | null>(null);
+  const [zakatType, setZakatType] = useState<ZakatType | null>('sunni');
   const [shiaRate, setShiaRate] = useState<ShiaRate>('5');
   const [cash, setCash] = useState('');
   const [gold, setGold] = useState('');
   const [silver, setSilver] = useState('');
   const [otherAssets, setOtherAssets] = useState('');
+  const [errors, setErrors] = useState({
+    cash: '',
+    gold: '',
+    silver: '',
+    otherAssets: '',
+  });
 
   const handleNext = () => {
+    // Validate all fields are filled
+    const newErrors = {
+      cash: !cash || cash.trim() === '' ? 'This field is required' : '',
+      gold: !gold || gold.trim() === '' ? 'This field is required' : '',
+      silver: !silver || silver.trim() === '' ? 'This field is required' : '',
+      otherAssets: !otherAssets || otherAssets.trim() === '' ? 'This field is required' : '',
+    };
+
+    setErrors(newErrors);
+
+    // Check if any field has an error
+    if (Object.values(newErrors).some(error => error !== '')) {
+      return;
+    }
+
     // You can pass all values as a stringified object or as separate params
     navigation.navigate('ZakatBusinessAssets', {
       homeAssets: JSON.stringify({ 
@@ -157,37 +178,62 @@ const ZakatHomeAssets = () => {
               This includes cash, gold, silver, and any other assets you own at home.
             </Paragraph>
             <Input
-              label="Cash at Home/Bank"
+              label="Cash at Home/Bank *"
               placeholder="Enter amount in PKR"
               keyboardType="numeric"
               value={cash}
-              onChangeText={setCash}
+              onChangeText={(text) => {
+                setCash(text);
+                if (errors.cash && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, cash: '' }));
+                }
+              }}
               style={styles.input}
             />
             <Input
-              label="Gold Value"
+              label="Gold Value *"
               placeholder="Enter gold value in PKR"
               keyboardType="numeric"
               value={gold}
-              onChangeText={setGold}
+              onChangeText={(text) => {
+                setGold(text);
+                if (errors.gold && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, gold: '' }));
+                }
+              }}
               style={styles.input}
             />
             <Input
-              label="Silver Value"
+              label="Silver Value *"
               placeholder="Enter silver value in PKR"
               keyboardType="numeric"
               value={silver}
-              onChangeText={setSilver}
+              onChangeText={(text) => {
+                setSilver(text);
+                if (errors.silver && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, silver: '' }));
+                }
+              }}
               style={styles.input}
             />
             <Input
-              label="Other Assets"
+              label="Other Assets *"
               placeholder="Enter value of other assets in PKR"
               keyboardType="numeric"
               value={otherAssets}
-              onChangeText={setOtherAssets}
+              onChangeText={(text) => {
+                setOtherAssets(text);
+                if (errors.otherAssets && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, otherAssets: '' }));
+                }
+              }}
               style={styles.input}
             />
+            {Object.values(errors).some(error => error !== '') && (
+              <Text style={{ color: 'red', marginTop: 4 }}>
+                Please fill in all required fields
+              </Text>
+            )}
             <Button onPress={handleNext} style={styles.button}>
               Next
             </Button>

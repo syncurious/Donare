@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
+import Text from '../../components/base/Text';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { UserStackParamList } from '../../config/navigation/UserNavigation';
@@ -21,8 +22,29 @@ const ZakatBusinessAssets = () => {
   const [receivables, setReceivables] = useState('');
   const [investments, setInvestments] = useState('');
   const [otherBusinessAssets, setOtherBusinessAssets] = useState('');
+  const [errors, setErrors] = useState({
+    inventory: '',
+    receivables: '',
+    investments: '',
+    otherBusinessAssets: '',
+  });
 
   const handleNext = () => {
+    // Validate all fields are filled
+    const newErrors = {
+      inventory: !inventory || inventory.trim() === '' ? 'This field is required' : '',
+      receivables: !receivables || receivables.trim() === '' ? 'This field is required' : '',
+      investments: !investments || investments.trim() === '' ? 'This field is required' : '',
+      otherBusinessAssets: !otherBusinessAssets || otherBusinessAssets.trim() === '' ? 'This field is required' : '',
+    };
+
+    setErrors(newErrors);
+
+    // Check if any field has an error
+    if (Object.values(newErrors).some(error => error !== '')) {
+      return;
+    }
+
     navigation.navigate('ZakatSummary', {
       homeAssets,
       businessAssets: JSON.stringify({
@@ -54,37 +76,62 @@ const ZakatBusinessAssets = () => {
           values will be used to calculate your zakat.
         </Paragraph>
         <Input
-          label="Inventory"
+          label="Inventory *"
           placeholder="Enter inventory value in PKR"
           keyboardType="numeric"
           value={inventory}
-          onChangeText={setInventory}
+          onChangeText={(text) => {
+            setInventory(text);
+            if (errors.inventory && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, inventory: '' }));
+            }
+          }}
           style={styles.input}
         />
         <Input
-          label="Receivables"
+          label="Receivables *"
           placeholder="Enter receivables in PKR"
           keyboardType="numeric"
           value={receivables}
-          onChangeText={setReceivables}
+          onChangeText={(text) => {
+            setReceivables(text);
+            if (errors.receivables && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, receivables: '' }));
+            }
+          }}
           style={styles.input}
         />
         <Input
-          label="Investments"
+          label="Investments *"
           placeholder="Enter investments in PKR"
           keyboardType="numeric"
           value={investments}
-          onChangeText={setInvestments}
+          onChangeText={(text) => {
+            setInvestments(text);
+            if (errors.investments && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, investments: '' }));
+            }
+          }}
           style={styles.input}
         />
         <Input
-          label="Other Business Assets"
+          label="Other Business Assets *"
           placeholder="Enter value of other business assets in PKR"
           keyboardType="numeric"
           value={otherBusinessAssets}
-          onChangeText={setOtherBusinessAssets}
+          onChangeText={(text) => {
+            setOtherBusinessAssets(text);
+            if (errors.otherBusinessAssets && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, otherBusinessAssets: '' }));
+            }
+          }}
           style={styles.input}
         />
+        {Object.values(errors).some(error => error !== '') && (
+          <Text style={{ color: 'red', marginTop: 4 }}>
+            Please fill in all required fields
+          </Text>
+        )}
         <Button onPress={handleNext} style={styles.button}>
           Next
         </Button>
