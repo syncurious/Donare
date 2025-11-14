@@ -39,30 +39,45 @@ const VolunteerDetailsScreen: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'PENDING': return theme.colors.warning[500];
-      case 'APPROVED': return theme.colors.success[500];
-      case 'REJECTED': return theme.colors.error[500];
-      case 'COMPLETED': return theme.colors.primary[500];
-      case 'CANCELLED': return theme.colors.neutral[500];
-      default: return theme.colors.neutral[500];
+      case 'PENDING':
+        return theme.colors.warning[500];
+      case 'APPROVED':
+        return theme.colors.success[500];
+      case 'REJECTED':
+        return theme.colors.error[500];
+      case 'COMPLETED':
+        return theme.colors.primary[500];
+      case 'CANCELLED':
+        return theme.colors.neutral[500];
+      default:
+        return theme.colors.neutral[500];
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'PENDING': return 'Pending';
-      case 'APPROVED': return 'Approved';
-      case 'REJECTED': return 'Rejected';
-      case 'COMPLETED': return 'Completed';
-      case 'CANCELLED': return 'Cancelled';
-      default: return status;
+      case 'PENDING':
+        return 'Pending';
+      case 'APPROVED':
+        return 'Approved';
+      case 'REJECTED':
+        return 'Rejected';
+      case 'COMPLETED':
+        return 'Completed';
+      case 'CANCELLED':
+        return 'Cancelled';
+      default:
+        return status;
     }
   };
 
-  const handleStatusUpdate = async (newStatus: 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED') => {
+  const handleStatusUpdate = async (
+    newStatus: 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED',
+  ) => {
     const actionText = newStatus.toLowerCase();
-    const actionTextCapitalized = actionText.charAt(0).toUpperCase() + actionText.slice(1);
-    
+    const actionTextCapitalized =
+      actionText.charAt(0).toUpperCase() + actionText.slice(1);
+
     Alert.alert(
       `${actionTextCapitalized} Volunteer`,
       `Are you sure you want to ${actionText} ${volunteer.full_name}?`,
@@ -70,26 +85,40 @@ const VolunteerDetailsScreen: React.FC = () => {
         { text: 'Cancel', style: 'cancel' },
         {
           text: actionTextCapitalized,
-          style: newStatus === 'REJECTED' || newStatus === 'CANCELLED' ? 'destructive' : 'default',
+          style:
+            newStatus === 'REJECTED' || newStatus === 'CANCELLED'
+              ? 'destructive'
+              : 'default',
           onPress: async () => {
             try {
               setLoading(true);
-              const response = await UpdateVolunteerStatus(volunteer.id, newStatus);
+              const response = await UpdateVolunteerStatus(
+                volunteer.id,
+                newStatus,
+              );
               if (response.status) {
-                Alert.alert('Success', `Volunteer ${actionText} successfully!`, [
-                  { text: 'OK', onPress: () => navigation.goBack() }
-                ]);
+                Alert.alert(
+                  'Success',
+                  `Volunteer ${actionText} successfully!`,
+                  [{ text: 'OK', onPress: () => navigation.goBack() }],
+                );
               } else {
-                Alert.alert('Error', response.message || `Failed to ${actionText} volunteer`);
+                Alert.alert(
+                  'Error',
+                  response.message || `Failed to ${actionText} volunteer`,
+                );
               }
             } catch (error: any) {
-              Alert.alert('Error', error.message || `Failed to ${actionText} volunteer`);
+              Alert.alert(
+                'Error',
+                error.message || `Failed to ${actionText} volunteer`,
+              );
             } finally {
               setLoading(false);
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
@@ -101,23 +130,36 @@ const VolunteerDetailsScreen: React.FC = () => {
       contentContainerStyle={styles.containerContent}
     >
       <View style={styles.profileCard}>
-        <ProfileCard user={{
-          fullName: volunteer.full_name,
-          email: volunteer.email,
-          phone: volunteer.phone, 
-          image: `https://avatar.iran.liara.run/public/boy?seed=${volunteer.email}`,
-          memberSince: formatDate(volunteer.created_at),
-        }} theme={theme} />
+        <ProfileCard
+          user={{
+            fullName: volunteer.full_name,
+            email: volunteer.email,
+            phone: volunteer.phone,
+            image: `https://avatar.iran.liara.run/public/boy?seed=${volunteer.email}`,
+            memberSince: formatDate(volunteer.created_at),
+          }}
+          theme={theme}
+        />
       </View>
 
       {/* Status Badge */}
-      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(volunteer.status) + '20' }]}>
-        <Text style={[styles.statusText, { color: getStatusColor(volunteer.status) }]}>
+      <View
+        style={[
+          styles.statusBadge,
+          { backgroundColor: getStatusColor(volunteer.status) + '20' },
+        ]}
+      >
+        <Text
+          style={[
+            styles.statusText,
+            { color: getStatusColor(volunteer.status) },
+          ]}
+        >
           {getStatusText(volunteer.status)}
         </Text>
       </View>
 
-      <View style={{ width: "100%" }}>
+      <View style={{ width: '100%' }}>
         <Section title="Skills">
           <View style={styles.skillsRow}>
             {volunteer.skills.split(',').map((skill, index) => (
@@ -134,13 +176,17 @@ const VolunteerDetailsScreen: React.FC = () => {
               <Text variant="body2" color="secondary">
                 Weekdays
               </Text>
-              <Text variant="body2">{getAvailabilityText(volunteer.on_week_days)}</Text>
+              <Text variant="body2">
+                {getAvailabilityText(volunteer.on_week_days)}
+              </Text>
             </View>
             <View style={styles.availCol}>
               <Text variant="body2" color="secondary">
                 Weekends
               </Text>
-              <Text variant="body2">{getAvailabilityText(volunteer.on_week_ends)}</Text>
+              <Text variant="body2">
+                {getAvailabilityText(volunteer.on_week_ends)}
+              </Text>
             </View>
           </View>
         </Section>
@@ -163,19 +209,15 @@ const VolunteerDetailsScreen: React.FC = () => {
         </Section>
 
         <Section title="Application Date">
-          <Text variant="body2">
-            {formatDate(volunteer.created_at)}
-          </Text>
+          <Text variant="body2">{formatDate(volunteer.created_at)}</Text>
         </Section>
 
         <Section title="Message">
-          <Text variant="body2">
-            {volunteer.message}
-          </Text>
+          <Text variant="body2">{volunteer.message}</Text>
         </Section>
       </View>
 
-      {volunteer.status === 'PENDING' || volunteer.status === 'COMPLETED' && (
+      {volunteer.status == 'PENDING' && (
         <View style={styles.actionsRow}>
           <Button
             variant="outlined"
@@ -185,8 +227,8 @@ const VolunteerDetailsScreen: React.FC = () => {
           >
             {loading ? <Loader size="small" /> : 'Reject'}
           </Button>
-          <Button 
-            style={styles.approveBtn} 
+          <Button
+            style={styles.approveBtn}
             onPress={() => handleStatusUpdate('APPROVED')}
             disabled={loading}
           >
@@ -195,11 +237,18 @@ const VolunteerDetailsScreen: React.FC = () => {
         </View>
       )}
 
-
-      {(volunteer.status === 'REJECTED' || volunteer.status === 'APPROVED' || volunteer.status === 'CANCELLED') && (
+      {(volunteer.status === 'REJECTED' ||
+        volunteer.status === 'APPROVED' ||
+        volunteer.status === 'CANCELLED') && (
         <View style={styles.statusMessage}>
-          <Text style={[styles.statusMessageText, { color: getStatusColor(volunteer.status) }]}>
-            This volunteer has been {getStatusText(volunteer.status).toLowerCase()}
+          <Text
+            style={[
+              styles.statusMessageText,
+              { color: getStatusColor(volunteer.status) },
+            ]}
+          >
+            This volunteer has been{' '}
+            {getStatusText(volunteer.status).toLowerCase()}
           </Text>
         </View>
       )}

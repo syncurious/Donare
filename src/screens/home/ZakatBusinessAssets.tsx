@@ -30,20 +30,30 @@ const ZakatBusinessAssets = () => {
   });
 
   const handleNext = () => {
-    // Validate all fields are filled
-    const newErrors = {
-      inventory: !inventory || inventory.trim() === '' ? 'This field is required' : '',
-      receivables: !receivables || receivables.trim() === '' ? 'This field is required' : '',
-      investments: !investments || investments.trim() === '' ? 'This field is required' : '',
-      otherBusinessAssets: !otherBusinessAssets || otherBusinessAssets.trim() === '' ? 'This field is required' : '',
-    };
+    // Check if at least one field is filled
+    const hasAnyValue = [inventory, receivables, investments, otherBusinessAssets].some(
+      value => value && value.trim() !== ''
+    );
 
-    setErrors(newErrors);
-
-    // Check if any field has an error
-    if (Object.values(newErrors).some(error => error !== '')) {
+    if (!hasAnyValue) {
+      // Show error if no fields are filled
+      const newErrors = {
+        inventory: 'Please fill at least one field',
+        receivables: '',
+        investments: '',
+        otherBusinessAssets: '',
+      };
+      setErrors(newErrors);
       return;
     }
+
+    // Clear any existing errors
+    setErrors({
+      inventory: '',
+      receivables: '',
+      investments: '',
+      otherBusinessAssets: '',
+    });
 
     navigation.navigate('ZakatSummary', {
       homeAssets,
@@ -76,7 +86,7 @@ const ZakatBusinessAssets = () => {
           values will be used to calculate your zakat.
         </Paragraph>
         <Input
-          label="Inventory *"
+          label="Inventory"
           placeholder="Enter inventory value in PKR"
           keyboardType="numeric"
           value={inventory}
@@ -89,7 +99,7 @@ const ZakatBusinessAssets = () => {
           style={styles.input}
         />
         <Input
-          label="Receivables *"
+          label="Receivables"
           placeholder="Enter receivables in PKR"
           keyboardType="numeric"
           value={receivables}
@@ -102,7 +112,7 @@ const ZakatBusinessAssets = () => {
           style={styles.input}
         />
         <Input
-          label="Investments *"
+          label="Investments"
           placeholder="Enter investments in PKR"
           keyboardType="numeric"
           value={investments}
@@ -115,7 +125,7 @@ const ZakatBusinessAssets = () => {
           style={styles.input}
         />
         <Input
-          label="Other Business Assets *"
+          label="Other Business Assets"
           placeholder="Enter value of other business assets in PKR"
           keyboardType="numeric"
           value={otherBusinessAssets}
@@ -127,9 +137,9 @@ const ZakatBusinessAssets = () => {
           }}
           style={styles.input}
         />
-        {Object.values(errors).some(error => error !== '') && (
+        {errors.inventory && (
           <Text style={{ color: 'red', marginTop: 4 }}>
-            Please fill in all required fields
+            {errors.inventory}
           </Text>
         )}
         <Button onPress={handleNext} style={styles.button}>

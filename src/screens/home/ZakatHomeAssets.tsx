@@ -29,20 +29,30 @@ const ZakatHomeAssets = () => {
   });
 
   const handleNext = () => {
-    // Validate all fields are filled
-    const newErrors = {
-      cash: !cash || cash.trim() === '' ? 'This field is required' : '',
-      gold: !gold || gold.trim() === '' ? 'This field is required' : '',
-      silver: !silver || silver.trim() === '' ? 'This field is required' : '',
-      otherAssets: !otherAssets || otherAssets.trim() === '' ? 'This field is required' : '',
-    };
+    // Check if at least one field is filled
+    const hasAnyValue = [cash, gold, silver, otherAssets].some(
+      value => value && value.trim() !== ''
+    );
 
-    setErrors(newErrors);
-
-    // Check if any field has an error
-    if (Object.values(newErrors).some(error => error !== '')) {
+    if (!hasAnyValue) {
+      // Show error if no fields are filled
+      const newErrors = {
+        cash: 'Please fill at least one field',
+        gold: '',
+        silver: '',
+        otherAssets: '',
+      };
+      setErrors(newErrors);
       return;
     }
+
+    // Clear any existing errors
+    setErrors({
+      cash: '',
+      gold: '',
+      silver: '',
+      otherAssets: '',
+    });
 
     // You can pass all values as a stringified object or as separate params
     navigation.navigate('ZakatBusinessAssets', {
@@ -178,7 +188,7 @@ const ZakatHomeAssets = () => {
               This includes cash, gold, silver, and any other assets you own at home.
             </Paragraph>
             <Input
-              label="Cash at Home/Bank *"
+              label="Cash at Home/Bank"
               placeholder="Enter amount in PKR"
               keyboardType="numeric"
               value={cash}
@@ -191,7 +201,7 @@ const ZakatHomeAssets = () => {
               style={styles.input}
             />
             <Input
-              label="Gold Value *"
+              label="Gold Value"
               placeholder="Enter gold value in PKR"
               keyboardType="numeric"
               value={gold}
@@ -204,7 +214,7 @@ const ZakatHomeAssets = () => {
               style={styles.input}
             />
             <Input
-              label="Silver Value *"
+              label="Silver Value"
               placeholder="Enter silver value in PKR"
               keyboardType="numeric"
               value={silver}
@@ -217,7 +227,7 @@ const ZakatHomeAssets = () => {
               style={styles.input}
             />
             <Input
-              label="Other Assets *"
+              label="Other Assets"
               placeholder="Enter value of other assets in PKR"
               keyboardType="numeric"
               value={otherAssets}
@@ -229,9 +239,9 @@ const ZakatHomeAssets = () => {
               }}
               style={styles.input}
             />
-            {Object.values(errors).some(error => error !== '') && (
+            {errors.cash && (
               <Text style={{ color: 'red', marginTop: 4 }}>
-                Please fill in all required fields
+                {errors.cash}
               </Text>
             )}
             <Button onPress={handleNext} style={styles.button}>
