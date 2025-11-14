@@ -6,7 +6,11 @@ import Loader from '../../../components/base/Loader';
 import Text from '../../../components/base/Text';
 import Heading from '../../../components/base/Heading';
 import theme from '../../../config/theme';
-import { getHelpRequests, type HelpRequest as HelpRequestType } from '../../../service/helpRequest';
+import {
+  GetHelpRequests,
+  type HelpRequest as HelpRequestType,
+} from '../../../service/admin';
+
 import VolunteerApplicationCard from '../../../components/cards/VolunteerApplicationCard';
 
 interface HelpRequestsState {
@@ -36,7 +40,7 @@ const HelpRequest = () => {
         error: null,
       }));
 
-      const response = await getHelpRequests();
+      const response = await GetHelpRequests();
 
       if (response.status && response.data && response.data.help_requests) {
         setState(prev => ({
@@ -47,7 +51,7 @@ const HelpRequest = () => {
           refreshing: false,
         }));
       } else {
-        throw new Error(response.message || 'Failed to fetch help requests');
+        throw new Error('Failed to fetch help requests');
       }
     } catch (error: any) {
       setState(prev => ({
@@ -65,7 +69,9 @@ const HelpRequest = () => {
 
   const onRefresh = () => fetchHelpRequests(true);
 
-  const getStatusDisplay = (status: string): 'Pending' | 'Approved' | 'Rejected' | 'Completed' => {
+  const getStatusDisplay = (
+    status: string,
+  ): 'Pending' | 'Approved' | 'Rejected' | 'Completed' => {
     switch (status) {
       case 'APPROVED':
         return 'Approved';
@@ -83,7 +89,11 @@ const HelpRequest = () => {
     return (
       <Container
         padding="small"
-        style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}
+        style={{
+          backgroundColor: '#fff',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
         <Loader />
       </Container>
@@ -94,13 +104,28 @@ const HelpRequest = () => {
     return (
       <Container
         padding="small"
-        style={{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}
+        style={{
+          backgroundColor: '#fff',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
-        <Text style={{ color: theme.colors.error[500], textAlign: 'center', marginBottom: 16 }}>
+        <Text
+          style={{
+            color: theme.colors.error[500],
+            textAlign: 'center',
+            marginBottom: 16,
+          }}
+        >
           {state.error}
         </Text>
         <TouchableOpacity
-          style={{ backgroundColor: theme.colors.primary[500], paddingHorizontal: 24, paddingVertical: 12, borderRadius: 8 }}
+          style={{
+            backgroundColor: theme.colors.primary[500],
+            paddingHorizontal: 24,
+            paddingVertical: 12,
+            borderRadius: 8,
+          }}
           onPress={() => fetchHelpRequests()}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Retry</Text>
@@ -130,7 +155,12 @@ const HelpRequest = () => {
               email={request.phone}
               image={`https://avatar.iran.liara.run/public/boy?seed=${request.phone}`}
               status={getStatusDisplay(request.status)}
-              onView={() => navigation.navigate('RequestDetails', { requestId: request.id, request })}
+              onView={() =>
+                navigation.navigate('RequestDetails', {
+                  requestId: request.id,
+                  request,
+                })
+              }
             />
           ))
         ) : (
@@ -144,7 +174,9 @@ const HelpRequest = () => {
               alignItems: 'center',
             }}
           >
-            <Text style={{ color: theme.colors.neutral[500], textAlign: 'center' }}>
+            <Text
+              style={{ color: theme.colors.neutral[500], textAlign: 'center' }}
+            >
               No help requests found
             </Text>
           </View>

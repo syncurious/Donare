@@ -4,12 +4,12 @@ import apiCaller from './apiCaller';
 export const AdminEndpoints = {
   DASHBOARD: 'admin/dashboard',
   VOLUNTEERS: 'admin/volunteer',
-  HELP_REQUESTS: 'admin/help-requests',
+  HELP_REQUESTS: 'admin/help-request',
   DONATIONS: 'admin/donations',
   USERS: 'admin/users',
   UPDATE_VOLUNTEER_STATUS: 'admin/volunteer',
   RESOLVE_HELP_REQUEST: 'admin/help-requests/resolve',
-  UPDATE_HELP_REQUEST_STATUS: 'help-request/admin',
+  UPDATE_HELP_REQUEST_STATUS: 'admin/help-request',
   PROFILE: 'user/profile',
 };
 
@@ -84,14 +84,14 @@ export interface VolunteersResponse {
 
 export interface HelpRequest {
   id: string;
+  full_name: string;
+  phone: string;
+  email: string;
   title: string;
   description: string;
-  status: 'pending' | 'resolved' | 'rejected';
-  requestDate: string;
-  requesterName: string;
-  requesterEmail: string;
-  category: string;
-  priority: 'low' | 'medium' | 'high';
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'RESOLVED';
+  created_at: string;
+  updated_at: string;
 }
 
 export interface UserProfile {
@@ -126,7 +126,7 @@ const GetVolunteers = async (): Promise<VolunteersResponse> => {
   return await apiCaller('get', AdminEndpoints.VOLUNTEERS, undefined, undefined, false);
 };
 
-const GetHelpRequests = async (): Promise<{ status: boolean; data: HelpRequest[] }> => {
+const GetHelpRequests = async (): Promise<{ status: boolean; data: { help_requests: HelpRequest[]; total: number } }> => {
   return await apiCaller('get', AdminEndpoints.HELP_REQUESTS, undefined, undefined, false);
 };
 
@@ -153,7 +153,7 @@ const UpdateHelpRequestStatus = async (
   requestId: string,
   status: 'APPROVED' | 'REJECTED'
 ): Promise<{ status: boolean; message: string }> => {
-  return await apiCaller('post', `${AdminEndpoints.UPDATE_HELP_REQUEST_STATUS}/${requestId}`, { status }, undefined, false);
+  return await apiCaller('patch', `${AdminEndpoints.UPDATE_HELP_REQUEST_STATUS}/${requestId}`, { status }, undefined, false);
 };
 
 const GetUserProfile = async (): Promise<ProfileResponse> => {
