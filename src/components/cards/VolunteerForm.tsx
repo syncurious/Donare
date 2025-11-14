@@ -23,7 +23,7 @@ interface VolunteerFormProps {
   }) => void;
 }
 
-const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSubmit }) => {
+const VolunteerForm = () => {
   const [form, setForm] = useState({
     full_name: '',
     email: '',
@@ -57,22 +57,19 @@ const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSubmit }) => {
     try {
       const response = (await RejisterVolunteer(form)) as any;
 
-      if (response.success) {
+      if (response?.data?.message) {
         showToast('success', 'Volunteer application submitted successfully!');
-        onSubmit?.(form);
         setTimeout(() => {
           navigation.navigate('BottomTabs');
         }, 1500);
       } else {
         showToast(
           'error',
-          response.message ||
+          response?.data?.message ||
             'Failed to submit volunteer application. Please try again.',
         );
       }
     } catch (err: any) {
-      console.log('Err', err);
-
       showToast(
         'error',
         err?.data?.error?.message ||

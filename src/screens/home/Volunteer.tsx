@@ -10,6 +10,7 @@ import { GetVolunteer } from '../../service/handler';
 import SocialIcon from '../../assets/icons/duoIcon.png';
 import SkillIcon from '../../assets/icons/compassIcon.png';
 import GrowthIcon from '../../assets/icons/heartIcon.png';
+import { useIsFocused } from '@react-navigation/native';
 
 const benefits = [
   {
@@ -33,6 +34,7 @@ const benefits = [
 ];
 
 const Volunteer: React.FC = () => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<any>>();
   const [loading, setLoading] = useState(true);
   const [volunteer, setVolunteer] = useState<any | null>(null);
@@ -59,8 +61,10 @@ const Volunteer: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchVolunteer();
-  }, []);
+    if (isFocused) {
+      fetchVolunteer();
+    }
+  }, [isFocused]);
 
   return (
     <VolunteerCard
