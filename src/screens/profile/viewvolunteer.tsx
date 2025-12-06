@@ -1,15 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  StyleSheet,
-  View,
-  RefreshControl,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
 import { GetVolunteer } from '../../service/handler';
-import { showToast } from '../../utils/toast';
 import { useTheme } from '../../config/theme';
 
 interface Volunteer {
@@ -44,15 +38,9 @@ const ViewVolunteer: React.FC = () => {
           console.log('No volunteer data found in response');
           setVolunteer(null);
         }
-      } else {
-        showToast('error', 'Failed to fetch volunteer data.');
       }
     } catch (err: any) {
       console.error('Error fetching volunteer:', err);
-      showToast(
-        'error',
-        err?.data?.error?.message || 'Failed to load volunteer data.',
-      );
     } finally {
       setLoading(false);
     }

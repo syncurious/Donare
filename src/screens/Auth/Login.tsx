@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, InteractionManager } from 'react-native';
 import Container from '../../components/base/Container';
 import Heading from '../../components/base/Heading';
 import Text from '../../components/base/Text';
@@ -11,7 +11,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import logoPng from '../../assets/images/logoWihtoutText.png';
 import { Login } from '../../service/handler';
 import { useDispatch } from 'react-redux';
-import { setProfile } from '../../store/reducers/profile';
+import { setProfile, setIsLogin } from '../../store/reducers/profile';
 import { showToast } from '../../utils/toast';
 import { initializeFirebaseMessaging } from '../../utils/firebase';
 
@@ -40,8 +40,16 @@ const LoginScreen = () => {
 
       const response = (await Login(loginPayload)) as any;
       if (response?.status) {
-        dispatch(setProfile(response?.data));
         showToast('success', 'Login Success');
+        
+        // Use InteractionManager to defer navigation until after animations complete
+        InteractionManager.runAfterInteractions(() => {
+          // Small delay to ensure toast is shown and current screen unmounts properly
+          setTimeout(() => {
+            dispatch(setProfile(response?.data));
+            dispatch(setIsLogin(true));
+          }, 100);
+        });
       } else {
         showToast('error', response?.message || 'Login failed. Please try again.');
       }
@@ -87,14 +95,14 @@ const LoginScreen = () => {
           secureTextEntry
         />
         {/* Forgot Password */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.forgotRow}
           onPress={() => navigation.navigate('ForgotPassword')}
         >
           <Text variant="body2" color="secondary" style={styles.forgotText}>
             Forgot Password?
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Button
           variant="contained"
           color="primary"

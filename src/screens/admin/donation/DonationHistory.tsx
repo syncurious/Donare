@@ -18,7 +18,7 @@ import { donationCoinIcon } from '../../../assets/icons';
 import { GetDonations } from '../../../service/admin';
 import { showToast } from '../../../utils/toast';
 
-const DONATION_TYPES = ['All', 'ZAKAT', 'SADAQAH', 'FITRAH', 'FIDYAH'];
+const DONATION_TYPES = ['All', 'ZAKAT', 'SADAQAH', 'OTHER'];
 
 interface Donation {
   id: string;
@@ -208,12 +208,6 @@ const DonationHistory = () => {
                         style={{ marginBottom: 4 }}
                       >
                         PKR {donation?.amount?.toFixed(2)}
-                      </Text>
-                      <Text
-                        variant="caption"
-                        style={{ color: getStatusColor(donation.status) }}
-                      >
-                        {donation.status}
                       </Text>
                     </View>
                   }

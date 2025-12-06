@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
+import Text from '../../components/base/Text';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { UserStackParamList } from '../../config/navigation/UserNavigation';
@@ -21,8 +22,39 @@ const ZakatBusinessAssets = () => {
   const [receivables, setReceivables] = useState('');
   const [investments, setInvestments] = useState('');
   const [otherBusinessAssets, setOtherBusinessAssets] = useState('');
+  const [errors, setErrors] = useState({
+    inventory: '',
+    receivables: '',
+    investments: '',
+    otherBusinessAssets: '',
+  });
 
   const handleNext = () => {
+    // Check if at least one field is filled
+    const hasAnyValue = [inventory, receivables, investments, otherBusinessAssets].some(
+      value => value && value.trim() !== ''
+    );
+
+    if (!hasAnyValue) {
+      // Show error if no fields are filled
+      const newErrors = {
+        inventory: 'Please fill at least one field',
+        receivables: '',
+        investments: '',
+        otherBusinessAssets: '',
+      };
+      setErrors(newErrors);
+      return;
+    }
+
+    // Clear any existing errors
+    setErrors({
+      inventory: '',
+      receivables: '',
+      investments: '',
+      otherBusinessAssets: '',
+    });
+
     navigation.navigate('ZakatSummary', {
       homeAssets,
       businessAssets: JSON.stringify({
@@ -58,7 +90,12 @@ const ZakatBusinessAssets = () => {
           placeholder="Enter inventory value in PKR"
           keyboardType="numeric"
           value={inventory}
-          onChangeText={setInventory}
+          onChangeText={(text) => {
+            setInventory(text);
+            if (errors.inventory && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, inventory: '' }));
+            }
+          }}
           style={styles.input}
         />
         <Input
@@ -66,7 +103,12 @@ const ZakatBusinessAssets = () => {
           placeholder="Enter receivables in PKR"
           keyboardType="numeric"
           value={receivables}
-          onChangeText={setReceivables}
+          onChangeText={(text) => {
+            setReceivables(text);
+            if (errors.receivables && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, receivables: '' }));
+            }
+          }}
           style={styles.input}
         />
         <Input
@@ -74,7 +116,12 @@ const ZakatBusinessAssets = () => {
           placeholder="Enter investments in PKR"
           keyboardType="numeric"
           value={investments}
-          onChangeText={setInvestments}
+          onChangeText={(text) => {
+            setInvestments(text);
+            if (errors.investments && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, investments: '' }));
+            }
+          }}
           style={styles.input}
         />
         <Input
@@ -82,9 +129,19 @@ const ZakatBusinessAssets = () => {
           placeholder="Enter value of other business assets in PKR"
           keyboardType="numeric"
           value={otherBusinessAssets}
-          onChangeText={setOtherBusinessAssets}
+          onChangeText={(text) => {
+            setOtherBusinessAssets(text);
+            if (errors.otherBusinessAssets && text.trim() !== '') {
+              setErrors(prev => ({ ...prev, otherBusinessAssets: '' }));
+            }
+          }}
           style={styles.input}
         />
+        {errors.inventory && (
+          <Text style={{ color: 'red', marginTop: 4 }}>
+            {errors.inventory}
+          </Text>
+        )}
         <Button onPress={handleNext} style={styles.button}>
           Next
         </Button>

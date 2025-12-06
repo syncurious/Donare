@@ -1,4 +1,4 @@
-import apiCaller from './index';
+import apiCaller from './apiCaller';
 
 export interface HelpRequest {
   id: string;

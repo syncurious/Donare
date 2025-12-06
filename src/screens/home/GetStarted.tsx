@@ -58,7 +58,7 @@ const GetStarted = () => {
             { backgroundColor: theme.colors.primary[500] },
             styles.button,
           ]}
-          onPress={() => handleToNavigate('Login')}
+          onPress={() => handleToNavigate('SignUp')}
         >
           Get Started
         </Button>

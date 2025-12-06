@@ -23,6 +23,9 @@ import QuickDonate from '../../../screens/home/QuickDonate';
 import ViewVolunteer from '../../../screens/profile/viewvolunteer';
 import RequestDetails from '../../../screens/profile/RequestDetails';
 import ZakatGuidance from '../../../screens/home/ZakatGuidance';
+import SadaqahGuidance from '../../../screens/home/SadaqahGuidance';
+import FidyahGuidance from '../../../screens/home/FidyahGuidance';
+import KaffarahGuidance from '../../../screens/home/KaffarahGuidance';
 
 type UserStackParamList = {
   BottomTabs: undefined;
@@ -85,6 +88,9 @@ type UserStackParamList = {
   QuickDonate: undefined;
   RequestDetails: { request: any }; 
   ZakatGuidance: undefined;
+  SadaqahGuidance: undefined;
+  FidyahGuidance: undefined;
+  KaffarahGuidance: undefined;
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -114,6 +120,33 @@ const UserNavigation = () => {
           title: 'Zakat Guidance',
         }}
         component={ZakatGuidance}
+      />
+      <Stack.Screen
+        name="SadaqahGuidance"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Sadaqah Guidance',
+        }}
+        component={SadaqahGuidance}
+      />
+      <Stack.Screen
+        name="FidyahGuidance"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Fidyah Guidance',
+        }}
+        component={FidyahGuidance}
+      />
+      <Stack.Screen
+        name="KaffarahGuidance"
+        options={{
+          animation: 'slide_from_bottom',
+          headerShown: true,
+          title: 'Kaffarah Guidance',
+        }}
+        component={KaffarahGuidance}
       />
       <Stack.Screen
         name="ViewVolunteer"

@@ -38,6 +38,8 @@ const BenefitsKaffarah = () => {
       onButtonPress={() =>
         navigation.navigate('ManualAmountEntry', { donationType: 'OTHER' })
       }
+      onNav={() => navigation.navigate('KaffarahGuidance')}
+      donationType="Kaffarah"
     />
   );
 };

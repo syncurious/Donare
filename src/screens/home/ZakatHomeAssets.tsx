@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { UserStackParamList } from '../../config/navigation/UserNavigation';
 import Heading from '../../components/base/Heading';
 import Paragraph from '../../components/base/Paragraph';
 import Input from '../../components/base/Input';
@@ -17,14 +15,45 @@ type ShiaRate = '5' | '10' | '20';
 
 const ZakatHomeAssets = () => {
   const navigation = useNavigation<NavigationProp<any, 'ZakatHomeAssets'>>();
-  const [zakatType, setZakatType] = useState<ZakatType | null>(null);
+  const [zakatType, setZakatType] = useState<ZakatType | null>('sunni');
   const [shiaRate, setShiaRate] = useState<ShiaRate>('5');
   const [cash, setCash] = useState('');
   const [gold, setGold] = useState('');
   const [silver, setSilver] = useState('');
   const [otherAssets, setOtherAssets] = useState('');
+  const [errors, setErrors] = useState({
+    cash: '',
+    gold: '',
+    silver: '',
+    otherAssets: '',
+  });
 
   const handleNext = () => {
+    // Check if at least one field is filled
+    const hasAnyValue = [cash, gold, silver, otherAssets].some(
+      value => value && value.trim() !== ''
+    );
+
+    if (!hasAnyValue) {
+      // Show error if no fields are filled
+      const newErrors = {
+        cash: 'Please fill at least one field',
+        gold: '',
+        silver: '',
+        otherAssets: '',
+      };
+      setErrors(newErrors);
+      return;
+    }
+
+    // Clear any existing errors
+    setErrors({
+      cash: '',
+      gold: '',
+      silver: '',
+      otherAssets: '',
+    });
+
     // You can pass all values as a stringified object or as separate params
     navigation.navigate('ZakatBusinessAssets', {
       homeAssets: JSON.stringify({ 
@@ -163,7 +192,12 @@ const ZakatHomeAssets = () => {
               placeholder="Enter amount in PKR"
               keyboardType="numeric"
               value={cash}
-              onChangeText={setCash}
+              onChangeText={(text) => {
+                setCash(text);
+                if (errors.cash && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, cash: '' }));
+                }
+              }}
               style={styles.input}
             />
             <Input
@@ -171,7 +205,12 @@ const ZakatHomeAssets = () => {
               placeholder="Enter gold value in PKR"
               keyboardType="numeric"
               value={gold}
-              onChangeText={setGold}
+              onChangeText={(text) => {
+                setGold(text);
+                if (errors.gold && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, gold: '' }));
+                }
+              }}
               style={styles.input}
             />
             <Input
@@ -179,7 +218,12 @@ const ZakatHomeAssets = () => {
               placeholder="Enter silver value in PKR"
               keyboardType="numeric"
               value={silver}
-              onChangeText={setSilver}
+              onChangeText={(text) => {
+                setSilver(text);
+                if (errors.silver && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, silver: '' }));
+                }
+              }}
               style={styles.input}
             />
             <Input
@@ -187,25 +231,23 @@ const ZakatHomeAssets = () => {
               placeholder="Enter value of other assets in PKR"
               keyboardType="numeric"
               value={otherAssets}
-              onChangeText={setOtherAssets}
+              onChangeText={(text) => {
+                setOtherAssets(text);
+                if (errors.otherAssets && text.trim() !== '') {
+                  setErrors(prev => ({ ...prev, otherAssets: '' }));
+                }
+              }}
               style={styles.input}
             />
+            {errors.cash && (
+              <Text style={{ color: 'red', marginTop: 4 }}>
+                {errors.cash}
+              </Text>
+            )}
             <Button onPress={handleNext} style={styles.button}>
               Next
             </Button>
           </>
-        )}
-
-        {/* Guidance Link */}
-        {zakatType && (
-          <TouchableOpacity
-            style={styles.guidanceButton}
-            onPress={() => navigation.navigate('ZakatGuidance')}
-          >
-            <Text variant="body1" color="primary" style={styles.guidanceButtonText}>
-              Zakat Shariya Guidance →
-            </Text>
-          </TouchableOpacity>
         )}
       </Container>
     </View>

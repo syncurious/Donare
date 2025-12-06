@@ -23,7 +23,7 @@ import {
   type UserProfile,
   type UpdateProfilePayload,
 } from '../../../service/admin';
-import { FileUpload } from '../../../service/handler';
+import { FileUpload, Logout } from '../../../service/handler';
 import { setProfile, clearProfile } from '../../../store/reducers/profile';
 import { persistor } from '../../../store';
 import Loader from '../../../components/base/Loader';
@@ -280,6 +280,9 @@ const AdminProfile = () => {
           style: 'destructive',
           onPress: async () => {
             try {
+              // Call logout API first
+              await Logout();
+              
               // Clear Redux state
               dispatch(clearProfile());
               
